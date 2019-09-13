@@ -18,21 +18,23 @@ tanimotoCoef = function(A, B) {
 #' Enrichment factor
 #' 
 #' Calculates enrichment factor against random overlap number
-#' @param A set input1 as vectors
-#' @param B set input2 as vectors
+#' @param setA set input1 as vectors
+#' @param setB set input2 as vectors
 #' @param total total set as vectors
+#' @param psc pseudocount for when expected count is too low.
 #' @export
 #' @examples
 #' A = c(1:5)
 #' B = c(3:7)
 #' total = c(1:10)
-#' enrichment(A, B)
+#' getEnrichmentFactor(A, B, total)
 
-enrichment <- function(A, B, total) {
-	A = intersect(A, total)
-	B = intersect(B, total)
-	expected = length(A) * length(B) / length(total)
-	observed = length(intersect(A, B))
-	if(expected == 0) return(NA)
-	return(observed / expected)
+getEnrichmentFactor <- function(setA,setB,setT, psc=0) {
+	ef = NA
+	A = length(setA)
+	B = length(setB)
+	T = length(setT)
+	I = length(intersect(setA, setB))
+	if((A / T * B) != 0) ef = (I+psc) / (A / T * B + psc)
+	return(ef)
 }
