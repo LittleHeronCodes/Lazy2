@@ -4,10 +4,12 @@
 #' @param genes genes either in Entrez or Symbol
 #' @return genes
 #' @export
+#' @examples
+#' ent2sym('TP53')
 
 ent2sym <- function(genes) {
 	if(!exists('geneInfo')) {
-		geneInfo = Lazy.geneInfo
+		geneInfo = LazygeneInfo
 	}
 	if(all(grepl('^[0-9]+$', genes))) {
 		out = geneInfo$hgnc_symbol[match(genes, geneInfo$entrez)]		
@@ -21,7 +23,7 @@ ent2sym <- function(genes) {
 #' TtestWithMat
 #'
 #' Row-wise t-Test for gene expression matrix
-#' @param m 
+#' @param m    Gene expression matrix
 #' @param idx1 index to feed to first vector in t.test
 #' @param idx2 index to feed to second vector in t.test
 #' @param alternative alternative argument for t.test
@@ -32,7 +34,11 @@ ent2sym <- function(genes) {
 #' menDiff : mean difference
 #' @export
 #' @examples
+#' \dontrun{
 #' TtestWithMat(M)
+#' }
+
+
 
 TtestWithMat <- function(m, idx1, idx2, alternative ='two.sided') {
 	resultsDF = apply(m, 1, function(v) {
@@ -68,8 +74,8 @@ geneCount <- function(geneList) { sapply(geneList, function(ls) sapply(ls, lengt
 #' 
 #' DEG List to deg Count
 #' 
-#' @param geneList gene list
 #' @param toSpace total gene space
+#' @inheritParams geneCount
 #' @export
 
 convertDEGList2Matrix <- function(geneList, toSpace = NULL) {
@@ -119,7 +125,7 @@ DEGMatSumm <- function(degMat, sort = FALSE) {
 #' 
 #' DEG List overlap 
 #' 
-#' @param geneList 
+#' @inheritParams geneCount
 #' @return dataframe of overlap measures
 #' @export
 
@@ -145,10 +151,11 @@ geneListSetOverlap <- function(geneList) {
 
 #' @section Section
 #' @describeIn geneListSetOverlap For parallel processing
+#' @param ncore number of cores to use
 
 geneListSetOverlap.parallel <- function(geneList, ncore) {
 	pairs = expand.grid(names(geneList), names(geneList))
-	pairs2 = mclapply(1:nrow(pairs), function(i) {
+	pairs2 = parallel::mclapply(1:nrow(pairs), function(i) {
 		v = as.matrix(pairs[i,])
 		A = geneList[[v[1]]]
 		B = geneList[[v[2]]]
@@ -169,6 +176,8 @@ geneListSetOverlap.parallel <- function(geneList, ncore) {
 #' @section Section
 #' @describeIn geneListSetOverlap 
 #' Covert pairs dataframe from geneListSetOverlap to matrix for distance
+#' @param pairs pairs dataframe from geneListSetOverlap
+#' @param value.var variable in pairs to use as value in matrix. Feeds to reshape2::acast
 
 geneListDistMat <- function(pairs, value.var) {
 	dm = reshape2::acast(pairs, Var1~Var2, value.var = value.var)	
@@ -178,6 +187,11 @@ geneListDistMat <- function(pairs, value.var) {
 
 #' @describeIn geneListSetOverlap
 #' Draw heatmap for distance matrix 
+#' @param distMat distance matrix from geneListDistMat
+#' @param name name to feed to ComplexHeatmap::Heatmap
+#' @param mtitle main title
+#' @param log log transform or no?
+#' @param km kmeans cluster feed for ComplexHeatmap::Heatmap
 
 geneListDistMat_HM <- function(distMat, name, mtitle = NULL, log = TRUE, km = NULL) {
 	if(log) distMat = log2(distMat + .01)

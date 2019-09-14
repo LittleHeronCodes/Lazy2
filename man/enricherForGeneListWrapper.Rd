@@ -27,6 +27,8 @@ List of enricher Object: up, down
 Wrapper function of enricher for differentially expressed gene list
 }
 \examples{
+\dontrun{
 sapply(glist, length)
 enricherForGeneListWrapper(glist, c2.kegg)
+}
 }

@@ -10,8 +10,10 @@
 #' @return List of enricher Object: up, down
 #' @export
 #' @examples
+#' \dontrun{
 #' sapply(glist, length)
 #' enricherForGeneListWrapper(glist, c2.kegg)
+#' }
 
 
 enricherForGeneListWrapper = function(glist, term, pcut=.1, qcut=.2, minGSSize=5, maxGSSize=100) {
@@ -48,8 +50,10 @@ enricherForGeneListWrapper = function(glist, term, pcut=.1, qcut=.2, minGSSize=5
 #' @return Matrix to feed to enr_HeatmapOnly (plotMat)
 #' @export
 #' @examples
+#' \dontrun{
 #' plotMat <- enrObjectTransform_1set(enr_obj)
 #' enrHeatmapOnly_1set(plotMat)
+#' }
 
 enrObjectTransform_1set <- function(enr_obj, pco=.1, max_row=10) {
 	LS = lapply(names(enr_obj), function(dir) {

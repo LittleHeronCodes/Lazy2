@@ -20,7 +20,7 @@ tanimotoCoef = function(A, B) {
 #' Calculates enrichment factor against random overlap number
 #' @param setA set input1 as vectors
 #' @param setB set input2 as vectors
-#' @param total total set as vectors
+#' @param setT total set as vectors
 #' @param psc pseudocount for when expected count is too low.
 #' @export
 #' @examples

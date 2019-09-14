@@ -11,9 +11,9 @@ getEnrichmentFactor(setA, setB, setT, psc = 0)
 
 \item{setB}{set input2 as vectors}
 
-\item{psc}{pseudocount for when expected count is too low.}
+\item{setT}{total set as vectors}
 
-\item{total}{total set as vectors}
+\item{psc}{pseudocount for when expected count is too low.}
 }
 \description{
 Calculates enrichment factor against random overlap number

@@ -62,6 +62,8 @@ NA
 }
 
 \examples{
+\dontrun{
 plotMat <- enrObjectTransform_1set(enr_obj)
 enrHeatmapOnly_1set(plotMat)
+}
 }

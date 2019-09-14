@@ -15,3 +15,6 @@ genes
 \description{
 gene mapper for entrez and symbol
 }
+\examples{
+ent2sym('TP53')
+}

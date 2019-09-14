@@ -7,7 +7,7 @@
 TtestWithMat(m, idx1, idx2, alternative = "two.sided")
 }
 \arguments{
-\item{m}{}
+\item{m}{Gene expression matrix}
 
 \item{idx1}{index to feed to first vector in t.test}
 
@@ -26,5 +26,7 @@ menDiff : mean difference
 Row-wise t-Test for gene expression matrix
 }
 \examples{
+\dontrun{
 TtestWithMat(M)
+}
 }

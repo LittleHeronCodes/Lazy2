@@ -7,7 +7,7 @@
 convertDEGList2Matrix(geneList, toSpace = NULL)
 }
 \arguments{
-\item{geneList}{gene list}
+\item{geneList}{geneList of DEG}
 
 \item{toSpace}{total gene space}
 }

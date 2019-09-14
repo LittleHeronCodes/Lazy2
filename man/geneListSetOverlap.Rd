@@ -17,7 +17,23 @@ geneListDistMat_HM(distMat, name, mtitle = NULL, log = TRUE,
   km = NULL)
 }
 \arguments{
-\item{geneList}{}
+\item{geneList}{geneList of DEG}
+
+\item{ncore}{number of cores to use}
+
+\item{pairs}{pairs dataframe from geneListSetOverlap}
+
+\item{value.var}{variable in pairs to use as value in matrix. Feeds to reshape2::acast}
+
+\item{distMat}{distance matrix from geneListDistMat}
+
+\item{name}{name to feed to ComplexHeatmap::Heatmap}
+
+\item{mtitle}{main title}
+
+\item{log}{log transform or no?}
+
+\item{km}{kmeans cluster feed for ComplexHeatmap::Heatmap}
 }
 \value{
 dataframe of overlap measures
