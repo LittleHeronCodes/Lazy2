@@ -48,7 +48,8 @@ enricherForGeneListWrapper = function(glist, term, pcut=.1, qcut=.2, minGSSize=5
 #' @return Matrix to feed to enr_HeatmapOnly (plotMat)
 #' @export
 #' @examples
-#' 
+#' plotMat <- enrObjectTransform_1set(enr_obj)
+#' enrHeatmapOnly_1set(plotMat)
 
 enrObjectTransform_1set <- function(enr_obj, pco=.1, max_row=10) {
 	LS = lapply(names(enr_obj), function(dir) {
@@ -71,7 +72,7 @@ enrObjectTransform_1set <- function(enr_obj, pco=.1, max_row=10) {
 }
 
 #' @section Another section after function section
-#' @describeIn enrObjectTransform_1set
+#' @describeIn enrObjectTransform_1set For multiple dataset gene list
 
 enrObjectTransform_nset <- function(enr_obj, pco=.1, max_row=10) {
 	LS = lapply(names(enr_obj), function(set) {
@@ -95,6 +96,7 @@ enrObjectTransform_nset <- function(enr_obj, pco=.1, max_row=10) {
 
 #' @section Drawing Heatmaps
 #' @describeIn enrObjectTransform_1set
+#' Heatmap draw from plotMat from enrObjectTransform_1set 
 #' @param plotMat Matrix for plotting from enrTransform functions
 #' @param mtitle  Main title for pathway analysis heatmaps
 #' @param colpal  Choosing color palette for nset pathway analysis heatmap. ('up' or 'dn')
@@ -111,6 +113,7 @@ enrHeatmapOnly_1set <- function(plotMat, mtitle, clust = TRUE) {
 }
 
 #' @describeIn enrObjectTransform_1set
+#' Heatmap draw from plotMat from enrObjectTransform_nset 
 
 enrHeatmapOnly_nset <- function(plotMat, max_row, mtitle, colpal='up', clust = TRUE) {
 

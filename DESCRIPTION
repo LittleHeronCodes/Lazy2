@@ -2,8 +2,8 @@ Package: Lazy2
 Title: What the Package Does (One Line, Title Case)
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "",
-           family = "",
+    person(given = "Yeogha",
+           family = "Yoon",
            role = c("aut", "cre"),
            email = "first.last@example.com",
            comment = c(ORCID = "YOUR-ORCID-ID"))
@@ -12,12 +12,11 @@ License: What license it uses
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
-
 Imports: 
-	circlize,
-	clusterProfiler,
-	ComplexHeatmap,
-	dplyr,
-	RColorBrewer,
-	reshape2,
-	tidyr
+	circlize (>= 0.4.6),
+	clusterProfiler (>= 3.12.0),
+	ComplexHeatmap (>= 2.0.0),
+	dplyr (>= 0.8.1),
+	RColorBrewer (>= 1.1),
+	reshape2 (>= 1.4.3),
+	tidyr (>= 0.8.3)

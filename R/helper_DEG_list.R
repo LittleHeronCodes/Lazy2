@@ -1,6 +1,6 @@
-#' enricherForGeneListWrapper
+#' ent2sym
 #' 
-#' Wrapper function of enricher for differentially expressed gene list
+#' gene mapper for entrez and symbol
 #' @param genes genes either in Entrez or Symbol
 #' @return genes
 #' @export
@@ -31,8 +31,8 @@ ent2sym <- function(genes) {
 #' medDiff : median difference
 #' menDiff : mean difference
 #' @export
-#' @example
-#' 
+#' @examples
+#' TtestWithMat(M)
 
 TtestWithMat <- function(m, idx1, idx2, alternative ='two.sided') {
 	resultsDF = apply(m, 1, function(v) {
@@ -144,7 +144,7 @@ geneListSetOverlap <- function(geneList) {
 
 
 #' @section Section
-#' @describeIn geneListSetOverlap
+#' @describeIn geneListSetOverlap For parallel processing
 
 geneListSetOverlap.parallel <- function(geneList, ncore) {
 	pairs = expand.grid(names(geneList), names(geneList))
@@ -167,15 +167,17 @@ geneListSetOverlap.parallel <- function(geneList, ncore) {
 
 
 #' @section Section
-#' @describeIn geneListSetOverlap
+#' @describeIn geneListSetOverlap 
+#' Covert pairs dataframe from geneListSetOverlap to matrix for distance
 
-geneListDistMat <- function(value.var) {
+geneListDistMat <- function(pairs, value.var) {
 	dm = reshape2::acast(pairs, Var1~Var2, value.var = value.var)	
 	return(dm)
 }
 
 
 #' @describeIn geneListSetOverlap
+#' Draw heatmap for distance matrix 
 
 geneListDistMat_HM <- function(distMat, name, mtitle = NULL, log = TRUE, km = NULL) {
 	if(log) distMat = log2(distMat + .01)
