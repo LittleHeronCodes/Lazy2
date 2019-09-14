@@ -4,8 +4,6 @@
 
 /raw-data/
 
-### R template ###
-
 # History files
 .Rhistory
 .Rapp.history
