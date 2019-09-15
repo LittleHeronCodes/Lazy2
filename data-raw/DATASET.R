@@ -1,3 +1,5 @@
+## code to prepare `DATASET` dataset goes here
+
 ## Gene Info processing from HGNC raw file
 
 LazygeneInfo <- read.table('raw-data/gene_info.csv', sep = ',', header=TRUE)
