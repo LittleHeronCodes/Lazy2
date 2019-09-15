@@ -2,7 +2,7 @@
 
 ## Gene Info processing from HGNC raw file
 
-LazygeneInfo <- read.table('raw-data/gene_info.csv', sep = ',', header=TRUE)
+LazygeneInfo <- read.table('data-raw/gene_info.csv', sep = ',', header=TRUE)
 
 usethis::use_data(LazygeneInfo)
 
