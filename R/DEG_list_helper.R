@@ -8,13 +8,10 @@
 #' ent2sym('TP53')
 
 ent2sym <- function(genes) {
-	if(!exists('geneInfo')) {
-		geneInfo = LazygeneInfo
-	}
 	if(all(grepl('^[0-9]+$', genes))) {
-		out = geneInfo$hgnc_symbol[match(genes, geneInfo$entrez)]		
+		out = LazygeneInfo$hgnc_symbol[match(genes, LazygeneInfo$entrez)]		
 	} else {
-		out = geneInfo$entrez[match(genes, geneInfo$hgnc_symbol)]
+		out = LazygeneInfo$entrez[match(genes, LazygeneInfo$hgnc_symbol)]
 	}
 	return(as.character(out))
 }
@@ -128,6 +125,12 @@ DEGMatSumm <- function(degMat, sort = FALSE) {
 #' @inheritParams geneCount
 #' @return dataframe of overlap measures
 #' @export
+#' @examples
+#' \dontrun{
+#'     pairs <- geneListSetOverlap(geneList)
+#'     distMat <- geneListDistMat(pairs, 'ef_dn')
+#'     geneListDistMat(distMat)
+#' }
 
 geneListSetOverlap <- function(geneList) {
 	pairs = expand.grid(names(geneList), names(geneList))
@@ -149,9 +152,9 @@ geneListSetOverlap <- function(geneList) {
 }
 
 
-#' @section Section
 #' @describeIn geneListSetOverlap For parallel processing
 #' @param ncore number of cores to use
+#' @export
 
 geneListSetOverlap.parallel <- function(geneList, ncore) {
 	pairs = expand.grid(names(geneList), names(geneList))
@@ -173,11 +176,11 @@ geneListSetOverlap.parallel <- function(geneList, ncore) {
 }
 
 
-#' @section Section
 #' @describeIn geneListSetOverlap 
 #' Covert pairs dataframe from geneListSetOverlap to matrix for distance
 #' @param pairs pairs dataframe from geneListSetOverlap
 #' @param value.var variable in pairs to use as value in matrix. Feeds to reshape2::acast
+#' @export
 
 geneListDistMat <- function(pairs, value.var) {
 	dm = reshape2::acast(pairs, Var1~Var2, value.var = value.var)	
@@ -189,17 +192,18 @@ geneListDistMat <- function(pairs, value.var) {
 #' Draw heatmap for distance matrix 
 #' @param distMat distance matrix from geneListDistMat
 #' @param name name to feed to ComplexHeatmap::Heatmap
+#' @param show_axis show column and row names?
 #' @param mtitle main title
 #' @param log log transform or no?
 #' @param km kmeans cluster feed for ComplexHeatmap::Heatmap
+#' @export
 
-geneListDistMat_HM <- function(distMat, name, mtitle = NULL, log = TRUE, km = NULL) {
+geneListDistMat_HM <- function(distMat, name, show_axis = TRUE, mtitle = NULL, log = TRUE, km = NULL) {
 	if(log) distMat = log2(distMat + .01)
 	if(is.null(mtitle)) mtitle = paste('Overlap Enrichment')
-	colors = colorRamp2(c(-3.5,-2,0,2,3.5), 
-		c('#2166ac','#4393c3','#f7f7f7','#d6604d','#b2182b'))
-	hp = Heatmap(distMat, col=colors, name=name, column_title=mtitle, 
-		row_km = km, column_km = km, show_column_names = FALSE, show_row_names = FALSE)
+	colors = colorRamp2(c(-3.5,-2,0,2,3.5), c('#2166ac','#4393c3','#f7f7f7','#d6604d','#b2182b'))
+	hp = Heatmap(distMat, col=colors, name=name, column_title=mtitle, row_km = km, 
+		column_km = km, show_column_names = show_axis, show_row_names = show_axis)
 	return(hp)
 }
 

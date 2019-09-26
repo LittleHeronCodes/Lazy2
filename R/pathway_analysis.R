@@ -75,8 +75,8 @@ enrObjectTransform_1set <- function(enr_obj, pco=.1, max_row=10) {
 	return(plotMat)
 }
 
-#' @section Another section after function section
 #' @describeIn enrObjectTransform_1set For multiple dataset gene list
+#' @export
 
 enrObjectTransform_nset <- function(enr_obj, pco=.1, max_row=10) {
 	LS = lapply(names(enr_obj), function(set) {
@@ -105,6 +105,7 @@ enrObjectTransform_nset <- function(enr_obj, pco=.1, max_row=10) {
 #' @param mtitle  Main title for pathway analysis heatmaps
 #' @param colpal  Choosing color palette for nset pathway analysis heatmap. ('up' or 'dn')
 #' @param clust   Cluster Heatmap or no?
+#' @export
 
 enrHeatmapOnly_1set <- function(plotMat, mtitle, clust = TRUE) {
 	colors = colorRamp2(c(-4,-2,0,2,4), 
@@ -118,6 +119,7 @@ enrHeatmapOnly_1set <- function(plotMat, mtitle, clust = TRUE) {
 
 #' @describeIn enrObjectTransform_1set
 #' Heatmap draw from plotMat from enrObjectTransform_nset 
+#' @export
 
 enrHeatmapOnly_nset <- function(plotMat, max_row, mtitle, colpal='up', clust = TRUE) {
 

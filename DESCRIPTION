@@ -1,6 +1,6 @@
 Package: Lazy2
 Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
+Version: 0.0.1.0
 Authors@R: 
     person(given = "Yeogha",
            family = "Yoon",
@@ -9,7 +9,7 @@ Authors@R:
            comment = c(ORCID = "YOUR-ORCID-ID"))
 Description: What the package does (one paragraph).
 Depends: R (>= 3.6.0)
-License: What license it uses
+License: None
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
@@ -21,3 +21,4 @@ Imports:
 	RColorBrewer (>= 1.1),
 	reshape2 (>= 1.4.3),
 	tidyr (>= 0.8.3)
+Suggets:
