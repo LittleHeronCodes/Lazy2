@@ -39,23 +39,12 @@ enricher Object list format transformation for plotting
 }
 \section{Functions}{
 \itemize{
-\item \code{enrObjectTransform_1set}: enr object list transform for 1 set plotting
-
 \item \code{enrObjectTransform_nset}: For multiple dataset gene list
 
 \item \code{enrHeatmapOnly_1set}: Heatmap draw from plotMat from enrObjectTransform_1set
 
 \item \code{enrHeatmapOnly_nset}: Heatmap draw from plotMat from enrObjectTransform_nset
 }}
-
-\section{After function section}{
-
-Despite its location, this actually comes after the function section.
-}
-
-\section{Another section after function section}{
-NA
-}
 
 \section{Drawing Heatmaps}{
 NA

@@ -196,7 +196,9 @@ geneListDistMat <- function(pairs, value.var) {
 
 
 #' @describeIn geneListSetOverlap
-#' Draw heatmap for distance matrix 
+#' 
+#' Draw heatmap for distance matrix
+#' 
 #' @param distMat distance matrix from geneListDistMat
 #' @param name name to feed to ComplexHeatmap::Heatmap
 #' @param show_axis show column and row names?
@@ -232,3 +234,4 @@ cleanGList <- function(g, concat = '///', filter = NULL) {
 	g = unique(g)
 	return(g)
 }
+

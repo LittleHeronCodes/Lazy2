@@ -15,6 +15,20 @@ build('Lazy2')
 devtools::install_github('LittleHeronCodes/Lazy2')
 ```
 
+## Update Guide
+
+```R
+library(roxygen2)
+library(devtools)
+
+getwd()
+#'path/to/alt/RLib/Lazy2'
+document()
+build()
+install()
+```
+
+
 ## To Do Notes
 
 * Add startup message for version
