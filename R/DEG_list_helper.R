@@ -118,6 +118,30 @@ DEGMatSumm <- function(degMat, sort = FALSE) {
 }
 
 
+#' pairsOverlap
+#' Calculate overlap metric for pairs
+#' This is an internal function used for geneListSetOverlap
+#' 
+#' @inheritParams geneCount
+#' @param v length 2 index vector from pair created by expand.grid
+#' @return 1-row dataframe
+
+pairsOverlap <- function(v, geneList) {
+		A = geneList[[v[1]]]
+		B = geneList[[v[2]]]
+		T = intersect(A$toGene, B$toGene)
+
+		int_up = length(intersect(A$upGene, B$upGene))
+		int_dn = length(intersect(A$dnGene, B$dnGene))
+		ef_up = getEnrichmentFactor(A$upGene, B$upGene, T)
+		ef_dn = getEnrichmentFactor(A$dnGene, B$dnGene, T)
+		tan_up = tanimotoCoef(A$upGene, B$upGene)
+		tan_dn = tanimotoCoef(A$dnGene, B$dnGene)
+
+		return(data.frame(int_up, int_dn, ef_up, ef_dn, tan_up, tan_dn))
+}
+
+
 #' geneListSetOverlap
 #' 
 #' DEG List overlap 
@@ -134,24 +158,13 @@ DEGMatSumm <- function(degMat, sort = FALSE) {
 
 geneListSetOverlap <- function(geneList) {
 	pairs = expand.grid(names(geneList), names(geneList))
-	pairs2 = apply(pairs, 1, function(v) {
-		A = geneList[[v[1]]]
-		B = geneList[[v[2]]]
-		T = intersect(A$toGene, B$toGene)
-
-		int = length(T)
-		ef_up = getEnrichmentFactor(A$upGene, B$upGene, T)
-		ef_dn = getEnrichmentFactor(A$dnGene, B$dnGene, T)
-		tan_up = tanimotoCoef(A$upGene, B$upGene)
-		tan_dn = tanimotoCoef(A$dnGene, B$dnGene)
-		return(data.frame(int, ef_up, ef_dn, tan_up, tan_dn))
-		})
+	pairs2 = apply(pairs, 1, function(v) pairsOverlap(v, geneList))
 	pairs2 = do.call(rbind,pairs2)
 	pairs = cbind(pairs, pairs2)
 	return(pairs)
 }
 
-
+#
 #' @describeIn geneListSetOverlap For parallel processing
 #' @param ncore number of cores to use
 #' @export
@@ -160,15 +173,7 @@ geneListSetOverlap.parallel <- function(geneList, ncore) {
 	pairs = expand.grid(names(geneList), names(geneList))
 	pairs2 = parallel::mclapply(1:nrow(pairs), function(i) {
 		v = as.matrix(pairs[i,])
-		A = geneList[[v[1]]]
-		B = geneList[[v[2]]]
-		T = intersect(A$toGene, B$toGene)
-
-		ef_up = getEnrichmentFactor(A$upGene, B$upGene, T)
-		ef_dn = getEnrichmentFactor(A$dnGene, B$dnGene, T)
-		tan_up = tanimotoCoef(A$upGene, B$upGene)
-		tan_dn = tanimotoCoef(A$dnGene, B$dnGene)
-		return(data.frame(ef_up, ef_dn, tan_up, tan_dn))
+		return(pairsOverlap(v, geneList))
 		}, mc.cores = ncore)
 	pairs2 = do.call(rbind,pairs2)
 	pairs = cbind(pairs, pairs2)
@@ -176,6 +181,8 @@ geneListSetOverlap.parallel <- function(geneList, ncore) {
 }
 
 
+#' geneList pairs to distance matrix
+#' 
 #' @describeIn geneListSetOverlap 
 #' Covert pairs dataframe from geneListSetOverlap to matrix for distance
 #' @param pairs pairs dataframe from geneListSetOverlap
@@ -208,3 +215,20 @@ geneListDistMat_HM <- function(distMat, name, show_axis = TRUE, mtitle = NULL, l
 }
 
 
+#' cleanGList
+#' 
+#' Cleanup concatenated gene list to remove na, blanks, filter protein coding genes
+#' Intended to use with microarray probe map from AnnotationDbi.
+#' 
+#' @param g Gene vector
+#' @param concat String used to concatenate multiple mapped genes. Default '///'
+#' @param filter Genes to filter out. Default NULL
+#' @export
+
+cleanGList <- function(g, concat = '///', filter = NULL) {
+	g = unlist(strsplit(g, concat))
+	g = g[which(!is.na(g) & g != '')]
+	if(!is.null(filter)) g = intersect(g, filter)
+	g = unique(g)
+	return(g)
+}

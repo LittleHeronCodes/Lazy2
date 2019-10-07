@@ -40,10 +40,6 @@ enricherForGeneListWrapper = function(glist, term, pcut=.1, qcut=.2, minGSSize=5
 #' 
 #' enricher Object list format transformation for plotting
 #' 
-#' @section After function section:
-#' Despite its location, this actually comes after the function section.
-#' @describeIn enrObjectTransform_1set enr object list transform for 1 set plotting
-#' 
 #' @param enr_obj enricher object list for single set (names: up, down)
 #' @param pco     p-value cutoff Default .1
 #' @param max_row maximum row of plotMat to return Default 10
@@ -75,6 +71,7 @@ enrObjectTransform_1set <- function(enr_obj, pco=.1, max_row=10) {
 	return(plotMat)
 }
 
+
 #' @describeIn enrObjectTransform_1set For multiple dataset gene list
 #' @export
 
@@ -92,6 +89,7 @@ enrObjectTransform_nset <- function(enr_obj, pco=.1, max_row=10) {
 
 	pathDF = tidyr::spread(hmplot[, c('set','ID','logP')], set, logP, fill = NA)
 	plotMat = as.matrix(pathDF[,-1])
+
 	rownames(plotMat) = gsub('^GO_|^KEGG_','',pathDF[,'ID'])
 	plotMat = plotMat[order(apply(plotMat,1, sum, na.rm=T), decreasing=TRUE),]
 	return(plotMat)
@@ -142,3 +140,34 @@ enrHeatmapOnly_nset <- function(plotMat, max_row, mtitle, colpal='up', clust = T
 
 
 
+
+#' enrLS2plotMat
+#'
+#' Formerly enrObjectTransform nset, fixed to no filter, ordering function
+#' 
+#' @param enrLS enricher object list
+#' @param ord.FUN function for ordering output plotMat
+#' @export
+#'
+
+enrLS2plotMat <- function(enrLS, ord.FUN = NULL ) {
+	hmplot = do.call(rbind, lapply(names(enrLS), function(set) {
+		df = data.frame(enrLS[[set]])
+		df = df[order(df$p.adjust),]
+		df$set = set
+		df$logP = -log10(df$p.adjust)
+		return(df)
+		}) )
+
+	pathDF = tidyr::spread(hmplot[, c('set','ID','logP')], set, logP, fill = NA)
+	plotMat = as.matrix(pathDF[,-1])
+	rownames(plotMat) = pathDF[,'ID']
+	plotMat = plotMat[order(apply(plotMat,1, mean, na.rm=T), decreasing=TRUE),]
+
+	if(is.null(ord.FUN)) { ord.FUN <- function(v) sum(!is.na(v)) }
+	if(class(ord.FUN) == 'function') { ord = apply(plotMat, 1, ord.FUN) }
+	if(class(ord.FUN) != 'function') { ord = ord.FUN }
+
+	plotMat = plotMat[order(ord, decreasing=TRUE),]
+	return(plotMat)
+}
