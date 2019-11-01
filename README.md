@@ -27,7 +27,12 @@ getwd()
 document()
 build()
 install()
+
+# reload package
+reload(inst('Lazy2'))
 ```
+
+**NOTE** : Be sure to run `DATASET.R` when adding new data.
 
 ## To Do Notes
 
