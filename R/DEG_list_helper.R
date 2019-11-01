@@ -1,6 +1,7 @@
 #' ent2sym
 #' 
 #' gene mapper for entrez and symbol
+#' 
 #' @param genes genes either in Entrez or Symbol
 #' @return genes
 #' @export
@@ -8,11 +9,38 @@
 #' ent2sym('TP53')
 
 ent2sym <- function(genes) {
+	geneMap = Lazy2::geneMap
+	genes = as.character(genes)
 	if(all(grepl('^[0-9]+$', genes))) {
-		out = LazygeneInfo$hgnc_symbol[match(genes, LazygeneInfo$entrez)]		
+		out = geneMap$Symbol[match(genes, geneMap$Entrez)]		
 	} else {
-		out = LazygeneInfo$entrez[match(genes, LazygeneInfo$hgnc_symbol)]
+		out = geneMap$Entrez[match(genes, geneMap$Symbol)]
 	}
+	return(as.character(out))
+}
+
+
+#' geneAliasMap
+#' 
+#' gene synonym mapper
+#' 
+#' @inheritParams ent2sym
+#' @param return_ent genes either in Entrez or Symbol
+#' @param verbose    print mapped percentage
+#' @return genes
+#' @export
+#' @examples
+#' geneAliasMap('CHOP')
+
+geneAliasMap <- function(genes, return_ent = FALSE, verbose=FALSE) {
+	geneAlias = Lazy2::geneAlias
+	genes = as.character(genes)
+	out = ifelse(genes %in% geneAlias$Symbol, genes, geneAlias$Symbol[match(genes, geneAlias$Synonyms)])
+	if(verbose) {
+		cat('Mapped', length(which(!is.na(out))), 'out of', length(genes), 'input mapped.\n')
+	}
+	if(return_ent) out = ent2sym(out)
+
 	return(as.character(out))
 }
 
@@ -34,8 +62,6 @@ ent2sym <- function(genes) {
 #' \dontrun{
 #' TtestWithMat(M)
 #' }
-
-
 
 TtestWithMat <- function(m, idx1, idx2, alternative ='two.sided') {
 	resultsDF = apply(m, 1, function(v) {
@@ -66,6 +92,7 @@ TtestWithMat <- function(m, idx1, idx2, alternative ='two.sided') {
 #' @export
 
 geneCount <- function(geneList) { sapply(geneList, function(ls) sapply(ls, length)) }
+
 
 #' convertDEGList2Matrix
 #' 

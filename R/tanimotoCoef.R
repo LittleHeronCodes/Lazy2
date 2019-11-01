@@ -15,6 +15,7 @@ tanimotoCoef = function(A, B) {
 	return(length(int) / length(uni))
 }
 
+
 #' Enrichment factor
 #' 
 #' Calculates enrichment factor against random overlap number
@@ -38,3 +39,17 @@ getEnrichmentFactor <- function(setA,setB,setT, psc=0) {
 	if((A / T * B) != 0) ef = (I+psc) / (A / T * B + psc)
 	return(ef)
 }
+
+
+#' Harmonic Mean
+#'
+#' Calculate harmonic mean
+#' @param v numeric vector
+#' @export
+#' @examples
+#' v <- seq(0.01,.99, .01)
+#' harmean(v)
+
+harmean <- function(v, ...) { 1/mean(1/v, ..., na.rm = T) }
+
+

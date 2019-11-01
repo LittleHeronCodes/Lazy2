@@ -2,7 +2,7 @@
 *.db
 .DS_Store
 
-#/raw-data/
+/data-raw/
 
 # History files
 .Rhistory

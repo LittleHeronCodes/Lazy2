@@ -3,21 +3,22 @@ Custom functions from Lazy for personal use, now as a package.
 
 ## Build Guide (local)
 
-```R
+```r
 library(devtools)
 build('Lazy2')
 ```
 
 ## Installation Guide
 
-```R
-.libLoc('path/to/alt/RLib')
+```r
+.libPaths('path/to/alt/RLib')
 devtools::install_github('LittleHeronCodes/Lazy2')
+library(Lazy2, lib.loc = 'path/to/alt/RLib')
 ```
 
 ## Update Guide
 
-```R
+```r
 library(roxygen2)
 library(devtools)
 
@@ -28,15 +29,31 @@ build()
 install()
 ```
 
-
 ## To Do Notes
 
 * Add startup message for version
 * Add Python based venn diagram function
 * Add draw MA plot, log fc result get for microarray no replicate
 
+## In Progress
+
+### Removing ClusterProfiler dependency
+
+-[ ] read gmt file
+-[ ] hypergeometric t-test against gmt list object
+-[ ] draw overrepresentation plot
+-[ ] test consistency against ClusterProfiler
+
+---
 
 ## Update Notes
+
+**2019.11.01**
+
+* Version 0.0.1.2
+* `gene_info` data file change to gene info from NCBI (`NCBIHomo_sapiens.gene_info.csv`)
+  * added gene alias data, updataed entrez symbol map
+* 
 
 **2019.10.07**
 
