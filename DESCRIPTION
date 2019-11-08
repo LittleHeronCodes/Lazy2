@@ -2,10 +2,11 @@ Package: Lazy2
 Title: Lazy Package
 Version: 0.0.1.2
 Authors@R: 
-    person(given = "Yeogha",
-           family = "Yoon",
-           role = c("aut", "cre"),
-           email = "first.last@example.com",
+    person(given   = "Yeogha",
+           family  = "Yoon",
+           role    = c("aut", "cre"),
+           email   = "first.last@example.com",
+           github  = "https://github.com/LittleHeronCodes",
            comment = c(ORCID = "YOUR-ORCID-ID"))
 Description: Lazy pakage of custom functions for personal use.
 License: None

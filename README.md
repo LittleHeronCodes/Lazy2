@@ -53,6 +53,11 @@ reload(inst('Lazy2'))
 
 ## Update Notes
 
+**2019.11.05**
+
+* Version 0.0.1.2 patch
+* Modifications in 
+
 **2019.11.01**
 
 * Version 0.0.1.2

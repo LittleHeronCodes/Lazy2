@@ -3,13 +3,18 @@
 #' Calculates Tanimoto coefficients given two set vectors
 #' @param A set input1 as vectors
 #' @param B set input2 as vectors
+#' @param T background space (if given, will intersect set before calculating)
 #' @export
 #' @examples
 #' A = c(1:5)
 #' B = c(3:7)
 #' tanimotoCoef(A, B)
 
-tanimotoCoef = function(A, B) {
+tanimotoCoef = function(A, B, T=NULL) {
+	if(!is.null(T)) {
+		A = intersect(A, T)
+		B = intersect(B, T)
+	}
 	int = intersect(A, B)
 	uni = union(A, B)
 	return(length(int) / length(uni))
@@ -39,6 +44,30 @@ getEnrichmentFactor <- function(setA,setB,setT, psc=0) {
 	if((A / T * B) != 0) ef = (I+psc) / (A / T * B + psc)
 	return(ef)
 }
+
+
+#' hypergeoTest
+#'
+#' Hypergeometric test for set inputs (because I'm an idiot)
+#' @param query     query set        (balls drawn)
+#' @param reference reference set    (white balls)
+#' @param bgspace   background space (balls in urn)
+#' @export
+
+hypergeoTest <- function(query, reference, bgspace) {
+	query = intersect(query, bgspace)
+	reference = intersect(reference, bgspace)
+
+	N = length(bgspace)							# no of balls in urn
+	k = length(query)							# no of balls drawn from urn (DEG no)
+	m = length(reference) 						# no of white balls in urn
+	q = length(intersect(reference, query))		# no of white balls drawn
+
+	pVal = phyper(q-1, m, N-m, k, lower.tail = FALSE)
+	odds = (q / k) / (m / N)
+	return(data.frame(pVal = pVal, oddsRatio=odds, int=q, bg=m))
+}
+
 
 
 #' Harmonic Mean

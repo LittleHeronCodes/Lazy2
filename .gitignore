@@ -2,6 +2,9 @@
 *.db
 .DS_Store
 
+*.sublime-project
+*.sublime-workspace
+
 /data-raw/
 
 # History files
