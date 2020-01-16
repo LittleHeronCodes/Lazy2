@@ -69,7 +69,6 @@ hypergeoTest <- function(query, reference, bgspace) {
 }
 
 
-
 #' Harmonic Mean
 #'
 #' Calculate harmonic mean

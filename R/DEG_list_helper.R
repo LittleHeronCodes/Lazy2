@@ -63,18 +63,17 @@ geneAliasMap <- function(genes, return_ent = FALSE, verbose=FALSE) {
 #' TtestWithMat(M)
 #' }
 
-TtestWithMat <- function(m, idx1, idx2, alternative ='two.sided') {
-	resultsDF = apply(m, 1, function(v) {
-		md = median(v[idx1]) - median(v[idx2])
-		mn = mean(v[idx1]) - mean(v[idx2])
-		t.res = t.test(v[idx1], v[idx2], alternative=alternative)
-		df = data.frame(
-			t_stat = t.res$statistic, t_pVal = t.res$p.value,
-			medDiff = md, menDiff = mn)
-		return(df)
-		})
-	resultsDF = do.call(rbind, resultsDF)
-	columns = colnames(resultsDF)
+TtestWithMat <- function(m, idx1, idx2, alternative ='two.sided', na.rm=TRUE) {
+	m1 = m[,idx1]
+	m2 = m[,idx2]
+	md = apply(m1, 1, median, na.rm=na.rm) - apply(m2, 1, median, na.rm=na.rm)
+	mn = apply(m1, 1, mean, na.rm=na.rm) - apply(m2, 1, mean, na.rm=na.rm)
+	t.res = t(apply(m,1, function(v) {
+		tt = t.test(v[idx1], v[idx2], alternative=alternative)
+		return(c(t_stat=tt$statistic, t_pVal=tt$p.value))
+		}))
+	resultsDF= data.frame(t.res, medDiff=md, menDiff=mn)
+	colnames(resultsDF) = gsub('.t$','',colnames(resultsDF))
 	rownames(resultsDF) = rownames(m)
 	# resultsDF$geneEnt = rownames(m)
 	# resultsDF$geneSym = ent2sym(rownames(m))

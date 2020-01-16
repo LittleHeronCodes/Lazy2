@@ -38,6 +38,7 @@ enrichmentFactorForDataFrame = function(df, enrich_element, rank_by,
 	# hypergeo test
 	hp = phyper(cntPct[idx]-1, cntAll[idx], N-cntAll[idx], k, lower.tail = FALSE)
 	hp = sort(hp)
+	# lhp = -log10(hp)
 
 	# ratio
 	rat = structure(paste0(cntPct[idx], '/', cntAll[idx]), names = idx)
@@ -48,6 +49,7 @@ enrichmentFactorForDataFrame = function(df, enrich_element, rank_by,
 	idx2= setdiff(names(cntAll), idx)
 	ef2 = structure(rep(0, length(idx2)), names=idx2)
 	hp2 = structure(rep(1, length(idx2)), names=idx2)
+	# lhp2 = structure(rep(0, length(idx2)), names=idx2)
 	rat2 = structure(paste0(0, '/', cntAll[idx2]), names=idx2)
 
 	out = list(EF= c(ef, ef2), HyperP=c(hp, hp2), ratio=c(rat, rat2))

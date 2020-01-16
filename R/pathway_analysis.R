@@ -164,10 +164,18 @@ enrLS2plotMat <- function(enrLS, ord.FUN = NULL ) {
 	rownames(plotMat) = pathDF[,'ID']
 	plotMat = plotMat[order(apply(plotMat,1, mean, na.rm=T), decreasing=TRUE),]
 
-	if(is.null(ord.FUN)) { ord.FUN <- function(v) sum(!is.na(v)) }
-	if(class(ord.FUN) == 'function') { ord = apply(plotMat, 1, ord.FUN) }
-	if(class(ord.FUN) != 'function') { ord = ord.FUN }
+	if(is.null(ord.FUN)) { 
+		ord.FUN = function(v) sum(!is.na(v))
+	}
+	if(class(ord.FUN) == 'function') { 
+		ord = apply(plotMat, 1, ord.FUN) 
+	}
+	if(class(ord.FUN) != 'function') { 
+		ord = ord.FUN 
+	}
 
 	plotMat = plotMat[order(ord, decreasing=TRUE),]
 	return(plotMat)
 }
+
+

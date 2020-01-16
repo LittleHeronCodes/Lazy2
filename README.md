@@ -51,16 +51,27 @@ reload(inst('Lazy2'))
 
 ---
 
-## Update Notes
+# Changelog
+
+## Ver 0.0.2.0
+
+**2019.12.19**
+
+* Added na.rm option in `TtestWithMat`
+* Added Lazier functions for faster data survey
+
+
+## Version 0.0.1.2 patch
 
 **2019.11.05**
 
-* Version 0.0.1.2 patch
 * Modifications in 
+
+
+## Version 0.0.1.2
 
 **2019.11.01**
 
-* Version 0.0.1.2
 * `gene_info` data file change to gene info from NCBI (`NCBIHomo_sapiens.gene_info.csv`)
   * added gene alias data, updataed entrez symbol map
 * 
