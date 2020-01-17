@@ -34,7 +34,7 @@ reload(inst('Lazy2'))
 
 **NOTE** : Be sure to run `DATASET.R` when adding new data.
 
-## To Do Notes
+## To Do Notes (For ver 0.1.3)
 
 * Add startup message for version
 * Add Python based venn diagram function
@@ -42,7 +42,7 @@ reload(inst('Lazy2'))
 
 ## In Progress
 
-### Removing ClusterProfiler dependency
+### ~Removing ClusterProfiler dependency~
 
 -[ ] read gmt file
 -[ ] hypergeometric t-test against gmt list object
@@ -53,19 +53,19 @@ reload(inst('Lazy2'))
 
 # Changelog
 
-## Ver 0.0.2.0
-
-**2019.12.19**
+## Ver 0.0.1.3
 
 * Added na.rm option in `TtestWithMat`
-* Added Lazier functions for faster data survey
+* New functions :
+ * removeZeroVariances
+ * Added Lazier functions for faster data survey
 
 
 ## Version 0.0.1.2 patch
 
 **2019.11.05**
 
-* Modifications in 
+* Modifications in ...??
 
 
 ## Version 0.0.1.2
@@ -74,7 +74,6 @@ reload(inst('Lazy2'))
 
 * `gene_info` data file change to gene info from NCBI (`NCBIHomo_sapiens.gene_info.csv`)
   * added gene alias data, updataed entrez symbol map
-* 
 
 **2019.10.07**
 
@@ -87,3 +86,4 @@ reload(inst('Lazy2'))
 * Version 0.0.1.0
 * Pathway analysis function : new enrLs to plot possible matrix function
 * LazygeneInfo entrez ID to character type
+

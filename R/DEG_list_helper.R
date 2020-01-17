@@ -45,6 +45,24 @@ geneAliasMap <- function(genes, return_ent = FALSE, verbose=FALSE) {
 }
 
 
+#' removeZeroVar
+#'
+#' Remove genes with zero covariances before t-test matrix
+#' @param m    Matrix (eg. Gene expression matrix)
+#' @param idx1 Column index for group A
+#' @param idx2 Column index for group B
+#' @param verbose verbose
+#' @return Matrix with zero covariance samples removed
+#' @export
+
+removeZeroVar <- function(m, idx1, idx2, verbose=TRUE) {
+	varsum = apply(m, 1, function(v) var(v[idx1]) + var(v[idx2]))
+	m = m[which(varsum != 0),]
+	if(verbose) cat('No of zero variances detected :',sum(varsum==0), '\n')
+	return(m)
+}
+
+
 #' TtestWithMat
 #'
 #' Row-wise t-Test for gene expression matrix
@@ -75,12 +93,13 @@ TtestWithMat <- function(m, idx1, idx2, alternative ='two.sided', na.rm=TRUE) {
 	resultsDF= data.frame(t.res, medDiff=md, menDiff=mn)
 	colnames(resultsDF) = gsub('.t$','',colnames(resultsDF))
 	rownames(resultsDF) = rownames(m)
+
+	## Additional information
 	# resultsDF$geneEnt = rownames(m)
 	# resultsDF$geneSym = ent2sym(rownames(m))
 	# resultsDF = resultsDF[,c('geneEnt','geneSym', columns)]
 	return(resultsDF)
 }
-
 
 
 #' geneCount
