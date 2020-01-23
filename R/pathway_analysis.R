@@ -36,6 +36,29 @@ enricherForGeneListWrapper = function(glist, term, pcut=.1, qcut=.2, minGSSize=5
 }
 
 
+
+enricherForGLIST <- function(geneList, use) {
+	require(clusterProfiler)
+	enrLS <- list()
+	for(dir in names(geneList[[1]])) {
+		glist = lapply(geneList, function(ls) ls[[dir]])
+		enrObj = lapply(glist, function(gset) {
+			if(use == 'kegg') {
+				output = enrichKEGG(gset, minGSSize=10, maxGSSize=200,
+					pvalueCutoff = 1, pAdjustMethod = 'fdr', qvalueCutoff = 1)				
+			} else if(use == 'gobp') {
+				require(org.Hs.eg.db)
+				output = enrichGO(gset, ont = 'BP', OrgDb = org.Hs.eg.db, minGSSize=50, maxGSSize=200,
+					pvalueCutoff = 1, pAdjustMethod = 'fdr', qvalueCutoff = 1)
+			} else {stop('Currently available use option : kegg, gobp')}
+			})
+		enrLS[[dir]] = enrObj
+	}
+	return(enrLS)
+}
+
+
+
 #' enrObjectTransform
 #' 
 #' enricher Object list format transformation for plotting
@@ -138,6 +161,38 @@ enrHeatmapOnly_nset <- function(plotMat, max_row, mtitle, colpal='up', clust = T
 	return(hp)
 }
 
+
+
+enrLS2plotMat <- function(enrLS, ord.FUN = NULL, use_adjP = TRUE, p.col='pvalue',id.col='ID') {
+
+	ix = grep(p.col, names(as.data.frame(enrLS[[1]])), ignore.case = TRUE)
+	
+	hmplot = do.call(rbind, lapply(names(enrLS), function(set) {
+		df = data.frame(enrLS[[set]])
+		df = df[order(df[,ix]),]
+		df$set = set
+		df$logP = -log10(df[,ix])
+		return(df)
+		}) )
+
+	pathDF = tidyr::spread(hmplot[, c('set',id.col,'logP')], set, logP, fill = NA)
+	plotMat = as.matrix(pathDF[,-1])
+	rownames(plotMat) = pathDF[,id.col]
+	plotMat = plotMat[order(apply(plotMat,1, mean, na.rm=T), decreasing=TRUE),]
+
+	if(is.null(ord.FUN)) { 
+		ord.FUN = function(v) sum(!is.na(v))
+	}
+	if(class(ord.FUN) == 'function') { 
+		ord = apply(plotMat, 1, ord.FUN) 
+	}
+	if(class(ord.FUN) != 'function') { 
+		ord = ord.FUN 
+	}
+
+	plotMat = plotMat[order(ord, decreasing=TRUE),]
+	return(plotMat)
+}
 
 
 
