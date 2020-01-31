@@ -14,7 +14,6 @@
 "geneMap"
 
 
-
 #' Gene symbol alias dataframe for Lazy2
 #'
 #' Gene mapper dataframe containing Entrez, Symbol, Ensembl (optional)

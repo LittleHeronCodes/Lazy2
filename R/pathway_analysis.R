@@ -17,7 +17,7 @@
 
 
 enricherForGeneListWrapper = function(glist, term, pcut=.1, qcut=.2, minGSSize=5, maxGSSize=100) {
-
+	require(clusterProfiler)
 	gspace = glist$toGene
 	enrGeneLs = list(
 		up   = glist$upGene,

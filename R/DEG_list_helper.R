@@ -47,12 +47,12 @@ geneAliasMap <- function(genes, return_ent = FALSE, verbose=FALSE) {
 
 #' removeZeroVar
 #'
-#' Remove genes with zero covariances before t-test matrix
+#' Remove genes with zero variances before t-test matrix
 #' @param m    Matrix (eg. Gene expression matrix)
 #' @param idx1 Column index for group A
 #' @param idx2 Column index for group B
 #' @param verbose verbose
-#' @return Matrix with zero covariance samples removed
+#' @return Matrix with zero variance samples removed (hopefully)
 #' @export
 
 removeZeroVar <- function(m, idx1, idx2, verbose=TRUE) {
@@ -106,7 +106,7 @@ TtestWithMat <- function(m, idx1, idx2, alternative ='two.sided', na.rm=TRUE) {
 #' 
 #' Lazy function for gene number for geneList
 #' 
-#' @param geneList geneList of DEG
+#' @param geneList nested gene list of DEG
 #' @export
 
 geneCount <- function(geneList) { sapply(geneList, function(ls) sapply(ls, length)) }
@@ -253,10 +253,13 @@ geneListDistMat <- function(pairs, value.var) {
 #' @export
 
 geneListDistMat_HM <- function(distMat, name, show_axis = TRUE, mtitle = NULL, log = TRUE, km = NULL) {
+	require(circlize)
+	require(ComplexHeatmap)
+
 	if(log) distMat = log2(distMat + .01)
 	if(is.null(mtitle)) mtitle = paste('Overlap Enrichment')
-	colors = colorRamp2(c(-3.5,-2,0,2,3.5), c('#2166ac','#4393c3','#f7f7f7','#d6604d','#b2182b'))
-	hp = Heatmap(distMat, col=colors, name=name, column_title=mtitle, row_km = km, 
+	colors = circlize::colorRamp2(c(-3.5,-2,0,2,3.5), c('#2166ac','#4393c3','#f7f7f7','#d6604d','#b2182b'))
+	hp = ComplexHeatmap::Heatmap(distMat, col=colors, name=name, column_title=mtitle, row_km = km, 
 		column_km = km, show_column_names = show_axis, show_row_names = show_axis)
 	return(hp)
 }

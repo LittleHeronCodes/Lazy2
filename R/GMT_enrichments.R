@@ -15,7 +15,6 @@
 #' readGMT('file/path.gmt')
 #' }
 
-
 readGMT <- function(file, skip=2, as.df = TRUE) {
 
 	out = list()

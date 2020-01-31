@@ -1,9 +1,11 @@
 # Lazy2
-Custom functions from Lazy for personal use, now as a package.
 
-## Build Guide (local)
+Custom functions from Lazy for personal use, now as a package!
+
+## Testing Build
 
 ```r
+getwd()	#'path/to/alt/RLib/Lazy2'
 library(devtools)
 build('Lazy2')
 ```
@@ -32,58 +34,32 @@ install()
 reload(inst('Lazy2'))
 ```
 
-**NOTE** : Be sure to run `DATASET.R` when adding new data.
+## Note to Self
 
-## To Do Notes (For ver 0.1.3)
+* Be sure to run `DATASET.R` when adding new data.
+* Test build on local before deployment.
+* Reduce dependency.
+* Version number : 
 
-* Add startup message for version
-* Add Python based venn diagram function
-* Add draw MA plot, log fc result get for microarray no replicate
+## To Do Notes (For ver 0.2.0)
 
-## In Progress
+* Startup message for version in `zzz.R`.
+* Python based venn diagram function
+* Draw MA plot, log fc result get for microarray no replicate.
+* Tutorials
+* Work to make Lazy2 as stand alone as possible.
+* Remove deprecated functions.
 
-### ~Removing ClusterProfiler dependency~
+## Checklist
 
--[ ] read gmt file
--[ ] hypergeometric t-test against gmt list object
--[ ] draw overrepresentation plot
--[ ] test consistency against ClusterProfiler
+-[] Add function namespace
+-[] Test build with minimal dependency
 
 ---
 
-# Changelog
+## Useful Links and References
 
-## Ver 0.0.1.3
-
-* Added na.rm option in `TtestWithMat`
-* New functions :
- * removeZeroVariances
- * Added Lazier functions for faster data survey
-
-
-## Version 0.0.1.2 patch
-
-**2019.11.05**
-
-* Modifications in ...??
-
-
-## Version 0.0.1.2
-
-**2019.11.01**
-
-* `gene_info` data file change to gene info from NCBI (`NCBIHomo_sapiens.gene_info.csv`)
-  * added gene alias data, updataed entrez symbol map
-
-**2019.10.07**
-
-* Version 0.0.1.1
-* geneSet Overlap fixed to include intersection counts
-
-
-**2019.09.26**
-
-* Version 0.0.1.0
-* Pathway analysis function : new enrLs to plot possible matrix function
-* LazygeneInfo entrez ID to character type
+* [R Namespaces](http://r-pkgs.had.co.nz/namespace.html)
+* [Package structure by CRAN](https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Package-structure)
+* [Writing R Packages by Karl Broman](https://kbroman.org/Tools4RR/assets/lectures/08_rpack_withnotes.pdf)
 

@@ -15,10 +15,7 @@ LazyData: true
 RoxygenNote: 6.1.1
 Depends: 
 	R (>= 3.6.0),
-	circlize (>= 0.4.6),
-	ComplexHeatmap (>= 2.0.0),
 	dplyr (>= 0.8.1),
-	RColorBrewer (>= 1.1),
 	reshape2 (>= 1.4.3),
 	tidyr (>= 0.8.3)
 Imports: 
