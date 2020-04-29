@@ -6,7 +6,6 @@ Authors@R:
            family  = "Yoon",
            role    = c("aut", "cre"),
            email   = "first.last@example.com",
-           github  = "https://github.com/LittleHeronCodes",
            comment = c(ORCID = "YOUR-ORCID-ID"))
 Description: Lazy pakage of custom functions for personal use.
 License: None
