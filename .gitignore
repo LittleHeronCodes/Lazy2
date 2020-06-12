@@ -5,7 +5,7 @@
 *.sublime-project
 *.sublime-workspace
 
-/data-raw/
+# /data-raw/
 
 # History files
 .Rhistory

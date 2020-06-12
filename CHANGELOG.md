@@ -10,7 +10,7 @@ Function changes :
  * Dependent function namespace control.
 
 New functions :
- * Lazier functions for faster data survey. **(NOT TO BE USED IN ACTUAL SCRIPT)**
+ * Lazier functions for faster and lazier data survey. **(NOT TO BE USED IN ACTUAL SCRIPT)**
  * removeZeroVariances
  
 
