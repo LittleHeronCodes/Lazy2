@@ -1,13 +1,13 @@
-#' enrichmentFactorForDataFrame
+#' CMAP Style Enrichment Calculation
 #'
-#' CMAP style enrichment. Calculate enrichment factor from a dataframe by rank cutoff.
-#' @param df data frame
+#' Calculate enrichment factor from a dataframe by rank cutoff.
+#' @param df input data frame
 #' @param enrich_element category column from df to enrich
 #' @param rank_by column used to sort rank
-#' @param cutoff cut percentile
-#' @param min_count minimum count to be valid
-#' @param psc pseudocount for enrichment
-#' @return vector of enrichment factor for each category
+#' @param cutoff cut percentile. default 0.05
+#' @param min_count minimum count to be valid. default 3
+#' @param psc pseudocount when caclulating enrichment. default 1
+#' @return list of named vectors for each category
 #' @export
 
 ## Calculate enrichment factor for drugs

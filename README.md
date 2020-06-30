@@ -4,16 +4,19 @@ Custom functions from Lazy for personal use, now as a package!
 
 ## To Do
 
-* Dependency clean up (so package won't load everything automatically).
-* `clusterprofiler` function wrapper removed.
-* Update Gene info table, increase reliability
-* Add bioMart info???
-* Remove overly specific functions (branch off for legacy)
-* Version numbering soft : *major.minor.build.revision*
+- [] Dependency clean up (so package won't load everything automatically).
+- [] `clusterprofiler` function wrapper removed.
+- [o] Update Gene info table, increase reliability
+- [] Gene list input into unnested list
+- [] Add bioMart info???
+- [] Remove overly specific functions (branch off for legacy)
+- [] Version numbering soft : *major.minor.build.revision*
 
 ## Ver 0.0.3.0 **[2020.07.31]**
 
+* Last build before minor deploy
 * `TanimotoCoef` take universe argument `T`
+* 
 
 ---
 
@@ -54,7 +57,6 @@ reload(inst('Lazy2'))
 * Be sure to run `DATASET.R` when adding new data.
 * Test build on local before deployment.
 * Reduce dependency.
-* Version number : 
 
 ## To Do Notes (For ver 0.2.0)
 
@@ -67,8 +69,8 @@ reload(inst('Lazy2'))
 
 ## Checklist
 
--[] Add function namespace
--[] Test build with minimal dependency
+- [] Add function namespace
+- [] Test build with minimal dependency
 
 ---
 

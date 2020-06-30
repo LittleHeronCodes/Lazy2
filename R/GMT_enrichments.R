@@ -49,25 +49,33 @@ writeGMT <- function(file, glist, geneset_desc='') {
 }
 
 
-#' hypergeoTestForGeneset
+#' Hypergeometric test for gmt style list
 #' 
-#' gene list hypergeometric test against gmt format gene set. Can be used for pathway analysis or CMAP style query.
+#' Gene list hypergeometric test against gmt format list of gene set. Can be used for custom pathway analysis or CMAP style query.
 #' 
-#' @param query  gene set to query (ex Differentially Expressed Genes)
-#' @param refGMT reference gene set in list format
+#' @param query  gene set to query (ex. Differentially Expressed Genes)
+#' @param refGMT list of reference gene set (ex. Pathways)
 #' @param gspace gene space to query in
 #' @return data frame
+#' pVal      : hypergeometric test p values from phyper
+#' logP      : -log10(p value)
+#' oddsRatio : odds ratio
+#' tanco     : tanimoto coefficient (Jaccard index)
+#' int       : intersected item count
+#' bg        : reference item background count
 #' @export
 #' @examples
 #' \dontrun{
-#' hypergeoTestForGeneset(glist, c2.kegg)
+#' gset = c('A','B','C')
+#' glist = list(ID1 = LETTERS[1:10], ID2 = LETTERS[4:25])
+#' hypergeoTestForGeneset(gset, glist, LETTERS)
 #' }
 
 hypergeoTestForGeneset <- function(query, refGMT, gspace) {
 	if(!all(query %in% gspace)) {
-		stop(paste(length(setdiff(query, gspace)),'query items were found outside of background space. Check inputs.'))
+		stop(paste(length(setdiff(query, gspace)),'Query items were found outside of background space. Check inputs.'))
 	}
-	if(length(query) == 0) stop('query length zero.')
+	if(length(query) == 0) stop('Query length is zero.')
 
 	N = length(gspace)							# no of balls in urn
 	k = length(query)							# no of balls drawn from urn (DEG no)
