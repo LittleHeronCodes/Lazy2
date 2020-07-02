@@ -2,18 +2,18 @@
 % Please edit documentation in R/DEG_list_helper.R
 \name{ent2sym}
 \alias{ent2sym}
-\title{ent2sym}
+\title{gene mapper for entrez and symbol}
 \usage{
 ent2sym(genes)
 }
 \arguments{
-\item{genes}{genes either in Entrez or Symbol}
+\item{genes}{genes either in Entrez or Symbol (human)}
 }
 \value{
-genes
+genes in wanted IDs
 }
 \description{
-gene mapper for entrez and symbol
+Entrez to Hugo symbol and vice versa
 }
 \examples{
 ent2sym('TP53')

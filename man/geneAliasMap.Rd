@@ -2,12 +2,12 @@
 % Please edit documentation in R/DEG_list_helper.R
 \name{geneAliasMap}
 \alias{geneAliasMap}
-\title{geneAliasMap}
+\title{???}
 \usage{
 geneAliasMap(genes, return_ent = FALSE, verbose = FALSE)
 }
 \arguments{
-\item{genes}{genes either in Entrez or Symbol}
+\item{genes}{genes either in Entrez or Symbol (human)}
 
 \item{return_ent}{genes either in Entrez or Symbol}
 

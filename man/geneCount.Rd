@@ -7,7 +7,7 @@
 geneCount(geneList)
 }
 \arguments{
-\item{geneList}{geneList of DEG}
+\item{geneList}{nested gene list of DEG}
 }
 \description{
 Lazy function for gene number for geneList

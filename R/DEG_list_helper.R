@@ -1,9 +1,9 @@
-#' ent2sym
-#' 
 #' gene mapper for entrez and symbol
 #' 
-#' @param genes genes either in Entrez or Symbol
-#' @return genes
+#' Entrez to Hugo symbol and vice versa
+#' 
+#' @param genes genes either in Entrez or Symbol (human)
+#' @return genes in wanted IDs
 #' @export
 #' @examples
 #' ent2sym('TP53')
@@ -20,7 +20,7 @@ ent2sym <- function(genes) {
 }
 
 
-#' geneAliasMap
+#' ???
 #' 
 #' gene synonym mapper
 #' 

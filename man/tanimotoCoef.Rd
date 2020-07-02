@@ -4,12 +4,14 @@
 \alias{tanimotoCoef}
 \title{Tanimoto coefficients}
 \usage{
-tanimotoCoef(A, B)
+tanimotoCoef(A, B, T = NULL)
 }
 \arguments{
 \item{A}{set input1 as vectors}
 
 \item{B}{set input2 as vectors}
+
+\item{T}{background space (if given, will intersect set before calculating)}
 }
 \description{
 Calculates Tanimoto coefficients given two set vectors

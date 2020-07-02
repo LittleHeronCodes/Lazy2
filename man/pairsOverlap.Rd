@@ -11,7 +11,7 @@ pairsOverlap(v, geneList)
 \arguments{
 \item{v}{length 2 index vector from pair created by expand.grid}
 
-\item{geneList}{geneList of DEG}
+\item{geneList}{nested gene list of DEG}
 }
 \value{
 1-row dataframe

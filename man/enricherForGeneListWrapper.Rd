@@ -4,8 +4,14 @@
 \alias{enricherForGeneListWrapper}
 \title{enricherForGeneListWrapper}
 \usage{
-enricherForGeneListWrapper(glist, term, pcut = 0.1, qcut = 0.2,
-  minGSSize = 5, maxGSSize = 100)
+enricherForGeneListWrapper(
+  glist,
+  term,
+  pcut = 0.1,
+  qcut = 0.2,
+  minGSSize = 5,
+  maxGSSize = 100
+)
 }
 \arguments{
 \item{glist}{List of genes (Entrez or Symbol) with names upGene, dnGene, toGene}

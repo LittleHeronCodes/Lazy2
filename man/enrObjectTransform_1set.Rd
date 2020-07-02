@@ -13,8 +13,7 @@ enrObjectTransform_nset(enr_obj, pco = 0.1, max_row = 10)
 
 enrHeatmapOnly_1set(plotMat, mtitle, clust = TRUE)
 
-enrHeatmapOnly_nset(plotMat, max_row, mtitle, colpal = "up",
-  clust = TRUE)
+enrHeatmapOnly_nset(plotMat, max_row, mtitle, colpal = "up", clust = TRUE)
 }
 \arguments{
 \item{enr_obj}{enricher object list for single set (names: up, down)}

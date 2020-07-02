@@ -4,7 +4,7 @@
 \alias{TtestWithMat}
 \title{TtestWithMat}
 \usage{
-TtestWithMat(m, idx1, idx2, alternative = "two.sided")
+TtestWithMat(m, idx1, idx2, alternative = "two.sided", na.rm = TRUE)
 }
 \arguments{
 \item{m}{Gene expression matrix}

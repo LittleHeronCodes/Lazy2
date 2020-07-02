@@ -13,11 +13,17 @@ geneListSetOverlap.parallel(geneList, ncore)
 
 geneListDistMat(pairs, value.var)
 
-geneListDistMat_HM(distMat, name, show_axis = TRUE, mtitle = NULL,
-  log = TRUE, km = NULL)
+geneListDistMat_HM(
+  distMat,
+  name,
+  show_axis = TRUE,
+  mtitle = NULL,
+  log = TRUE,
+  km = NULL
+)
 }
 \arguments{
-\item{geneList}{geneList of DEG}
+\item{geneList}{nested gene list of DEG}
 
 \item{ncore}{number of cores to use}
 

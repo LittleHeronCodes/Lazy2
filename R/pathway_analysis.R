@@ -162,40 +162,6 @@ enrHeatmapOnly_nset <- function(plotMat, max_row, mtitle, colpal='up', clust = T
 }
 
 
-
-enrLS2plotMat <- function(enrLS, ord.FUN = NULL, use_adjP = TRUE, p.col='pvalue',id.col='ID') {
-
-	ix = grep(p.col, names(as.data.frame(enrLS[[1]])), ignore.case = TRUE)
-	
-	hmplot = do.call(rbind, lapply(names(enrLS), function(set) {
-		df = data.frame(enrLS[[set]])
-		df = df[order(df[,ix]),]
-		df$set = set
-		df$logP = -log10(df[,ix])
-		return(df)
-		}) )
-
-	pathDF = tidyr::spread(hmplot[, c('set',id.col,'logP')], set, logP, fill = NA)
-	plotMat = as.matrix(pathDF[,-1])
-	rownames(plotMat) = pathDF[,id.col]
-	plotMat = plotMat[order(apply(plotMat,1, mean, na.rm=T), decreasing=TRUE),]
-
-	if(is.null(ord.FUN)) { 
-		ord.FUN = function(v) sum(!is.na(v))
-	}
-	if(class(ord.FUN) == 'function') { 
-		ord = apply(plotMat, 1, ord.FUN) 
-	}
-	if(class(ord.FUN) != 'function') { 
-		ord = ord.FUN 
-	}
-
-	plotMat = plotMat[order(ord, decreasing=TRUE),]
-	return(plotMat)
-}
-
-
-
 #' enrLS2plotMat
 #'
 #' Formerly enrObjectTransform nset, fixed to no filter, ordering function

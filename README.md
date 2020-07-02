@@ -7,23 +7,24 @@ Custom functions from Lazy for personal use, now as a package!
 - [] Dependency clean up (so package won't load everything automatically).
 - [] `clusterprofiler` function wrapper removed.
 - [o] Update Gene info table, increase reliability
-- [] Gene list input into unnested list
+- [] Gene list default input changed to unnested list
 - [] Add bioMart info???
 - [] Remove overly specific functions (branch off for legacy)
 - [] Version numbering soft : *major.minor.build.revision*
+- [] Add cheatsheet page??
 
 ## Ver 0.0.3.0 **[2020.07.31]**
 
-* Last build before minor deploy
+* Last testing build before minor deploy
 * `TanimotoCoef` take universe argument `T`
-* 
+* Removed ClusterProfiler dependency
 
 ---
 
 ## Testing Build
 
 ```r
-getwd()	#'path/to/alt/RLib/Lazy2'
+getwd()	#'path/to/alt/RLib'
 library(devtools)
 build('Lazy2')
 ```

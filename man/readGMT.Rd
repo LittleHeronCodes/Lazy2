@@ -2,23 +2,36 @@
 % Please edit documentation in R/GMT_enrichments.R
 \name{readGMT}
 \alias{readGMT}
+\alias{writeGMT}
 \title{readGMT}
 \usage{
-readGMT(fn, skip = 2, as.df = TRUE)
+readGMT(file, skip = 2, as.df = TRUE)
+
+writeGMT(file, glist, geneset_desc = "")
 }
 \arguments{
-\item{fn}{gmt file path}
+\item{file}{GMT file path}
 
-\item{skip}{fields to skip. Usually 2.}
+\item{skip}{Fields to skip. Usually 2.}
 
-\item{as.df}{return as data frame?}
+\item{as.df}{Return as data frame?}
+
+\item{glist}{List of gene set. Should be un-nested level one named list.}
+
+\item{geneset_desc}{Description meta information for gene set. Either length one or same length vector as glist.}
 }
 \value{
-gene set dataframe of 2 column or list
+Gene set dataframe of 2 column or list
 }
 \description{
-gmt file reader
+gmt file reader. A GMT file format is a tab delimited text file containing gene sets.
+Each line should contain one geneset, delimited by tab. Genes should start from 3rd field.
 }
+\section{Functions}{
+\itemize{
+\item \code{writeGMT}: write gmt file for geneset list.
+}}
+
 \examples{
 \dontrun{
 readGMT('file/path.gmt')

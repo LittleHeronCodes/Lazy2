@@ -3,8 +3,10 @@
 \docType{data}
 \name{LazygeneInfo}
 \alias{LazygeneInfo}
-\title{Gene Mapping dataframe for Lazy2}
-\format{A dataframe of columns 'hgnc_symbol', 'entrez'}
+\title{Gene Mapping dataframe for Lazy2 (SHOULD BE DEPRECATED)}
+\format{
+A dataframe of columns 'hgnc_symbol', 'entrez'
+}
 \source{
 \href{https://www.gencodegenes.org/human/}{Gencode Metadata}
 }
