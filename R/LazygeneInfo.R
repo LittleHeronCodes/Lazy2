@@ -1,4 +1,4 @@
-#' Gene Mapping dataframe for Lazy2 (SHOULD BE DEPRECATED)
+#' Gene Mapping dataframe for Lazy2 (Needs to be updated)
 #'
 #' Gene mapper dataframe containing Entrez, Symbol, Ensembl (optional)
 #' used for ent2sym and more gene mapper functions.

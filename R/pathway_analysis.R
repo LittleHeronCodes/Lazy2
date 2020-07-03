@@ -1,4 +1,4 @@
-#' enricherForGeneListWrapper
+#' enricherForGeneListWrapper****
 #' 
 #' Wrapper function of enricher for differentially expressed gene list
 #' @param glist List of genes (Entrez or Symbol) with names upGene, dnGene, toGene
