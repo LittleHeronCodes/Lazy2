@@ -4,10 +4,18 @@ library(data.table)
 library(tidyverse)
 
 ## Gene Info processing from HGNC raw file
+## Downloaded from HGNC genenames.org/download/custom
+hgnc = fread('/data-raw/HGNC_Gene_Info.csv')
+colnames(hgnc) = gsub(' ', '_', colnames(hgnc))
+geneInfo = hgnc %>% 
+  filter(Status == 'Approved') %>%
+  select(NCBI_Gene_ID, HGNC_ID, Approved_name, Approved_symbol, Ensembl_gene_ID, Locus_group) %>%
+  rename(entrez=NCBI_Gene_ID, hgnc_id = HGNC_ID, hgnc_gene = Approved_name, 
+    hgnc_symbol = Approved_symbol, ensembl = Ensembl_gene_ID, gene_type = Locus_group) %>%
+  mutate(hgnc_id = gsub('^HGNC:','',hgnc_id), entrez = as.character(entrez)) %>%
+  arrange(entrez, hgnc_id)
 
-LazygeneInfo <- read.table('data-raw/gene_info.csv', sep = ',', header=TRUE)
-LazygeneInfo$entrez = as.character(LazygeneInfo$entrez)
-LazygeneInfo$hgnc_id = as.character(LazygeneInfo$hgnc_id)
+LazygeneInfo = geneInfo
 
 usethis::use_data(LazygeneInfo)
 
@@ -37,26 +45,13 @@ geneAlias = geneAlias[idx,]
 geneMap <- NCBIgeneInfo[,c('Entrez','Symbol','HGNC_symbol','gene_type')]
 
 
-usethis::use_data(geneMap)
-usethis::use_data(geneAlias)
+# usethis::use_data(geneMap)
+# usethis::use_data(geneAlias)
 
 
 
 
-## Downloaded from HGNC genenames.org/download/custom
-hgnc = fread('/data-raw/HGNC_Gene_Info.csv')
-colnames(hgnc) = gsub(' ', '_', colnames(hgnc))
-geneInfo = hgnc %>% 
-  filter(Status == 'Approved') %>%
-  select(NCBI_Gene_ID, HGNC_ID, Approved_name, Approved_symbol, Ensembl_gene_ID, Locus_group) %>%
-  rename(entrez=NCBI_Gene_ID, hgnc_id = HGNC_ID, hgnc_gene = Approved_name, 
-  	hgnc_symbol = Approved_symbol, ensembl = Ensembl_gene_ID, gene_type = Locus_group) %>%
-  mutate(hgnc_id = gsub('^HGNC:','',hgnc_id), entrez = as.character(entrez)) %>%
-  arrange(entrez, hgnc_id)
 
-
-
-head(ginfo)
 #   entrez hgnc_id                          hgnc_gene hgnc_symbol
 # 1      1       5             alpha-1-B glycoprotein        A1BG
 # 2      2       7              alpha-2-macroglobulin         A2M
