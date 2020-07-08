@@ -57,12 +57,14 @@ writeGMT <- function(file, glist, geneset_desc='') {
 #' @param refGMT list of reference gene set (ex. Pathways)
 #' @param gspace gene space to query in
 #' @return data frame
-#' pVal      : hypergeometric test p values from phyper
-#' logP      : -log10(p value)
-#' oddsRatio : odds ratio
-#' tanco     : tanimoto coefficient (Jaccard index)
-#' int       : intersected item count
-#' bg        : reference item background count
+#' \describe{
+#' 	  \item{pVal}{hypergeometric test p values from phyper}
+#' 	  \item{logP}{-log10(p value)}
+#' 	  \item{oddsRatio}{odds ratio}
+#' 	  \item{tanco}{tanimoto coefficient (Jaccard index)}
+#' 	  \item{int}{intersected item count}
+#' 	  \item{bg}{reference item background count}
+#' }
 #' @export
 #' @examples
 #' \dontrun{
@@ -82,18 +84,52 @@ hypergeoTestForGeneset <- function(query, refGMT, gspace) {
 	enrRes = lapply(refGMT, function(refgenes) {
 		q = length(intersect(refgenes, query))	# no of white balls drawn
 		m = length(intersect(gspace, refgenes)) # no of white balls in urn
+		I = intersect(refgenes, query)
 
 		pVal = phyper(q-1, m, N-m, k, lower.tail = FALSE)
 		odds = (q / k) / (m / N)
 		jacc = q / length(union(query, refgenes))
 
-		return(data.frame(pVal = pVal, oddsRatio=odds, tanco=jacc, int=q, bg=m))
+		return(data.frame(pVal = pVal, oddsRatio=odds, tan = jacc, int=q, bg=m))
 		})
 
 	enrRes = do.call(rbind, enrRes)
 	enrRes$ID = names(refGMT)
 	enrRes$logP = -log10(enrRes$pVal)
-	enrRes = enrRes[,c('ID','pVal','logP','oddsRatio','tanco','int','bg')]
+	enrRes = enrRes[,c('ID','pVal','logP','oddsRatio','tan','int','bg')]
 	return(enrRes)	
 }
 
+
+
+#' @describeIn hypergeoTestForGeneset
+#' Using multiprocessing
+#' @export
+
+hypergeoTestForGeneset2 <- function (query, refGMT, gspace, ncore = 1) {
+	require(parallel)
+
+	if(!all(query %in% gspace)) {
+		stop(paste(length(setdiff(query, gspace)),'Query items were found outside of background space. Check inputs.'))
+	}
+	if(length(query) == 0) stop('Query length is zero.')
+
+    N = length(gspace)
+    k = length(query)
+    enrRes = mclapply(refGMT, function(refgenes) {
+    	I = intersect(refgenes, query)
+        q = length(intersect(refgenes, query))
+        m = length(intersect(gspace, refgenes))
+        pVal = phyper(q - 1, m, N - m, k, lower.tail = FALSE)
+        odds = (q / k) / (m / N)
+        jacc = q / length(union(query, refgenes))
+
+        return(data.frame(pVal = pVal, oddsRatio = odds, tan = jacc, int = q, bg = m))
+    }, mc.cores = ncore)
+
+    enrRes = do.call(rbind, enrRes)
+    enrRes$ID = names(refGMT)
+    enrRes$logP = -log10(enrRes$pVal)
+    enrRes = enrRes[, c('ID', 'pVal', 'logP', 'oddsRatio', 'tan', 'int', 'bg')]
+    return(enrRes)
+}

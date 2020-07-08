@@ -1,5 +1,16 @@
 # Changelog
 
+## Ver 0.0.3.0 test [2020.07.08]
+
+* Last testing build before minor deploy
+* `TanimotoCoef` take universe argument `T`
+* Removed `ClusterProfiler` dependency
+* Lazygeneinfo rebuilt from HGNC dataset and documented.
+* Removed genemap, genealias dataset
+* Fixed documentations
+* Added `hypergeoTestSetForGenes` multiprocessing
+
+
 ## Ver 0.0.2.0 [2020.01.29]
 
 * Changelog moved to separate file.

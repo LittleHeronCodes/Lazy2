@@ -8,7 +8,7 @@
 #' @param minGSSize minimum gene set size for enricher
 #' @param maxGSSize maximum gene set size for enricher
 #' @return List of enricher Object: up, down
-#' @export
+# ' @export
 #' @examples
 #' \dontrun{
 #' sapply(glist, length)
@@ -67,7 +67,7 @@ enricherForGLIST <- function(geneList, use) {
 #' @param pco     p-value cutoff Default .1
 #' @param max_row maximum row of plotMat to return Default 10
 #' @return Matrix to feed to enr_HeatmapOnly (plotMat)
-#' @export
+# ' @export
 #' @examples
 #' \dontrun{
 #' plotMat <- enrObjectTransform_1set(enr_obj)
@@ -96,7 +96,7 @@ enrObjectTransform_1set <- function(enr_obj, pco=.1, max_row=10) {
 
 
 #' @describeIn enrObjectTransform_1set For multiple dataset gene list
-#' @export
+# ' @export
 
 enrObjectTransform_nset <- function(enr_obj, pco=.1, max_row=10) {
 	LS = lapply(names(enr_obj), function(set) {
@@ -126,7 +126,7 @@ enrObjectTransform_nset <- function(enr_obj, pco=.1, max_row=10) {
 #' @param mtitle  Main title for pathway analysis heatmaps
 #' @param colpal  Choosing color palette for nset pathway analysis heatmap. ('up' or 'dn')
 #' @param clust   Cluster Heatmap or no?
-#' @export
+# ' @export
 
 enrHeatmapOnly_1set <- function(plotMat, mtitle, clust = TRUE) {
 	colors = colorRamp2(c(-4,-2,0,2,4), 
@@ -140,7 +140,7 @@ enrHeatmapOnly_1set <- function(plotMat, mtitle, clust = TRUE) {
 
 #' @describeIn enrObjectTransform_1set
 #' Heatmap draw from plotMat from enrObjectTransform_nset 
-#' @export
+# ' @export
 
 enrHeatmapOnly_nset <- function(plotMat, max_row, mtitle, colpal='up', clust = TRUE) {
 
@@ -168,7 +168,7 @@ enrHeatmapOnly_nset <- function(plotMat, max_row, mtitle, colpal='up', clust = T
 #' 
 #' @param enrLS enricher object list
 #' @param ord.FUN function for ordering output plotMat
-#' @export
+# ' @export
 #'
 
 enrLS2plotMat <- function(enrLS, ord.FUN = NULL ) {

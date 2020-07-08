@@ -4,11 +4,9 @@
 \alias{convertDEGList2Matrix}
 \title{convertDEGList2Matrix}
 \usage{
-convertDEGList2Matrix(geneList, toSpace = NULL)
+convertDEGList2Matrix(glist, toSpace = NULL)
 }
 \arguments{
-\item{geneList}{nested gene list of DEG}
-
 \item{toSpace}{total gene space}
 }
 \description{

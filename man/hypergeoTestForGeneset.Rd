@@ -2,9 +2,12 @@
 % Please edit documentation in R/GMT_enrichments.R
 \name{hypergeoTestForGeneset}
 \alias{hypergeoTestForGeneset}
+\alias{hypergeoTestForGeneset2}
 \title{Hypergeometric test for gmt style list}
 \usage{
 hypergeoTestForGeneset(query, refGMT, gspace)
+
+hypergeoTestForGeneset2(query, refGMT, gspace, ncore = 1)
 }
 \arguments{
 \item{query}{gene set to query (ex. Differentially Expressed Genes)}
@@ -15,16 +18,23 @@ hypergeoTestForGeneset(query, refGMT, gspace)
 }
 \value{
 data frame
-pVal      : hypergeometric test p values from phyper
-logP      : -log10(p value)
-oddsRatio : odds ratio
-tanco     : tanimoto coefficient (Jaccard index)
-int       : intersected item count
-bg        : reference item background count
+\describe{
+	  \item{pVal}{hypergeometric test p values from phyper}
+	  \item{logP}{-log10(p value)}
+	  \item{oddsRatio}{odds ratio}
+	  \item{tanco}{tanimoto coefficient (Jaccard index)}
+	  \item{int}{intersected item count}
+	  \item{bg}{reference item background count}
+}
 }
 \description{
 Gene list hypergeometric test against gmt format list of gene set. Can be used for custom pathway analysis or CMAP style query.
 }
+\section{Functions}{
+\itemize{
+\item \code{hypergeoTestForGeneset2}: Using multiprocessing
+}}
+
 \examples{
 \dontrun{
 gset = c('A','B','C')

@@ -4,20 +4,27 @@ Custom functions from Lazy for personal use, now as a package!
 
 ## To Do
 
-- [] Dependency clean up (so package won't load everything automatically).
-- [] `clusterprofiler` function wrapper removed.
+- [o] Dependency clean up (so package won't load everything automatically).
+- [o] `clusterprofiler` function wrapper removed.
 - [o] Update Gene info table, increase reliability
-- [] Gene list default input changed to unnested list
+- [o] Gene list default input changed to unnested list
 - [] Add bioMart info???
-- [] Remove overly specific functions (branch off for legacy)
+- [o] Remove overly specific functions (branch off for legacy)
 - [] Version numbering soft : *major.minor.build.revision*
-- [] Add cheatsheet page??
+- [] Package startup message
+- [] hypergeoTestset : multiprocessing into option
+- [] 
 
 ## Ver 0.0.3.0 **[2020.07.31]**
 
 * Last testing build before minor deploy
 * `TanimotoCoef` take universe argument `T`
-* Removed ClusterProfiler dependency
+* Removed `ClusterProfiler` dependency
+* Lazygeneinfo rebuilt from HGNC dataset and documented.
+* Removed genemap, genealias dataset
+* Fixed documentations
+* Added `hypergeoTestSetForGenes` multiprocessing
+
 
 ---
 
@@ -68,10 +75,6 @@ reload(inst('Lazy2'))
 * Work to make Lazy2 as stand alone as possible.
 * Remove deprecated functions.
 
-## Checklist
-
-- [] Add function namespace
-- [] Test build with minimal dependency
 
 ---
 

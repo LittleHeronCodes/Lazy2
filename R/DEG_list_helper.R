@@ -28,7 +28,7 @@ ent2sym <- function(genes) {
 #' @param return_ent genes either in Entrez or Symbol
 #' @param verbose    print mapped percentage
 #' @return genes
-#' @export
+# ' @export
 #' @examples
 #' geneAliasMap('CHOP')
 
@@ -118,22 +118,22 @@ geneCount <- function(geneList) { sapply(geneList, function(ls) sapply(ls, lengt
 #' 
 #' @param toSpace total gene space
 #' @inheritParams geneCount
-#' @export
+# ' @export
 
-convertDEGList2Matrix <- function(geneList, toSpace = NULL) {
+convertDEGList2Matrix <- function(glist, toSpace = NULL) {
 
 	if(is.null(toSpace)) {
-		toSpace = Reduce('union', lapply(geneList, function(ls) ls$toGene))
+		toSpace = Reduce(union, glist)
 		cat('Total space inferred from list.\n')
 	}
 
-	degMat <- matrix(nrow = length(toSpace), ncol = length(geneList),
-		dimnames=list(toSpace, names(geneList)))
+	degMat <- matrix(nrow = length(toSpace), ncol = length(glist),
+		dimnames=list(toSpace, names(glist)))
 
-	for(can in names(geneList)) {
-		degMat[geneList[[can]]$toGene, can] =  0
-		degMat[geneList[[can]]$upGene, can] =  1
-		degMat[geneList[[can]]$dnGene, can] = -1
+	for(id in names(glist)) {
+		degMat[glist[[id]]$toGene, id] =  0
+		degMat[glist[[id]]$upGene, id] =  1
+		degMat[glist[[id]]$dnGene, id] = -1
 	}
 	return(degMat)
 }
@@ -144,13 +144,12 @@ convertDEGList2Matrix <- function(geneList, toSpace = NULL) {
 #' 
 #' @param degMat degMat from convertDEGList2Matrix results
 #' @param sort   sort or no?
-#' @export
+# ' @export
 
 DEGMatSumm <- function(degMat, sort = FALSE) {
 
 	degMetaDF = data.frame(
-		geneEnt = rownames(degMat),
-		geneSym = ent2sym(rownames(degMat)),
+		gene = rownames(degMat),
 		upRecord  = apply(degMat, 1, function(v) sum(v ==  1, na.rm=TRUE)),
 		dnRecord  = apply(degMat, 1, function(v) sum(v == -1, na.rm=TRUE)),
 		anyRecord = apply(degMat, 1, function(v) sum(v !=  0, na.rm=TRUE)),
@@ -193,7 +192,7 @@ pairsOverlap <- function(v, geneList) {
 #' 
 #' @inheritParams geneCount
 #' @return dataframe of overlap measures
-#' @export
+# ' @export
 #' @examples
 #' \dontrun{
 #'     pairs <- geneListSetOverlap(geneList)
@@ -212,7 +211,7 @@ geneListSetOverlap <- function(geneList) {
 #
 #' @describeIn geneListSetOverlap For parallel processing
 #' @param ncore number of cores to use
-#' @export
+# ' @export
 
 geneListSetOverlap.parallel <- function(geneList, ncore) {
 	pairs = expand.grid(names(geneList), names(geneList))

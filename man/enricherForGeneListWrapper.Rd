@@ -2,7 +2,7 @@
 % Please edit documentation in R/pathway_analysis.R
 \name{enricherForGeneListWrapper}
 \alias{enricherForGeneListWrapper}
-\title{enricherForGeneListWrapper}
+\title{enricherForGeneListWrapper****}
 \usage{
 enricherForGeneListWrapper(
   glist,
