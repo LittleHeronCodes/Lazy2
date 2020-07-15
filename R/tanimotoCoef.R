@@ -45,13 +45,19 @@ getEnrichmentFactor <- function(setA,setB,setT, psc=0) {
 	return(ef)
 }
 
-
-#' hypergeoTest
+#' Hypergeometric test
 #'
-#' Hypergeometric test for set inputs (because I'm an idiot)
+#' Run one-tailed hypergeometric test (fisher test) with set inputs. 'hypergeoTest' 
+#' uses hypergeometric distribution function phyper with lower.tail = FALSE fixed. 
+#' This is commonly used for testing significance in overlap between sets. 
+#'
 #' @param query     query set        (balls drawn)
 #' @param reference reference set    (white balls)
 #' @param bgspace   background space (balls in urn)
+#' @return Returns a dataframe of 4 columns. pVal is p value returned by phyper.
+#' oddsRatio gives number of observation by number of expectation. int and bg are
+#' number of intersected items and background space respectively. 
+#' By nature of phyper, reference and query input are interchangeable.
 #' @export
 
 hypergeoTest <- function(query, reference, bgspace) {
@@ -71,7 +77,7 @@ hypergeoTest <- function(query, reference, bgspace) {
 
 #' Harmonic Mean
 #'
-#' Calculate harmonic mean
+#' Calculate harmonic mean. Harmonic means are often used to calculate means of p-values.
 #' @param v numeric vector
 #' @export
 #' @examples
