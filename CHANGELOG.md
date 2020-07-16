@@ -1,5 +1,9 @@
 # Changelog
 
+## Ver 0.0.3.1 [2020.07.16]
+
+* patch 1 : Fix ent2sym (geneMap to LazygeneInfo)
+
 ## Ver 0.0.3.0 test [2020.07.08]
 
 * Last testing build before minor deploy

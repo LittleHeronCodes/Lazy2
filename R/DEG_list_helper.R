@@ -9,12 +9,12 @@
 #' ent2sym('TP53')
 
 ent2sym <- function(genes) {
-	geneMap = Lazy2::geneMap
+	geneMap = Lazy2::LazygeneInfo
 	genes = as.character(genes)
 	if(all(grepl('^[0-9]+$', genes))) {
-		out = geneMap$Symbol[match(genes, geneMap$Entrez)]		
+		out = geneMap$hgnc_symbol[match(genes, geneMap$entrez)]		
 	} else {
-		out = geneMap$Entrez[match(genes, geneMap$Symbol)]
+		out = geneMap$entrez[match(genes, geneMap$hgnc_symbol)]
 	}
 	return(as.character(out))
 }

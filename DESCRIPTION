@@ -1,6 +1,6 @@
 Package: Lazy2
 Title: Lazy Package
-Version: 0.0.3.0
+Version: 0.0.3.1
 Authors@R: 
     person(given   = "littleheron",
            family  = "butorides",
