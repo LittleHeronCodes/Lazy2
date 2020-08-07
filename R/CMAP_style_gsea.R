@@ -31,10 +31,10 @@ enrichmentFactorForDataFrame = function(df, enrich_element, rank_by, cutoff = 0.
 	cntPct = table(df[rowIdx, enrich_element])	# observed
 	idx = names(cntPct)
 	N = nrow(df)
-	k = floor(nrow(df) * cutoff)
+	k = floor(nrow(df) * cover)
 
 	# enrichment factor
-	ef = (cntPct[idx]+psc) / ( cntAll[idx] * cutoff + psc)
+	ef = (cntPct[idx]+psc) / ( cntAll[idx] * cover + psc)
 	ef = sort(ef, decreasing = TRUE)
 
 	# hypergeo test
