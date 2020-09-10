@@ -1,5 +1,11 @@
 # Changelog
 
+## Ver 0.0.4.0 [2020.09.10]
+
+* Resurrected `convertDEGList2Matrix` to be used in finding consensus genes
+
+
+
 ## Ver 0.0.3.2 [2020.07.23]
 
 * `enrichmentFactorForDataFrame`

@@ -94,10 +94,6 @@ TtestWithMat <- function(m, idx1, idx2, alternative ='two.sided', na.rm=TRUE) {
 	colnames(resultsDF) = gsub('.t$','',colnames(resultsDF))
 	rownames(resultsDF) = rownames(m)
 
-	## Additional information
-	# resultsDF$geneEnt = rownames(m)
-	# resultsDF$geneSym = ent2sym(rownames(m))
-	# resultsDF = resultsDF[,c('geneEnt','geneSym', columns)]
 	return(resultsDF)
 }
 
@@ -114,29 +110,36 @@ geneCount <- function(geneList) { sapply(geneList, function(ls) sapply(ls, lengt
 
 #' convertDEGList2Matrix
 #' 
-#' DEG List to deg Count
+#' Take a gene list and tally counts for each set. Used to find consensus DEG signatures.
 #' 
-#' @param toSpace total gene space
-#' @inheritParams geneCount
-# ' @export
+#' @param gls list of genes (unnested)
+#' @param tgls list of gene space corresponding to each gene set
+#' @export
+#' @examples
+#' glist = list(
+#' 	a = c(1,2,3,4,5,6,7,8,9),
+#' 	b = c(1,2,4,5,8,9,11,13),
+#' 	c = c(3,5,7,8,10,11,15))
+#' tglist = list(a = 1:15, b = 1:14, c = 1:16)
+#' convertDEGList2Matrix(glist, tglist)
 
-convertDEGList2Matrix <- function(glist, toSpace = NULL) {
+convertDEGList2Matrix <- function(gls, tgls) {
 
-	if(is.null(toSpace)) {
-		toSpace = Reduce(union, glist)
-		cat('Total space inferred from list.\n')
+	toSpace = Reduce(union, tgls)
+	degMat <- matrix(nrow = length(toSpace), ncol = length(gls), dimnames=list(toSpace, names(gls)))
+
+	for(id in names(gls)) {
+		degMat[tgls[[id]], id] =  0
+		degMat[gls[[id]], id] =  1
 	}
+	hitcnt = apply(degMat, 1, function(v) sum(v == 1, na.rm = TRUE))
+	cnt = apply(degMat, 1, function(v) sum(!is.na(v)))
+	pct = hitcnt / cnt
 
-	degMat <- matrix(nrow = length(toSpace), ncol = length(glist),
-		dimnames=list(toSpace, names(glist)))
-
-	for(id in names(glist)) {
-		degMat[glist[[id]]$toGene, id] =  0
-		degMat[glist[[id]]$upGene, id] =  1
-		degMat[glist[[id]]$dnGene, id] = -1
-	}
-	return(degMat)
+	out = data.frame(cbind(degMat, hitcnt = hitcnt, cnt = cnt, pct = pct))
+	return(out)
 }
+
 
 #' DEGMatSumm
 #' 
