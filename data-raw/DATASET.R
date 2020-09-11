@@ -19,6 +19,14 @@ LazygeneInfo = geneInfo
 
 usethis::use_data(LazygeneInfo)
 
+#   entrez hgnc_id                          hgnc_gene hgnc_symbol           gene_type
+# 1      1       5             alpha-1-B glycoprotein        A1BG protein-coding gene
+# 2      2       7              alpha-2-macroglobulin         A2M protein-coding gene
+# 3      3       8 alpha-2-macroglobulin pseudogene 1       A2MP1          pseudogene
+# 4     11      15     N-acetyltransferase pseudogene        NATP          pseudogene
+# 5     12      16           serpin family A member 3    SERPINA3 protein-coding gene
+# 6     13      17          arylacetamide deacetylase       AADAC protein-coding gene
+
 
 ##  Gene info data processed from NCBI
 ## download link ftp://ftp.ncbi.nlm.nih.gov/gene/DATA/GENE_INFO/Mammalia/Homo_sapiens.gene_info.gz
@@ -51,11 +59,3 @@ usethis::use_data(LazygeneInfo)
 
 
 
-
-#   entrez hgnc_id                          hgnc_gene hgnc_symbol           gene_type
-# 1      1       5             alpha-1-B glycoprotein        A1BG protein-coding gene
-# 2      2       7              alpha-2-macroglobulin         A2M protein-coding gene
-# 3      3       8 alpha-2-macroglobulin pseudogene 1       A2MP1          pseudogene
-# 4     11      15     N-acetyltransferase pseudogene        NATP          pseudogene
-# 5     12      16           serpin family A member 3    SERPINA3 protein-coding gene
-# 6     13      17          arylacetamide deacetylase       AADAC protein-coding gene
