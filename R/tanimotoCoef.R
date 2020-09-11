@@ -1,6 +1,6 @@
 #' Tanimoto coefficients
 #' 
-#' Calculates Tanimoto coefficients given two set vectors
+#' Calculates Tanimoto coefficients (Jaccard Index) given two set vectors.
 #' @param A set input1 as vectors
 #' @param B set input2 as vectors
 #' @param T background space (if given, will intersect set before calculating)
@@ -21,9 +21,10 @@ tanimotoCoef = function(A, B, T=NULL) {
 }
 
 
-#' Enrichment factor
+#' Calculate Enrichment factor
 #' 
-#' Calculates enrichment factor against random overlap number
+#' Enrichment factor represents the "enrichment" of overlap between two sets in a given space.
+#' This is calculated as (observed count) / (expected count).
 #' @param setA set input1 as vectors
 #' @param setB set input2 as vectors
 #' @param setT total set as vectors
@@ -47,17 +48,17 @@ getEnrichmentFactor <- function(setA,setB,setT, psc=0) {
 
 #' Hypergeometric test
 #'
-#' Run one-tailed hypergeometric test (fisher test) with set inputs. 'hypergeoTest' 
-#' uses hypergeometric distribution function phyper with lower.tail = FALSE fixed. 
+#' Run one-tailed hypergeometric test (fisher test) with set inputs. 
+#' 'hypergeoTest' uses hypergeometric distribution function phyper with lower.tail = FALSE fixed. 
 #' This is commonly used for testing significance in overlap between sets. 
 #'
 #' @param query     query set        (balls drawn)
 #' @param reference reference set    (white balls)
 #' @param bgspace   background space (balls in urn)
 #' @return Returns a dataframe of 4 columns. pVal is p value returned by phyper.
-#' oddsRatio gives number of observation by number of expectation. int and bg are
-#' number of intersected items and background space respectively. 
-#' By nature of phyper, reference and query input are interchangeable.
+#' oddsRatio gives number of observation by number of expectation. int and bg refers to
+#' the number of intersected items and background space respectively. 
+#' By nature of phyper, reference and query input should be interchangeable.
 #' @export
 
 hypergeoTest <- function(query, reference, bgspace) {
@@ -84,6 +85,6 @@ hypergeoTest <- function(query, reference, bgspace) {
 #' v <- seq(0.01,.99, .01)
 #' harmean(v)
 
-harmean <- function(v, ...) { 1/mean(1/v, ..., na.rm = T) }
+harmean <- function(v, ...) { 1/mean(1/v, ...) }
 
 

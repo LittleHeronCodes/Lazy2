@@ -8,12 +8,14 @@ Custom functions from Lazy for personal use, now as a package!
 - [o] `clusterprofiler` function wrapper removed.
 - [o] Update Gene info table, increase reliability
 - [o] Gene list default input changed to unnested list
-- [] Add bioMart info???
 - [o] Remove overly specific functions (branch off for legacy)
+- [] Add bioMart info???
 - [] Version numbering soft : *major.minor.build.revision*
 - [] Package startup message
-- [] hypergeoTestset : multiprocessing into option
-- [] 
+- [] `hypergeoTestset` : multiprocessing into option
+- [] Think about utilizing cpp codes for simple calculation function.
+- [] Mathematical equations into help page. (if possible)
+
 
 ## Ver 0.0.3.0 **[2020.07.31]**
 

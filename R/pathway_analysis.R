@@ -25,7 +25,7 @@ enricherForGeneListWrapper = function(glist, term, pcut=.1, qcut=.2, minGSSize=5
 	)
 
 	enr_res = lapply(enrGeneLs, function(gset) {
-		output = enricher(gset, TERM2GENE = base::get(term), universe = gspace, 
+		output = clusterProfiler::enricher(gset, TERM2GENE = base::get(term), universe = gspace, 
 			pvalueCutoff = pcut, pAdjustMethod = 'fdr', qvalueCutoff = qcut,
 			minGSSize=minGSSize, maxGSSize=maxGSSize)
 		return(output)
@@ -44,11 +44,11 @@ enricherForGLIST <- function(geneList, use) {
 		glist = lapply(geneList, function(ls) ls[[dir]])
 		enrObj = lapply(glist, function(gset) {
 			if(use == 'kegg') {
-				output = enrichKEGG(gset, minGSSize=10, maxGSSize=200,
+				output = clusterProfiler::enrichKEGG(gset, minGSSize=10, maxGSSize=200,
 					pvalueCutoff = 1, pAdjustMethod = 'fdr', qvalueCutoff = 1)				
 			} else if(use == 'gobp') {
 				require(org.Hs.eg.db)
-				output = enrichGO(gset, ont = 'BP', OrgDb = org.Hs.eg.db, minGSSize=50, maxGSSize=200,
+				output = clusterProfiler::enrichGO(gset, ont = 'BP', OrgDb = org.Hs.eg.db, minGSSize=50, maxGSSize=200,
 					pvalueCutoff = 1, pAdjustMethod = 'fdr', qvalueCutoff = 1)
 			} else {stop('Currently available use option : kegg, gobp')}
 			})
@@ -129,9 +129,9 @@ enrObjectTransform_nset <- function(enr_obj, pco=.1, max_row=10) {
 # ' @export
 
 enrHeatmapOnly_1set <- function(plotMat, mtitle, clust = TRUE) {
-	colors = colorRamp2(c(-4,-2,0,2,4), 
+	colors = circlize::colorRamp2(c(-4,-2,0,2,4), 
 		c('#134173','#46cbfc','#f7f7f7','#ff6249','#a63b39'))
-	hp = Heatmap(plotMat, cluster_rows = clust, cluster_columns = FALSE, col = colors,
+	hp = ComplexHeatmap::Heatmap(plotMat, cluster_rows = clust, cluster_columns = FALSE, col = colors,
 		heatmap_width=unit(8,'cm'), heatmap_height = unit(16, 'cm'),
 		rect_gp = gpar(col = "gray12", lty = 1, lwd = 0.2), 
 		row_names_side='left', column_title = mtitle)

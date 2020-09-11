@@ -16,7 +16,7 @@ enrichmentFactorForDataFrame = function(df, enrich_element, rank_by, cutoff = 0.
 	# index to use
 	include = names(which(table(df[, enrich_element]) >= min_count))
 	if( length(include) < length(unique(df[, enrich_element]))*.10 ) {
-		stop("Included factors less than 10%. There's a problem with input or lower min_count.")
+		stop("Less than 10% factors were included. There may be a problem with the inputs or set lower min_count.")
 	}
 	df = df[which(df[, enrich_element] %in% include),]
 

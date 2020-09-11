@@ -1,15 +1,17 @@
 #' gene mapper for entrez and symbol
 #' 
-#' Entrez to Hugo symbol and vice versa
+#' Map Entrez ID to Hugo symbol and vice versa.
+#' Uses LazygeneInfo if no gene map data frame is provided at geneMap.
 #' 
 #' @param genes genes either in Entrez or Symbol (human)
+#' @param geneMap gene mapper data frame. Uses LazygeneInfo if null.
 #' @return genes in wanted IDs
 #' @export
 #' @examples
 #' ent2sym('TP53')
 
-ent2sym <- function(genes) {
-	geneMap = Lazy2::LazygeneInfo
+ent2sym <- function(genes, geneMap=NULL) {
+	if(is.null(geneMap)) geneMap = Lazy2::LazygeneInfo
 	genes = as.character(genes)
 	if(all(grepl('^[0-9]+$', genes))) {
 		out = geneMap$hgnc_symbol[match(genes, geneMap$entrez)]		

@@ -116,7 +116,7 @@ hypergeoTestForGeneset2 <- function (query, refGMT, gspace, ncore = 1) {
 
     N = length(gspace)
     k = length(query)
-    enrRes = mclapply(refGMT, function(refgenes) {
+    enrRes = parallel::mclapply(refGMT, function(refgenes) {
     	I = intersect(refgenes, query)
         q = length(intersect(refgenes, query))
         m = length(intersect(gspace, refgenes))

@@ -2,6 +2,7 @@
 
 ## Ver 0.0.4.0 [2020.09.10]
 
+* Added more descriptions for each function
 * Resurrected `convertDEGList2Matrix` to be used in finding consensus genes
 
 
