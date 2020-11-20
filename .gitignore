@@ -5,6 +5,9 @@
 *.sublime-project
 *.sublime-workspace
 
+# Data files
+*.csv
+*.gtf
 # /data-raw/
 
 # History files
