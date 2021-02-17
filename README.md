@@ -5,27 +5,18 @@ Custom functions from Lazy for personal use, now as a package!
 ## To Do
 
 - [o] Dependency clean up (so package won't load everything automatically).
-- [o] `clusterprofiler` function wrapper removed.
 - [o] Update Gene info table, increase reliability
 - [o] Gene list default input changed to unnested list
 - [o] Remove overly specific functions (branch off for legacy)
+- [o] `readGMT` : doesn't work, fix by adapting read.gmt from clusterProfiler
 - [] Add bioMart info???
 - [] Version numbering soft : *major.minor.build.revision*
 - [] Package startup message
 - [] `hypergeoTestset` : multiprocessing into option
-- [] Think about utilizing cpp codes for simple calculation function.
+- [] `clusterprofiler` function wrapper removed. --> put it back in
+- [] Think about utilizing cpp codes for simple calculation function. --> speed trade-off potentially not worth it
 - [] Mathematical equations into help page. (if possible)
 
-
-## Ver 0.0.3.0 **[2020.07.31]**
-
-* Last testing build before minor deploy
-* `TanimotoCoef` take universe argument `T`
-* Removed `ClusterProfiler` dependency
-* Lazygeneinfo rebuilt from HGNC dataset and documented.
-* Removed genemap, genealias dataset
-* Fixed documentations
-* Added `hypergeoTestSetForGenes` multiprocessing
 
 
 ---

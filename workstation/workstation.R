@@ -116,20 +116,28 @@ enrobj2Matrix <-function(enrobj, val.col='pvalue', log=TRUE) {
 	LS = lapply(names(enrobj), function(set) {
 		dff = data.frame(enrobj[[set]])
 		if('Description' %in% names(dff)) dff = dff %>% dplyr::rename(termID=ID, ID=Description)
-		dff = dff[order(dff[,val.col]),]
 		dff$set = set
-		if(log) dff$logP = -log10(dff[,val.col])
+		dff = dff[order(dff$set),]
 		return(dff)
 	})
 	hmplot = do.call(rbind, LS)
-	logn = ifelse(grepl('q|fdr|Q|FDR', val.col), 'logQ', 'logP')
-	if( log) plotMat = reshape2::acast(hmplot, ID~set, value.var=logn, fill = NA)
+
+	# detect log values
+	logdetect <- FALSE
+	if(any(quantile(hmplot[,val.col], na.rm=TRUE) > 1)) logdetect <- TRUE
+	if(log & logdetect) cat('Already in log values.'); log <- FALSE
+	if(log & !logdetect) {
+		hmplot$logV <- -log10(hmplot[,val.col])
+		plotMat = reshape2::acast(hmplot, ID~set, value.var=logV, fill = NA)
+	}
+
 	if(!log) plotMat = reshape2::acast(hmplot, ID~set, value.var=val.col, fill = NA)
-	plotMat = plotMat[order(apply(plotMat,1, sum, na.rm=T), decreasing=TRUE),]
+	plotMat = plotMat[order(apply(plotMat,1, sum, na.rm=TRUE), decreasing=TRUE),]
 	return(plotMat)
 }
 
 
 
+## readgmt adapted from clusterProfiler read.gmt
 
 
