@@ -1,10 +1,17 @@
 # Changelog
 
-## Ver 0.0.4.0 [2020.09.10]
+## Ver 0.0.4.0 [2021.02.21]
 
 * Added more descriptions for each function
 * Resurrected `convertDEGList2Matrix` to be used in finding consensus genes
+* `readGMT` fix
+* Returned `ClusterProfiler` dependency for KEGG, GO enrichments
 
+### Functions changed
+
+* Added : `extractGeneList`, `GO_enrichment`, `KEGG_enrichment`, `enrobj2Matrix`, `readGTF`, `ens2sym`
+* Changed : `Gen_enrichment`, `readGMT`
+* Removed : `TtestWithMat`
 
 
 ## Ver 0.0.3.2 [2020.07.23]

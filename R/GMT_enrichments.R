@@ -4,7 +4,6 @@
 #' Each line should contain one geneset, delimited by tab. Genes should start from 3rd field.
 #' 
 #' @param file GMT file path
-#' @param skip Fields to skip. Usually 2.
 #' @param as.df Return as data frame?
 #' @param glist List of gene set. Should be un-nested level one named list.
 #' @param geneset_desc Description meta information for gene set. Either length one or same length vector as glist.
@@ -15,21 +14,18 @@
 #' readGMT('file/path.gmt')
 #' }
 
-readGMT <- function(file, skip=2, as.df = TRUE) {
 
-	out = list()
-	con = file(file, 'r')
-	while( TRUE ) {
-		line = readLines(con, n=1)
-		if( length(line) == 0 ) break
-		sp = unlist(strsplit(line, split='\t'))
-		out[[sp[1]]] = sp[-skip]
-	}
-
+readGMT <- function(gmtfile, as.df=FALSE) {
+	x <- readLines(gmtfile)
+	res <- strsplit(x, "\t")
+	names(res) <- vapply(res, function(y) y[1], character(1))
+	out <- lapply(res, "[", -c(1:2))
 	if(as.df) {
-		out = do.call(rbind,  lapply(names(out), function(i) data.frame(key=i, value=out[[i]]) ))
+		ont2gene <- stack(out)
+		ont2gene <- ont2gene[, c("ind", "values")]
+		colnames(ont2gene) <- c("ont", "gene")
+		out <- ont2gene
 	}
-	close(con)
 	return(out)
 }
 
