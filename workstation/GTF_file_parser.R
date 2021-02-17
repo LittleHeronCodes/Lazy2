@@ -19,5 +19,8 @@ genes$gene_type <- genes$gene_type_raw
 genes$gene_type[grep('protein_coding', genes$gene_type_raw)] <- 'protein-coding gene'
 genes$gene_type[grep('pseudogene$'   , genes$gene_type_raw)] <- 'pseudogene'
 
-fwrite(genes, file='data/others/mousegenes_from_gtf.csv')
+fwrite(genes, file='data-raw/mousegenes_from_gtf.csv')
+
+
+
 

@@ -27,35 +27,50 @@ usethis::use_data(LazygeneInfo)
 # 5     12      16           serpin family A member 3    SERPINA3 protein-coding gene
 # 6     13      17          arylacetamide deacetylase       AADAC protein-coding gene
 
+##===========================================================================================
+## Mouse gene info
 
-##  Gene info data processed from NCBI
-## download link ftp://ftp.ncbi.nlm.nih.gov/gene/DATA/GENE_INFO/Mammalia/Homo_sapiens.gene_info.gz
-
-# NCBIgeneInfo <- data.table::fread('data-raw/NCBIHomo_sapiens.gene_info.csv')
-# NCBIgeneInfo <- dplyr::rename(NCBIgeneInfo, 
-# 	Entrez = GeneID, 
-# 	chr = chromosome,
-# 	gene_type = type_of_gene,
-# 	HGNC_symbol = Symbol_from_nomenclature_authority,
-# 	HGNC_name   = Full_name_from_nomenclature_authority)
-# NCBIgeneInfo <- NCBIgeneInfo[,c('Entrez', 'Symbol','Synonyms','dbXrefs', 'chr','gene_type','HGNC_symbol','HGNC_name')]
+library(biomaRt)
+library(rtracklayer)
 
 
-# ## gene alias map
-# geneAlias <- NCBIgeneInfo[,c('Entrez', 'Symbol', 'Synonyms')]
-# geneAlias <- tidyr::separate_rows(geneAlias, Synonyms, sep = '\\|')
+## Parse GTF File for information
+gtf_path <- "gencode.vM24.primary_assembly.annotation.gtf"
 
-# # remove ambiguous synonyms
-# idx = with(geneAlias, !(duplicated(Synonyms) | duplicated(Synonyms,fromLast=TRUE)) | (Synonyms == '-'))
-# geneAlias = geneAlias[idx,]
+# GTF <- fread(gtf_path)
+gtf <- readGFF(gtf_path)
 
-# ## ent2sym map
-# geneMap <- NCBIgeneInfo[,c('Entrez','Symbol','HGNC_symbol','gene_type')]
+# gtfDT <- as.data.table(gtf)
+
+genes <- gtf[which(gtf$type == 'gene'),c('gene_id','seqid','gene_type','gene_name','mgi_id')]
+table(genes$gene_type)
+
+colnames(genes)[3] <- 'gene_type_raw'
+
+genes$gene_type <- genes$gene_type_raw
+genes$gene_type[grep('protein_coding', genes$gene_type_raw)] <- 'protein-coding gene'
+genes$gene_type[grep('pseudogene$'   , genes$gene_type_raw)] <- 'pseudogene'
+
+fwrite(genes, file='data-raw/mousegenes_from_gtf.csv')
 
 
-# usethis::use_data(geneMap)
-# usethis::use_data(geneAlias)
+# mouse gene IDs
+mouse <- useMart('ensembl', dataset='mmusculus_gene_ensembl')
+bmlist <- listFilters(mouse)
+mouseGenes <- getBM(attributes = c('entrezgene_id','ensembl_gene_id', 'mgi_symbol', 'mgi_id'), mart = mouse)
 
+mouseGeneTypes <- fread('data-raw/mousegenes_from_gtf.csv')
+mouseGeneTypes$ensGene <- gsub('.[0-9]+$','', mouseGeneTypes$gene_id)
+
+setdiff(mouseGeneTypes$mgi_id, mouseGenes$mgi_id)
+
+mouseGenes <- mouseGenes[which(mouseGenes$mgi_id!=''),]
+mouseGeneTypes <- mouseGeneTypes[which(mouseGeneTypes$mgi_id!=''),]
+
+mouseGeneInfo <- merge(mouseGeneTypes, mouseGenes, by='mgi_id')
+mouseGeneInfo <- mouseGeneInfo[,c('mgi_id','ensembl_gene_id','entrezgene_id','mgi_symbol','gene_type')]
+
+save(mouseGeneInfo, file='data/others/mousegeneInfo.RData')
 
 
 
