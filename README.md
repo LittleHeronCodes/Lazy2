@@ -9,6 +9,7 @@ Custom functions from Lazy for personal use, now as a package!
 - [o] Gene list default input changed to unnested list
 - [o] Remove overly specific functions (branch off for legacy)
 - [o] `readGMT` : doesn't work, fix by adapting read.gmt from clusterProfiler
+- [] reshape2::acast into tidyverse like
 - [] Add bioMart info???
 - [] Version numbering soft : *major.minor.build.revision*
 - [] Package startup message

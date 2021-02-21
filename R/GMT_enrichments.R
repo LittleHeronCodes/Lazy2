@@ -14,7 +14,6 @@
 #' readGMT('file/path.gmt')
 #' }
 
-
 readGMT <- function(gmtfile, as.df=FALSE) {
 	x <- readLines(gmtfile)
 	res <- strsplit(x, "\t")

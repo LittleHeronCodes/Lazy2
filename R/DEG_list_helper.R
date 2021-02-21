@@ -77,7 +77,7 @@ removeZeroVar <- function(m, idx1, idx2, verbose=TRUE) {
 #' t_pVal : t-test p value
 #' medDiff : median difference
 #' menDiff : mean difference
-#' @export
+##' @export
 #' @examples
 #' \dontrun{
 #' TtestWithMat(M)
