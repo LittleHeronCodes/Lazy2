@@ -4,11 +4,21 @@
 \alias{convertDEGList2Matrix}
 \title{convertDEGList2Matrix}
 \usage{
-convertDEGList2Matrix(glist, toSpace = NULL)
+convertDEGList2Matrix(gls, tgls)
 }
 \arguments{
-\item{toSpace}{total gene space}
+\item{gls}{list of genes (unnested)}
+
+\item{tgls}{list of gene space corresponding to each gene set}
 }
 \description{
-DEG List to deg Count
+Take a gene list and tally counts for each set. Used to find consensus DEG signatures.
+}
+\examples{
+glist = list(
+	a = c(1,2,3,4,5,6,7,8,9),
+	b = c(1,2,4,5,8,9,11,13),
+	c = c(3,5,7,8,10,11,15))
+tglist = list(a = 1:15, b = 1:14, c = 1:16)
+convertDEGList2Matrix(glist, tglist)
 }

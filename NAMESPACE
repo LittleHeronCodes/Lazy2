@@ -2,6 +2,7 @@
 
 export(TtestWithMat)
 export(cleanGList)
+export(convertDEGList2Matrix)
 export(countUni)
 export(enrichmentFactorForDataFrame)
 export(ent2sym)

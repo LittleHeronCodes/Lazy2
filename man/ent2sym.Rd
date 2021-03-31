@@ -4,16 +4,19 @@
 \alias{ent2sym}
 \title{gene mapper for entrez and symbol}
 \usage{
-ent2sym(genes)
+ent2sym(genes, geneMap = NULL)
 }
 \arguments{
 \item{genes}{genes either in Entrez or Symbol (human)}
+
+\item{geneMap}{gene mapper data frame. Uses LazygeneInfo if null.}
 }
 \value{
 genes in wanted IDs
 }
 \description{
-Entrez to Hugo symbol and vice versa
+Map Entrez ID to Hugo symbol and vice versa.
+Uses LazygeneInfo if no gene map data frame is provided at geneMap.
 }
 \examples{
 ent2sym('TP53')

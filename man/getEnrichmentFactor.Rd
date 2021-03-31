@@ -2,7 +2,7 @@
 % Please edit documentation in R/tanimotoCoef.R
 \name{getEnrichmentFactor}
 \alias{getEnrichmentFactor}
-\title{Enrichment factor}
+\title{Calculate Enrichment factor}
 \usage{
 getEnrichmentFactor(setA, setB, setT, psc = 0)
 }
@@ -16,7 +16,8 @@ getEnrichmentFactor(setA, setB, setT, psc = 0)
 \item{psc}{pseudocount for when expected count is too low.}
 }
 \description{
-Calculates enrichment factor against random overlap number
+Enrichment factor represents the "enrichment" of overlap between two sets in a given space.
+This is calculated as (observed count) / (expected count).
 }
 \examples{
 A = c(1:5)

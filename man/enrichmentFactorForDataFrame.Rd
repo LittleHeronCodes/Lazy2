@@ -27,7 +27,7 @@ enrichmentFactorForDataFrame(
 \item{psc}{pseudocount when caclulating enrichment. default 1}
 }
 \value{
-list of named vectors for each category
+dataframe of named vectors for each category
 }
 \description{
 Calculate enrichment factor from a dataframe by rank cutoff.

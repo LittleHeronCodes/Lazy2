@@ -2,7 +2,7 @@
 % Please edit documentation in R/tanimotoCoef.R
 \name{hypergeoTest}
 \alias{hypergeoTest}
-\title{hypergeoTest}
+\title{Hypergeometric test}
 \usage{
 hypergeoTest(query, reference, bgspace)
 }
@@ -13,6 +13,14 @@ hypergeoTest(query, reference, bgspace)
 
 \item{bgspace}{background space (balls in urn)}
 }
+\value{
+Returns a dataframe of 4 columns. pVal is p value returned by phyper.
+oddsRatio gives number of observation by number of expectation. int and bg refers to
+the number of intersected items and background space respectively. 
+By nature of phyper, reference and query input should be interchangeable.
+}
 \description{
-Hypergeometric test for set inputs (because I'm an idiot)
+Run one-tailed hypergeometric test (fisher test) with set inputs. 
+'hypergeoTest' uses hypergeometric distribution function phyper with lower.tail = FALSE fixed. 
+This is commonly used for testing significance in overlap between sets.
 }

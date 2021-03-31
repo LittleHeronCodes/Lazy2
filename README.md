@@ -2,21 +2,27 @@
 
 Custom functions from Lazy for personal use, now as a package!
 
-## To Do
+## To Do -- Version 0.1
 
 - [o] Dependency clean up (so package won't load everything automatically).
 - [o] Update Gene info table, increase reliability
 - [o] Gene list default input changed to unnested list
 - [o] Remove overly specific functions (branch off for legacy)
-- [o] `readGMT` : doesn't work, fix by adapting read.gmt from clusterProfiler
-- [] reshape2::acast into tidyverse like
-- [] Add bioMart info???
-- [] Version numbering soft : *major.minor.build.revision*
+- [o] `readGMT` : doesn't work, fix by adapting `read.gmt` from `clusterProfiler`
+- [o] Version numbering soft : *major.minor.build.revision*
+- [] Remove all unused functions (export commented out)
+- [] Style fix : assign operation into arrows
+- [] Style fix : banish `df` from variables
 - [] Package startup message
 - [] `hypergeoTestset` : multiprocessing into option
-- [] `clusterprofiler` function wrapper removed. --> put it back in
+
+## To Do -- future ideas
+
 - [] Think about utilizing cpp codes for simple calculation function. --> speed trade-off potentially not worth it
 - [] Mathematical equations into help page. (if possible)
+- [] Add mouse gene info
+- [] ~`reshape2::acast` into tidyverse like~
+- [] ~Add bioMart info???~
 
 
 

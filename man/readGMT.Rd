@@ -5,16 +5,14 @@
 \alias{writeGMT}
 \title{readGMT}
 \usage{
-readGMT(file, skip = 2, as.df = TRUE)
+readGMT(gmtfile, as.df = FALSE)
 
 writeGMT(file, glist, geneset_desc = "")
 }
 \arguments{
-\item{file}{GMT file path}
-
-\item{skip}{Fields to skip. Usually 2.}
-
 \item{as.df}{Return as data frame?}
+
+\item{file}{GMT file path}
 
 \item{glist}{List of gene set. Should be un-nested level one named list.}
 

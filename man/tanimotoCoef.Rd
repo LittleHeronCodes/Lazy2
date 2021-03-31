@@ -14,7 +14,7 @@ tanimotoCoef(A, B, T = NULL)
 \item{T}{background space (if given, will intersect set before calculating)}
 }
 \description{
-Calculates Tanimoto coefficients given two set vectors
+Calculates Tanimoto coefficients (Jaccard Index) given two set vectors.
 }
 \examples{
 A = c(1:5)

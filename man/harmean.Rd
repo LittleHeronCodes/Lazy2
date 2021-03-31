@@ -10,7 +10,7 @@ harmean(v, ...)
 \item{v}{numeric vector}
 }
 \description{
-Calculate harmonic mean
+Calculate harmonic mean. Harmonic means are often used to calculate means of p-values.
 }
 \examples{
 v <- seq(0.01,.99, .01)

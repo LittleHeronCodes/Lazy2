@@ -16,28 +16,29 @@
 
 extractGeneList <- function(resultsLS, fco, qco, pco=NULL, cnt=NULL, remove_ambi=FALSE) {
 
-	## Add logFC, p-value, adjusted p-value detector ##
+	## Add logFC, p-value, adjusted p-value column detector ##
 	## 
 	## 
 	## 
 
-	if(length(qco) == 1) qco = structure(rep(qco, length(resultsLS)), names=names(resultsLS))
-	if(length(fco) == 1) fco = structure(rep(fco, length(resultsLS)), names=names(resultsLS))
+	if(length(qco) == 1) qco <- structure(rep(qco, length(resultsLS)), names=names(resultsLS))
+	if(length(fco) == 1) fco <- structure(rep(fco, length(resultsLS)), names=names(resultsLS))
 
-	geneList = list(up = list(), dn = list(), to=list())
+	geneList <- list(up = list(), dn = list(), to=list())
 	for(aid in names(resultsLS)) {
-		resultDF = resultsLS[[aid]] %>% filter(adj.P.Val < qco[aid] & !is.na(entGene))
+		resultDF <- resultsLS[[aid]] %>% filter(adj.P.Val < qco[aid] & !is.na(entGene))
 
-		geneList$up[[aid]] = resultDF %>% filter(logFC >=  log2(fco[aid])) %>% arrange(-logFC) %>% .$entGene %>% unique()
-		geneList$dn[[aid]] = resultDF %>% filter(logFC <= -log2(fco[aid])) %>% arrange( logFC) %>% .$entGene %>% unique()
-		geneList$to[[aid]] = resultsLS[[aid]] %>% filter(!is.na(entGene)) %>% .$entGene %>% unique()
-
-		## Remove ambiguous option ##
-		## if(remove_ambi) ambi = intersect(geneList$up[[aid]], geneList$dn[[aid]])
-		## 
-		## 
+		geneList$up[[aid]] <- resultDF %>% filter(logFC >=  log2(fco[aid])) %>% arrange(-logFC) %>% .$entGene %>% unique()
+		geneList$dn[[aid]] <- resultDF %>% filter(logFC <= -log2(fco[aid])) %>% arrange( logFC) %>% .$entGene %>% unique()
+		geneList$to[[aid]] <- resultsLS[[aid]] %>% filter(!is.na(entGene)) %>% .$entGene %>% unique()
 
 	}
+
+	## Remove ambiguous option ##
+	if(remove_ambi) geneList <- removeAmbigDEGs(geneList)
+	## print how many were removed
+	## 
+
 	return(geneList)
 }
 
@@ -67,8 +68,8 @@ removeAmbigDEGs <- function(geneList) {
 ## compare with map2 methods
 
 getOverlapDF <- function(gls, tgls) {
-	pairdf = expand.grid(names(gls), names(gls), stringsAsFactors=FALSE)
-	LS = apply(pairdf, 1, function(v) {
+	pairdf <- expand.grid(names(gls), names(gls), stringsAsFactors=FALSE)
+	LS <- apply(pairdf, 1, function(v) {
 		ix1 = as.character(v[1])
 		ix2 = as.character(v[2])
 		gspace = intersect(tgls[[ix1]], tgls[[ix2]])
@@ -79,7 +80,7 @@ getOverlapDF <- function(gls, tgls) {
 		tan = tanimotoCoef(setA, setB)
 		data.frame(ix1 = ix1, ix2 = ix2, hgeo = hgeo, ef = eff, tan=tan)
 		})
-	pairdf = do.call(rbind, LS)	
+	pairdf <- do.call(rbind, LS)	
 }
 
 
@@ -102,6 +103,7 @@ KEGG_enrichment <- function(glist, tglist=NULL, organism='hsa') {
 
 ## GO wrapper
 GO_enrichment <- function(glist, organism='hsa', ont='BP', ncore=1) {
+	require(parallel)
 	if(!organism %in% c('hsa','mmu')) stop('Supported organisms : hsa or mmu.')
 	enrobj = mclapply(names(glist), function(aid) {
 		gset = glist[[aid]]
@@ -119,14 +121,18 @@ GO_enrichment <- function(glist, organism='hsa', ont='BP', ncore=1) {
 
 ## General hypergeo test
 Gen_enrichment <- function(glist, refgmt, tglist, ncore=1) {
+	require(parallel)
 	enrobj = mclapply(names(glist), function(aid) {
 		hgeos = hypergeoTestForGeneset(glist[[aid]], refgmt, tglist[[aid]])
 		hgeos$qVal = p.adjust(hgeos$pVal, method='fdr')
+		hgeos$logQ = -log10(hgeos$qVal)
 		return(hgeos)
 		}, mc.cores = ncore)
 	names(enrobj) = names(glist)
 	return(enrobj)
 }
+
+## GSEA (from clusterProfiler)
 
 
 
@@ -188,8 +194,5 @@ enrSaveHeatmap <- function(plotMat2, mtitle, colpal_t, ha, name='logQ', fign=NUL
 
 }
 
-
-
-## readgmt adapted from clusterProfiler read.gmt
 
 
