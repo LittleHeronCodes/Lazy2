@@ -72,7 +72,7 @@ hypergeoTest <- function(query, reference, bgspace) {
 
 	pVal = phyper(q-1, m, N-m, k, lower.tail = FALSE)
 	odds = (q / k) / (m / N)
-	return(data.frame(pVal = pVal, oddsRatio=odds, int=q, bg=m))
+	return(data.frame(pVal = pVal, oddsRatio=odds, int=q, bg=N))
 }
 
 
