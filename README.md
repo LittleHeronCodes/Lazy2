@@ -15,6 +15,7 @@ Custom functions from Lazy for personal use, now as a package!
 - [] Style fix : banish `df` from variables
 - [] Package startup message
 - [] `hypergeoTestset` : multiprocessing into option
+- [] GSEA plot function using fgsea. function modified from plotEnrichment
 
 ## To Do -- future ideas
 

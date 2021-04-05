@@ -195,4 +195,90 @@ enrSaveHeatmap <- function(plotMat2, mtitle, colpal_t, ha, name='logQ', fign=NUL
 }
 
 
+##====================================================
+## GSEA plot
+
+plotEnrichment2 <- function(gset, stats, nes, qv, gseaParam = 1, mtitle=NULL, ylab='',
+	ticksSize=0.4, base_size=7, line.col='green', lwd=2) {
+
+	require(gtable)
+	require(fgsea)
+	
+	rnk <- rank(-stats)
+	ord <- order(rnk)
+	statsAdj <- stats[ord]
+	statsAdj <- sign(statsAdj) * (abs(statsAdj)^gseaParam)
+	statsAdj <- statsAdj/max(abs(statsAdj))
+	pathway <- unname(as.vector(na.omit(match(gset, names(statsAdj)))))
+	pathway <- sort(pathway)
+	gseaRes <- calcGseaStat(statsAdj, selectedStats = pathway, returnAllExtremes = TRUE)
+	bottoms <- gseaRes$bottoms
+	tops <- gseaRes$tops
+	txt <- sprintf('NES : %.2f  \nq-value : %.2e  ', nes, qv)
+
+	n <- length(statsAdj)
+	xs <- as.vector(rbind(pathway - 1, pathway))
+	ys <- as.vector(rbind(bottoms, tops))
+	toPlot <- data.frame(x = c(0, xs, n + 1), y = c(0, ys, 0))
+	diff <- (max(tops) - min(bottoms))/8
+
+	ln1=round(seq(min(bottoms), max(tops), 0.1), digits = 1)
+	half_line = base_size/2
+
+	g1 <- ggplot(toPlot, aes(x = x, y = y)) + geom_point(color = line.col, size = 0.1) + 
+	  geom_line(color = line.col,size = lwd) +
+	  geom_hline(yintercept = ln1, colour = "grey85", linetype='dashed',size = lwd*0.8) +
+	  geom_hline(yintercept = 0, colour = "black", linetype='dashed', size = lwd*0.8) +
+	  geom_hline(yintercept = ifelse(nes>0, max(tops), min(bottoms)), colour = "red", linetype = "dashed", size = lwd*0.8) +
+	  annotate('text', x=max(toPlot$x), y=max(c(ln1,tops)), label=txt, hjust=1, vjust=1.5, fontface='plain', size=rel(3.0)) +
+	  labs(y = ylab, title=mtitle) + 
+	  theme_common(base_size=base_size) +
+	  theme(
+	    plot.title = element_text(hjust = 0.5, vjust=0.2, face='bold', margin=unit(c(0,0,1.5,0), 'mm')),
+	    axis.title.y = element_text(face='bold', angle=90, margin=unit(c(0,1.5,0,0), 'mm'),size=rel(0.95)),
+	    # plot.margin = unit(c(1.2,2.0,0,1.2), 'mm'),
+	    plot.margin = margin(half_line, half_line*2.5, 0, half_line),
+	  	axis.title.x=element_blank(), axis.text.x=element_blank()
+	  	)
+	g2 <- ggplot(data.frame(x=pathway),aes(x = x, y = -diff/2, xend = x, yend = diff/2)) +
+	  geom_segment(size = ticksSize, colour='grey35') +
+	  theme_common(base_size=base_size) +
+	  theme(
+		# plot.margin = unit(c(0,2.0,1.2,1.2), 'mm'),
+		plot.margin = margin(0, half_line*2.5, half_line, half_line),
+	  	axis.text.y=element_blank(), axis.title=element_blank()
+	 	)
+
+	gr1 <- ggplotGrob(g1)
+	gr2 <- ggplotGrob(g2)
+	gr <- rbind(gr1, gr2)
+	gr$widths <- unit.pmax(gr1$widths, gr2$widths)
+
+	# identify the position of the panels within the gtable
+	panid <- gr$layout$t[grep(pattern="panel", gr$layout$name)]
+	gr$heights[panid] <- unit(c(7,1), 'null')
+	grid.newpage()
+	grid.draw(gr)
+
+	return(gr)
+}
+
+
+theme_gsea_common <- function(base_size=5) {
+	half_line = base_size/2
+	.theme <- theme(
+		text = element_text(face='plain', size=base_size, colour='black', family='Arial'),
+		plot.title = element_text(size=rel(1.1)),
+		axis.ticks=element_blank(), 
+		axis.text = element_text(size=rel(0.8), colour='black'),
+		panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+		panel.background = element_rect(fill = "transparent", colour = NA),
+		plot.background = element_rect(fill = "transparent",colour = NA),
+		complete=TRUE)
+	.theme
+}
+
+
+
+
 
