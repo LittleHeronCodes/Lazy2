@@ -85,7 +85,7 @@ hypergeoTestForGeneset <- function(query, refGMT, gspace) {
 		odds = (q / k) / (m / N)
 		jacc = q / length(union(query, refgenes))
 
-		return(data.frame(pVal = pVal, oddsRatio=odds, tan = jacc, int=q, bg=m))
+		return(data.frame(pVal = pVal, oddsRatio=odds, tan = jacc, int=q, bg=N))
 		})
 
 	enrRes = do.call(rbind, enrRes)
@@ -119,7 +119,7 @@ hypergeoTestForGeneset2 <- function (query, refGMT, gspace, ncore = 1) {
         odds = (q / k) / (m / N)
         jacc = q / length(union(query, refgenes))
 
-        return(data.frame(pVal = pVal, oddsRatio = odds, tan = jacc, int = q, bg = m))
+        return(data.frame(pVal = pVal, oddsRatio = odds, tan = jacc, int = q, bg = N))
     }, mc.cores = ncore)
 
     enrRes = do.call(rbind, enrRes)
