@@ -203,7 +203,6 @@ plotEnrichment2 <- function(gset, stats, nes, qv, gseaParam = 1, mtitle=NULL, yl
 
 	require(gtable)
 	require(fgsea)
-	
 	rnk <- rank(-stats)
 	ord <- order(rnk)
 	statsAdj <- stats[ord]
@@ -226,10 +225,10 @@ plotEnrichment2 <- function(gset, stats, nes, qv, gseaParam = 1, mtitle=NULL, yl
 	half_line = base_size/2
 
 	g1 <- ggplot(toPlot, aes(x = x, y = y)) + geom_point(color = line.col, size = 0.1) + 
-	  geom_line(color = line.col,size = lwd) +
 	  geom_hline(yintercept = ln1, colour = "grey85", linetype='dashed',size = lwd*0.8) +
 	  geom_hline(yintercept = 0, colour = "black", linetype='dashed', size = lwd*0.8) +
 	  geom_hline(yintercept = ifelse(nes>0, max(tops), min(bottoms)), colour = "red", linetype = "dashed", size = lwd*0.8) +
+	  geom_line(color = line.col,size = lwd) +
 	  annotate('text', x=max(toPlot$x), y=max(c(ln1,tops)), label=txt, hjust=1, vjust=1.5, fontface='plain', size=rel(3.0)) +
 	  labs(y = ylab, title=mtitle) + 
 	  theme_common(base_size=base_size) +
@@ -277,7 +276,6 @@ theme_gsea_common <- function(base_size=5) {
 		complete=TRUE)
 	.theme
 }
-
 
 
 

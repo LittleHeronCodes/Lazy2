@@ -70,9 +70,18 @@ writeGMT <- function(file, glist, geneset_desc='') {
 
 hypergeoTestForGeneset <- function(query, refGMT, gspace) {
 	if(!all(query %in% gspace)) {
-		stop(paste(length(setdiff(query, gspace)),'Query items were found outside of background space. Check inputs.'))
+		stop(paste(length(setdiff(query, gspace)),'query items were found outside of background space. Check inputs.'))
 	}
+	query = intersect(query, gspace)
+	refGMT = lapply(refGMT, function(g) intersect(g,gspace))
+
 	if(length(query) == 0) stop('Query length is zero.')
+
+	exc <- which(sapply(refGMT, length) <= 10))
+	if(length(exc) != 0) {
+		warning(paste('Ref set no', paste(exc, collapse=', '), 'had less than 10 genes and were excluded.'))
+		refGMT = refGMT[which(sapply(refGMT, length) > 10)]
+	}
 
 	N = length(gspace)							# no of balls in urn
 	k = length(query)							# no of balls drawn from urn (DEG no)
@@ -107,7 +116,16 @@ hypergeoTestForGeneset2 <- function (query, refGMT, gspace, ncore = 1) {
 	if(!all(query %in% gspace)) {
 		stop(paste(length(setdiff(query, gspace)),'Query items were found outside of background space. Check inputs.'))
 	}
+	query = intersect(query, gspace)
+	refGMT = lapply(refGMT, function(g) intersect(g,gspace))
+
 	if(length(query) == 0) stop('Query length is zero.')
+
+	exc <- which(sapply(refGMT, length) <= 10))
+	if(length(exc) != 0) {
+		warning(paste('Ref set no', paste(exc, collapse=', '), 'had less than 10 genes and were excluded.'))
+		refGMT = refGMT[which(sapply(refGMT, length) > 10)]
+	}
 
     N = length(gspace)
     k = length(query)
