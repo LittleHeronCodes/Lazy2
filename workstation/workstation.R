@@ -198,8 +198,20 @@ enrSaveHeatmap <- function(plotMat2, mtitle, colpal_t, ha, name='logQ', fign=NUL
 ##====================================================
 ## GSEA plot
 
+# gset = intgpath[[i]]
+# stats = tstatLS$PHMG
+# nes=ss1$NES
+# qv=ss1$qVal
+# mtitle='PHMG'
+# ylab=cleanTermNames(i, remove_source=TRUE)
+# lwd=1.1
+# base_size=11
+# ticksSize=0.3
+# ylim = c(-0.55,0.55)
+
+
 plotEnrichment2 <- function(gset, stats, nes, qv, gseaParam = 1, mtitle=NULL, ylab='',
-	ticksSize=0.4, base_size=7, line.col='green', lwd=2) {
+	ticksSize=0.4, base_size=7, line.col='green', lwd=2, ylim=NULL, draw=TRUE) {
 
 	require(gtable)
 	require(fgsea)
@@ -214,6 +226,7 @@ plotEnrichment2 <- function(gset, stats, nes, qv, gseaParam = 1, mtitle=NULL, yl
 	bottoms <- gseaRes$bottoms
 	tops <- gseaRes$tops
 	txt <- sprintf('NES : %.2f  \nq-value : %.2e  ', nes, qv)
+	# Add fgsea run if no nes and qv given
 
 	n <- length(statsAdj)
 	xs <- as.vector(rbind(pathway - 1, pathway))
@@ -221,18 +234,21 @@ plotEnrichment2 <- function(gset, stats, nes, qv, gseaParam = 1, mtitle=NULL, yl
 	toPlot <- data.frame(x = c(0, xs, n + 1), y = c(0, ys, 0))
 	diff <- (max(tops) - min(bottoms))/8
 
-	ln1=round(seq(min(bottoms), max(tops), 0.1), digits = 1)
+	ln1 <- trunc(seq(min(bottoms), max(tops), 0.1)*10)/10
+	if(!is.null(ylim)) ln1 <- trunc(seq(ylim[1], ylim[2], 0.1)*10)/10
+
 	half_line = base_size/2
 
 	g1 <- ggplot(toPlot, aes(x = x, y = y)) + geom_point(color = line.col, size = 0.1) + 
-	  geom_hline(yintercept = ln1, colour = "grey85", linetype='dashed',size = lwd*0.8) +
+	  # geom_hline(yintercept = ln1, colour = "grey85", linetype='dashed',size = lwd*0.65) +
 	  geom_hline(yintercept = 0, colour = "black", linetype='dashed', size = lwd*0.8) +
 	  geom_hline(yintercept = ifelse(nes>0, max(tops), min(bottoms)), colour = "red", linetype = "dashed", size = lwd*0.8) +
 	  geom_line(color = line.col,size = lwd) +
 	  annotate('text', x=max(toPlot$x), y=max(c(ln1,tops)), label=txt, hjust=1, vjust=1.5, fontface='plain', size=rel(3.0)) +
-	  labs(y = ylab, title=mtitle) + 
-	  theme_common(base_size=base_size) +
+	  labs(y = ylab, title=mtitle) + scale_y_continuous(breaks=ln1) +
+	  theme_common_gsea(base_size=base_size) +
 	  theme(
+	  	panel.grid.major.y = element_line(colour = "grey85",linetype='dashed', size = lwd*0.65),
 	    plot.title = element_text(hjust = 0.5, vjust=0.2, face='bold', margin=unit(c(0,0,1.5,0), 'mm')),
 	    axis.title.y = element_text(face='bold', angle=90, margin=unit(c(0,1.5,0,0), 'mm'),size=rel(0.95)),
 	    # plot.margin = unit(c(1.2,2.0,0,1.2), 'mm'),
@@ -241,29 +257,33 @@ plotEnrichment2 <- function(gset, stats, nes, qv, gseaParam = 1, mtitle=NULL, yl
 	  	)
 	g2 <- ggplot(data.frame(x=pathway),aes(x = x, y = -diff/2, xend = x, yend = diff/2)) +
 	  geom_segment(size = ticksSize, colour='grey35') +
-	  theme_common(base_size=base_size) +
+	  theme_common_gsea(base_size=base_size) +
 	  theme(
 		# plot.margin = unit(c(0,2.0,1.2,1.2), 'mm'),
 		plot.margin = margin(0, half_line*2.5, half_line, half_line),
 	  	axis.text.y=element_blank(), axis.title=element_blank()
 	 	)
 
+	# if(!is.null(ggadd)) g1 <- g1 + ggadd
+
 	gr1 <- ggplotGrob(g1)
 	gr2 <- ggplotGrob(g2)
 	gr <- rbind(gr1, gr2)
-	gr$widths <- unit.pmax(gr1$widths, gr2$widths)
+	gr$widths <- grid::unit.pmax(gr1$widths, gr2$widths)
 
 	# identify the position of the panels within the gtable
 	panid <- gr$layout$t[grep(pattern="panel", gr$layout$name)]
 	gr$heights[panid] <- unit(c(7,1), 'null')
-	grid.newpage()
-	grid.draw(gr)
+	if(draw) {
+		grid.newpage()
+		grid.draw(gr)		
+	}
 
 	return(gr)
 }
 
 
-theme_gsea_common <- function(base_size=5) {
+theme_common_gsea <- function(base_size=5) {
 	half_line = base_size/2
 	.theme <- theme(
 		text = element_text(face='plain', size=base_size, colour='black', family='Arial'),
