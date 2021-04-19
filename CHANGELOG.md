@@ -13,7 +13,6 @@
 * Changed : `Gen_enrichment`, `readGMT`
 * Removed : `TtestWithMat`
 
-
 ## Ver 0.0.3.2 [2020.07.23]
 
 * `enrichmentFactorForDataFrame`
