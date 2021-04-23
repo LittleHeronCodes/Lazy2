@@ -1,7 +1,9 @@
-#' gene mapper for entrez and symbol
+#' Gene ID mapper for entrez and symbol
 #' 
-#' Map Entrez ID to Hugo symbol and vice versa.
-#' Uses LazygeneInfo if no gene map data frame is provided at geneMap.
+#' Map Entrez ID to HGNC symbol and vice versa.
+#' Uses LazygeneInfo if no gene ID information is provided at geneMap.
+#' geneMap, if provided, should be a data frame with at least two columns named 'hgnc_symbol' and 'entrez'.
+#' ent2sym is meant for quick ID conversion and uses match, which does not handle many-to-one or many-to-many relationships. 
 #' 
 #' @param genes genes either in Entrez or Symbol (human)
 #' @param geneMap gene mapper data frame. Uses LazygeneInfo if null.
@@ -55,7 +57,7 @@ geneAliasMap <- function(genes, return_ent = FALSE, verbose=FALSE) {
 #' @param idx2 Column index for group B
 #' @param verbose verbose
 #' @return Matrix with zero variance samples removed (hopefully)
-#' @export
+# ' @export
 
 removeZeroVar <- function(m, idx1, idx2, verbose=TRUE) {
 	varsum = apply(m, 1, function(v) var(v[idx1]) + var(v[idx2]))
@@ -100,19 +102,28 @@ TtestWithMat <- function(m, idx1, idx2, alternative ='two.sided', na.rm=TRUE) {
 }
 
 
-#' geneCount
+#' Count number of genes in geneList
 #' 
 #' Lazy function for gene number for geneList
 #' 
-#' @param geneList nested gene list of DEG
+#' @param geneList Nested DEG list. See example for gene list structure. 
 #' @export
+#' @examples
+#' set.seed(1234)
+#' geneList <- list(
+#' 	up = list(A=sample(letters,10), B=sample(letters, 5), C=sample(letters, 4)),
+#' 	dn = list(A=sample(letters, 6), B=sample(letters,15), C=sample(letters, 7)),
+#' 	to = list(A=letters, B=letters, C=letters)
+#' 	)
+#' geneCount(geneList)
+
 
 geneCount <- function(geneList) { sapply(geneList, function(ls) sapply(ls, length)) }
 
 
-#' convertDEGList2Matrix
+#' Convert gene list into binary matrix
 #' 
-#' Take a gene list and tally counts for each set. Used to find consensus DEG signatures.
+#' Take a gene list and tally counts for each set. Used to find consensus DEG across multiple signatures.
 #' 
 #' @param gls list of genes (unnested)
 #' @param tgls list of gene space corresponding to each gene set
