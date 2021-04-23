@@ -1,6 +1,7 @@
 ## Gene list extraction from result
 ## Supported formats : ebayes, DEseq2
 
+#' Get DEG list from list of results
 #' 
 #' @param resultsLS list of result data frames. (limma results default)
 #' @param fco fold change cut-offs (NOT LOG). Used to filter logFC column.
@@ -65,7 +66,7 @@ removeAmbigDEGs <- function(geneList) {
 
 
 ## Overlap metrics
-## calculate genelist set overlap
+## calculate genelist set overlap (replaces pairsOverlap)
 ## compare with map2 methods
 
 getOverlapDF <- function(gls, tgls) {
@@ -84,46 +85,11 @@ getOverlapDF <- function(gls, tgls) {
 	pairdf <- do.call(rbind, LS)	
 }
 
-
-
-## General hypergeo test
-Gen_enrichment <- function(glist, refgmt, tglist, ncore=1) {
-	require(parallel)
-	enrobj = mclapply(names(glist), function(aid) {
-		hgeos = hypergeoTestForGeneset(glist[[aid]], refgmt, tglist[[aid]])
-		hgeos$qVal = p.adjust(hgeos$pVal, method='fdr')
-		hgeos$logQ = -log10(hgeos$qVal)
-		return(hgeos)
-		}, mc.cores = ncore)
-	names(enrobj) = names(glist)
-	return(enrobj)
-}
-
-
-
-## enrichment object list to matrix (genarilzed function compatible)
-enrobj2Matrix <-function(enrobj, val.col='pvalue', log=TRUE) {
-	LS = lapply(names(enrobj), function(set) {
-		dff = data.frame(enrobj[[set]])
-		if('Description' %in% names(dff)) dff = dff %>% dplyr::rename(termID=ID, ID=Description)
-		dff$set = set
-		dff = dff[order(dff$set),]
-		return(dff)
-	})
-	hmplot = do.call(rbind, LS)
-
-	# detect log values
-	logdetect <- FALSE
-	if(any(quantile(hmplot[,val.col], na.rm=TRUE) > 1)) logdetect <- TRUE
-	if(log & logdetect) cat('Already in log values.'); log <- FALSE
-	if(log & !logdetect) {
-		hmplot$logV <- -log10(hmplot[,val.col])
-		plotMat = reshape2::acast(hmplot, ID~set, value.var=logV, fill = NA)
-	}
-
-	if(!log) plotMat = reshape2::acast(hmplot, ID~set, value.var=val.col, fill = NA)
-	plotMat = plotMat[order(apply(plotMat,1, sum, na.rm=TRUE), decreasing=TRUE),]
-	return(plotMat)
+# (replaces geneListDistMat)
+getPairmat <- function(pairdf, metric='ef') {
+	pairm = reshape2::acast(pairdf, ix1~ix2, value.var=metric)
+	diag(pairm) = NA
+	return(pairm)
 }
 
 

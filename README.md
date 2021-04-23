@@ -27,7 +27,7 @@ Ver 0.0.4.1 is final backward incompatible change. (deploy number : 0.1.0.9000)
 - [] Read up on gitFlow. 
 
 
-## To Do -- future ideas
+## Future ideas
 
 - [] ens2sym ??
 - [] Think about utilizing cpp codes for simple calculation function. --> speed trade-off potentially not worth it

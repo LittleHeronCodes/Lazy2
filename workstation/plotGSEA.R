@@ -1,26 +1,33 @@
+#' plotEnrichment2
+#'
+#' Plot running score for GSEA enrichment plot. Function modified from plotEnrichment.
+#' @param gset gene set to calculate enrichment in character vector.
+#' @param stats gene level statistics. This should be a named vector where names match gene ids in gset.
+#' @param nes 
+#' @param qv 
+#' @param gseaParam 
+#' @param mtitle 
+#' @param ylab 
+#' @param ticksSize 
+#' @param base_size 
+#' @param line.col 
+#' @param lwd 
+#' @param draw 
+#' @param statbar 
+#' @return enrichment plot
+#' @export
 
-##====================================================
 ## GSEA plot
-
-gset = intgpath[[i]]
-stats = tstatLS$PHMG
-nes=ss1$NES
-qv=ss1$qVal
-mtitle='PHMG'
-ylab=cleanTermNames(i, remove_source=TRUE)
-lwd=1.1
-base_size=11
-ticksSize=0.3
-ylim = c(-0.55,0.55)
-line.col='green'
-draw=TRUE
-
-plotEnrichment2 <- function(gset, stats, nes, qv, gseaParam = 1, mtitle=NULL, ylab='',
+plotEnrichment2 <- function(gset, stats, nes, qv, gseaParam=1, mtitle=NULL, ylab='',
 	ticksSize=0.4, base_size=7, line.col='green', lwd=2, ylim=NULL, draw=TRUE, statbar=FALSE) {
 
-	require(grid)
 	require(gtable)
 	require(fgsea)
+	set.seed(1234)
+
+	if(!any(gset %in% names(stats))) {
+		stop('stat')
+	}
 
 	rnk <- rank(-stats)
 	ord <- order(rnk)
@@ -33,13 +40,6 @@ plotEnrichment2 <- function(gset, stats, nes, qv, gseaParam = 1, mtitle=NULL, yl
 	bottoms <- gseaRes$bottoms
 	tops <- gseaRes$tops
 
-	## Add fgsea run if no nes and qv given ##
-	if(any(is.na(c(nes,qv)))) {
-		
-	}
-
-	txt <- sprintf('NES : %.2f  \nq-value : %.2e  ', nes, qv)
-
 	n <- length(statsAdj)
 	xs <- as.vector(rbind(pathway - 1, pathway))
 	ys <- as.vector(rbind(bottoms, tops))
@@ -47,7 +47,16 @@ plotEnrichment2 <- function(gset, stats, nes, qv, gseaParam = 1, mtitle=NULL, yl
 	diff <- (max(tops) - min(bottoms))/8
 	es <- c(tops, bottoms)[which.max(abs(c(tops,bottoms)))]
 
-	if(is.null(ylim)) ylim = c(floor(min(bottoms)*20), ceiling(max(tops)*20))/20
+	# run fgsea if no nes and qv given
+	if(any(is.na(c(nes,qv)))) {
+		gseares <- fgsea(pathways = list(a=gset), stats=stats, nperm=10000)
+		nes <- gseares$NES[1]
+		qv <- gseares$padj
+	}
+	txt <- sprintf('NES : %.2f  \nFDR : %.2e  ', nes, qv)
+
+	# set y axis ticks
+	if(is.null(ylim)) ylim <- c(floor(min(bottoms)*20), ceiling(max(tops)*20))/20
 
 	if( (ylim[2] - ylim[1]) > 0.55 ) {
 		br <- 0.2
@@ -56,48 +65,46 @@ plotEnrichment2 <- function(gset, stats, nes, qv, gseaParam = 1, mtitle=NULL, yl
 		br <- 0.1
 		ln1 <- seq(ceiling(ylim[1]*10)/10, floor(ylim[2]*10)/10, br)
 	}
+	txt_y_pos <- ifelse(es < 0, max(c(ln1,tops)), min(c(ln1, bottoms)))
+	max_es <- ifelse(es > 0, max(tops), min(bottoms))
 
-	txt_y_pos = ifelse(es < 0, max(c(ln1,tops)), min(c(ln1, bottoms)))
+	xlim <- c(0, ceiling(length(stats)/500)*500)
+	half_line <- base_size/2
 
-	half_line = base_size/2
-
+	# running score
 	g1 <- ggplot(toPlot, aes(x = x, y = y)) + geom_point(color = line.col, size = 0.1) + 
-	  geom_hline(yintercept = 0, colour = "black", linetype='dashed', size = lwd*0.8) +
-	  geom_hline(yintercept = ifelse(nes>0, max(tops), min(bottoms)), colour = "red", linetype = "dashed", size = lwd*0.8) +
-	  geom_line(color = line.col,size = lwd) +
-	  annotate('text', x=max(toPlot$x), y=txt_y_pos, label=txt, hjust=1, vjust=.5, fontface='plain', size=rel(3.0)) +
-	  scale_y_continuous(breaks=ln1, limits=ylim) + 
-	  labs(y = ylab, title=mtitle) + 
-	  theme_common_gsea(base_size=base_size) +
+	  geom_hline(yintercept = 0, colour = 'black', linetype = 'dashed', size = lwd*0.8) +
+	  geom_hline(yintercept = max_es, colour = 'red', linetype = 'dashed', size = lwd*0.8) +
+	  geom_line(colour = line.col, size = lwd) +
+	  annotate('text', x = max(toPlot$x), y = txt_y_pos, label = txt, hjust = 1, vjust = .5, size = rel(3.0)) +
+	  scale_y_continuous(breaks = ln1, limits = ylim) + xlim(xlim[1], xlim[2]) +
+	  labs(y = ylab, title = mtitle) + 
+	  theme_common_gsea(base_size = base_size) +
 	  theme(
-	  	panel.grid.major.y = element_line(colour = "grey85",linetype='dashed', size = lwd*0.65),
-	    plot.title = element_text(hjust = 0.5, vjust=0.2, face='bold', margin=unit(c(0,0,1.5,0), 'mm')),
-	    axis.title.y = element_text(face='bold', angle=90, margin=unit(c(0,1.5,0,0), 'mm'),size=rel(0.95)),
-	    # plot.margin = unit(c(1.2,2.0,0,1.2), 'mm'),
-	    plot.margin = margin(half_line, half_line*2.5, 0, half_line),
-	  	axis.title.x=element_blank(), axis.text.x=element_blank()
+	    plot.title = element_text(hjust = 0.5, vjust = 0.2, face = 'bold', margin = unit(c(0,0,1.5,0), 'mm')),
+	  	panel.grid.major.y = element_line(colour = 'grey85', linetype = 'dashed', size = lwd*0.65),
+	    axis.title.y = element_text(face = 'bold', angle = 90, margin = unit(c(0,1.5,0,0), 'mm'), size = rel(0.95)),
+	    axis.text.y = element_text(size = rel(0.8), colour = 'black'),
+	    plot.margin = margin(half_line, half_line*2.5, 0, half_line)
 	  	)
 
+	# gene set bar
 	g2 <- ggplot(data.frame(x=pathway),aes(x = x, y = -diff/3, xend = x, yend = diff/3)) +
-	  geom_segment(size = ticksSize, colour='grey35') +
-	  theme_common_gsea(base_size=base_size) + scale_x_continuous(breaks=c(0,5000,10000,15000), limits=c(0,15000)) +
-	  theme(
-		# plot.margin = unit(c(0,2.0,1.2,1.2), 'mm'),
-		plot.margin = margin(0, half_line*2.5, half_line, half_line),
-	  	axis.text.y = element_blank(), axis.title=element_blank()
-	 	)
+	  geom_segment(size = ticksSize, colour = 'grey35') +
+	  scale_x_continuous(breaks = c(seq(xlim[1], xlim[2], 5000), xlim[2]), limits = xlim) +
+	  theme_common_gsea(base_size = base_size) + 
+	  theme(plot.margin = margin(0, half_line*2.5, half_line, half_line))
 
+	# rank score bar (t stat, logFC etc)
 	if(statbar) {
-		lead <- toPlot[which(toPlot$y==es),]
-		g1 <- g1 + geom_segment(x=lead$x, xend=lead$x, y=0, yend=es, color='red', linetype=3, size=lwd*0.25)
-		g2 <- g2 + theme(axis.text.x=element_blank(),plot.margin = margin(0, half_line*2.5, 0, half_line))
-		g3 <- ggplot(data.frame(x=seq_along(stats), stat=stats), aes(x=x, y=0, xend=x, yend=stat)) +
-		  geom_segment(size = ticksSize, colour='grey35') +
-		  theme_common_gsea(base_size=base_size) +
-		  theme(
-		  	plot.margin = margin(0, half_line*2.5, half_line, half_line),
-		  	axis.text.y=element_blank(), axis.title=element_blank()
-		  	)
+		lead <- toPlot[which(toPlot$y == es),]
+		g1 <- g1 + geom_segment(x = lead$x, xend = lead$x, y = 0, yend = es, color = 'red', linetype = 3, size = lwd*0.25)
+		g2 <- g2 + theme(plot.margin = margin(0, half_line*2.5, 0, half_line))
+		g3 <- ggplot(data.frame(x = seq_along(stats), stat = stats), aes(x = x, y = 0, xend = x, yend = stat)) +
+		  geom_segment(size = ticksSize, colour = 'grey35') +
+		  scale_x_continuous(breaks = c(seq(xlim[1], xlim[2], 5000), xlim[2]), limits = xlim) +
+		  theme_common_gsea(base_size = base_size) +
+		  theme(plot.margin = margin(0, half_line*2.5, half_line, half_line))
 	}
 
 	gr1 <- ggplotGrob(g1)
@@ -116,7 +123,7 @@ plotEnrichment2 <- function(gset, stats, nes, qv, gseaParam = 1, mtitle=NULL, yl
 	gr$widths <- grid::unit.pmax(gr1$widths, gr2$widths)
 
 	# identify the position of the panels within the gtable
-	panid <- gr$layout$t[grep(pattern="panel", gr$layout$name)]
+	panid <- gr$layout$t[grep(pattern = "panel", gr$layout$name)]
 	gr$heights[panid] <- unit(ht.ratio, 'null')
 
 	if(draw) {
@@ -129,16 +136,15 @@ plotEnrichment2 <- function(gset, stats, nes, qv, gseaParam = 1, mtitle=NULL, yl
 
 
 theme_common_gsea <- function(base_size=5) {
-	half_line = base_size/2
+	half_line <- base_size/2
 	.theme <- theme(
-		text = element_text(face='plain', size=base_size, colour='black', family='Arial'),
-		plot.title = element_text(size=rel(1.0)),
-		axis.ticks=element_blank(), 
-		axis.text = element_text(size=rel(0.8), colour='black'),
+		text = element_text(face = 'plain', size = base_size, colour = 'black', family = 'Arial'),
+		plot.title = element_text(size = rel(1.0)),
+		axis.ticks = element_blank(), axis.text = element_blank(), axis.title = element_blank(),
 		panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
 		panel.background = element_rect(fill = "transparent", colour = NA),
 		plot.background = element_rect(fill = "transparent",colour = NA),
-		complete=TRUE)
+		complete = TRUE)
 	.theme
 }
 

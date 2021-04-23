@@ -1,27 +1,49 @@
 ## Updated pathway analysis set
 
 
-drawHeatmap <- function(plotMat, col_pal, mtitle, name = 'logQ',ha = NULL) {
-	colors = colorRamp2(c(0,.2,1,4), col_pal)
-
-	hp = Heatmap(plotMat, col = colors, column_title = mtitle, name = name,
-		cluster_rows = FALSE, cluster_columns = FALSE,
-		row_names_gp = gpar(fontsize = 9), column_names_gp = gpar(fontsize = 9),
-		show_row_dend = FALSE, show_column_dend = FALSE,
-		row_names_max_width = unit(1, 'npc'), width = unit(3, 'cm'),
-		row_names_side='right', rect_gp = gpar(col = "gray25", lty = 1, lwd = 0.4), 
-		heatmap_legend_param = list(direction='vertical', title_position='topcenter'),
-		right_annotation = ha)
-	return(hp)
+## General hypergeo test
+Gen_enrichment <- function(glist, refgmt, tglist, ncore=1) {
+	if(ncore <= 1) {
+		enrobj <- lapply(names())
+	}
+	require(parallel)
+	enrobj = mclapply(names(glist), function(aid) {
+		hgeos = hypergeoTestForGeneset(glist[[aid]], refgmt, tglist[[aid]])
+		hgeos$qVal = p.adjust(hgeos$pVal, method='fdr')
+		hgeos$logQ = -log10(hgeos$qVal)
+		return(hgeos)
+		}, mc.cores = ncore)
+	names(enrobj) = names(glist)
+	return(enrobj)
 }
 
 
-plotMatNamesClean <- function(plotMat) {
-	rownames(plotMat) = gsub('^GO_|^KEGG_|^WIKI_','',rownames(plotMat))
-	rownames(plotMat) = gsub('_',' ',rownames(plotMat))
-	colnames(plotMat) = gsub('_vs_Control$', '/Con',colnames(plotMat))
+
+## enrichment object list to matrix (genarilzed function compatible)
+enrobj2Matrix <-function(enrobj, val.col='pvalue', log=TRUE) {
+	LS = lapply(names(enrobj), function(set) {
+		dff = data.frame(enrobj[[set]])
+		if('Description' %in% names(dff)) dff = dff %>% dplyr::rename(termID=ID, ID=Description)
+		dff$set = set
+		dff = dff[order(dff$set),]
+		return(dff)
+	})
+	hmplot = do.call(rbind, LS)
+
+	# detect log values
+	is_log <- FALSE
+	if(any(quantile(hmplot[,val.col], na.rm=TRUE) > 1)) is_log <- TRUE
+	if(log & is_log) cat('val.col is already in log values.'); log <- FALSE
+	if(log & !is_log) {
+		hmplot$logV <- -log10(hmplot[,val.col])
+		plotMat = reshape2::acast(hmplot, ID~set, value.var=logV, fill = NA)
+	}
+
+	if(!log) plotMat = reshape2::acast(hmplot, ID~set, value.var=val.col, fill = NA)
+	plotMat = plotMat[order(apply(plotMat,1, sum, na.rm=TRUE), decreasing=TRUE),]
 	return(plotMat)
 }
+
 
 
 enrLS2plotMat <- function(enrLS, ord.FUN = NULL, use_adjP = TRUE, id.col='ID') {
@@ -68,41 +90,3 @@ enrLS2plotMat <- function(enrLS, ord.FUN = NULL, use_adjP = TRUE, id.col='ID') {
 
 
 
-enrDrawPlotSave.go <- function(enrObj, use_adjP) {
-	nm = ifelse(use_adjP, 'logQ','logP')
-	plotMat <- enrLS2plotMat(enrObj, ord.FUN = ord.FUN, use_adjP = use_adjP)
-	print(dim(plotMat))
-	plotMat <- plotMat[1:30,c(1,5,3,2,6,4)]
-	hp <- drawHeatmap(plotMat, col_pal$RdWh, sprintf('%s %s (fco %.1f)',dir, 'GO', fco), name=nm)
-	# png(sprintf('%s/pathway/cell_death/CellDeathPathways_p_fco%.1f_%s_up.png',yml$fig, fco, 'GO'), 
-	# 	width = 17, height = 22, unit = 'cm', res = 150)
-	draw(hp, heatmap_legend_side = 'left')
-	# dev.off()
-}
-
-
-
-enrDrawPlotSave.kg <- function(enrObj, use_adjP, col_pal) {
-	nm = 'logP' #ifelse(use_adjP, 'logQ','logP')
-	plotMat <- enrLS2plotMat(enrObj, ord.FUN = NULL, use_adjP = FALSE)
-	# plotMat <- plotMat[grep(paste(cell_death_terms, collapse='|'), rownames(plotMat), ignore.case = TRUE), ]
-	print(dim(plotMat))
-	# plotMat <- plotMat[,c(1,5,3,2,6,4)]
-
-	hacat = rep('',nrow(plotMat))
-	for(x in cell_death_terms) {
-		hacat = ifelse(grepl(x, rownames(plotMat), ignore.case=TRUE), x, hacat)
-	}
-	hacat = ifelse(hacat %in% c('apopto','necro','ferropto'), paste0(hacat, 'sis'),
-		ifelse(hacat == 'autophag', paste0(hacat, 'y'), 'others'))
-	hacol = structure(RColorBrewer::brewer.pal(8, 'Set2')[1:length(unique(hacat))], 
-		names = sort(unique(hacat)))
-	ha = HeatmapAnnotation(categories = hacat, which = 'row', 
-		col = list(categories = hacol), width=unit(.5,'npc'))
-
-	hp <- drawHeatmap(plotMat, col_pal, sprintf('%s %s (fco %.1f)', dir, 'kegg', fco), name=nm, ha=ha)
-	png(sprintf('%s/pathway/cell_death/CellDeathPathways_%s_fco%.1f_%s_%s_.png', yml$fig,nm,fco,dir,'KEGG'), 
-		width = 15, height = 10, unit = 'cm', res = 150)
-	draw(hp, heatmap_legend_side = 'left')
-	dev.off()
-}
