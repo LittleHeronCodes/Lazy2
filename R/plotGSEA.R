@@ -3,17 +3,17 @@
 #' Plot running score for GSEA enrichment plot. Function modified from plotEnrichment.
 #' @param gset gene set to calculate enrichment in character vector.
 #' @param stats gene level statistics. This should be a named vector where names match gene ids in gset.
-#' @param nes 
-#' @param qv 
-#' @param gseaParam 
-#' @param mtitle 
-#' @param ylab 
-#' @param ticksSize 
-#' @param base_size 
-#' @param line.col 
-#' @param lwd 
-#' @param draw 
-#' @param statbar 
+#' @param nes NES provided for annotation. Runs fgsea if not provided.
+#' @param qv adjusted p value provided for annotation. Runs fgsea if not provided.
+#' @param gseaParam gseaParam from plotEnrichment.
+#' @param mtitle main title
+#' @param ylab y axis name
+#' @param ticksSize ticks lwd for geneset bars.
+#' @param base_size font base size. default 7
+#' @param line.col line colour for GSEA running score.
+#' @param lwd line width for GSEA running score.
+#' @param draw draw plot. default TRUE
+#' @param statbar show statistics tick at bottom of plot.
 #' @return enrichment plot
 #' @export
 
@@ -135,7 +135,11 @@ plotEnrichment2 <- function(gset, stats, nes, qv, gseaParam=1, mtitle=NULL, ylab
 }
 
 
-theme_common_gsea <- function(base_size=5) {
+#' @describeIn plotEnrichment2
+#' Using multiprocessing
+#' @export
+
+theme_common_gsea <- function(base_size=7) {
 	half_line <- base_size/2
 	.theme <- theme(
 		text = element_text(face = 'plain', size = base_size, colour = 'black', family = 'Arial'),
