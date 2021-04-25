@@ -18,13 +18,13 @@ Gen_enrichment <- function(glist, refgmt, tglist, ncore=1) {
 
 	}
 	require(parallel)
-	enrobj = mclapply(names(glist), function(aid) {
-		hgeos = hypergeoTestForGeneset(glist[[aid]], refgmt, tglist[[aid]])
-		hgeos$qVal = p.adjust(hgeos$pVal, method='fdr')
-		hgeos$logQ = -log10(hgeos$qVal)
+	enrobj <- mclapply(names(glist), function(aid) {
+		hgeos <- hypergeoTestForGeneset(glist[[aid]], refgmt, tglist[[aid]])
+		hgeos$qVal <- p.adjust(hgeos$pVal, method='fdr')
+		hgeos$logQ <- -log10(hgeos$qVal)
 		return(hgeos)
 		}, mc.cores = ncore)
-	names(enrobj) = names(glist)
+	names(enrobj) <- names(glist)
 	return(enrobj)
 }
 
@@ -40,14 +40,14 @@ Gen_enrichment <- function(glist, refgmt, tglist, ncore=1) {
 
 
 enrobj2Matrix <- function(enrobj, val.col='pvalue', log=TRUE) {
-	LS = lapply(names(enrobj), function(set) {
-		dff = data.frame(enrobj[[set]])
-		if('Description' %in% names(dff)) dff = dff %>% dplyr::rename(termID=ID, ID=Description)
-		dff$set = set
-		dff = dff[order(dff$set),]
+	LS <- lapply(names(enrobj), function(set) {
+		dff <- data.frame(enrobj[[set]])
+		if('Description' %in% names(dff)) dff <- dff %>% dplyr::rename(termID=ID, ID=Description)
+		dff$set <- set
+		dff <- dff[order(dff$set),]
 		return(dff)
 	})
-	hmplot = do.call(rbind, LS)
+	hmplot <- do.call(rbind, LS)
 
 	# detect log values
 	is_log <- FALSE
@@ -55,11 +55,11 @@ enrobj2Matrix <- function(enrobj, val.col='pvalue', log=TRUE) {
 	if(log & is_log) cat('val.col is already in log values.'); log <- FALSE
 	if(log & !is_log) {
 		hmplot$logV <- -log10(hmplot[,val.col])
-		plotMat = reshape2::acast(hmplot, ID~set, value.var=logV, fill = NA)
+		plotMat <- reshape2::acast(hmplot, ID~set, value.var=logV, fill = NA)
 	}
 
-	if(!log) plotMat = reshape2::acast(hmplot, ID~set, value.var=val.col, fill = NA)
-	plotMat = plotMat[order(apply(plotMat,1, sum, na.rm=TRUE), decreasing=TRUE),]
+	if(!log) plotMat <- reshape2::acast(hmplot, ID~set, value.var=val.col, fill = NA)
+	plotMat <- plotMat[order(apply(plotMat,1, sum, na.rm=TRUE), decreasing=TRUE),]
 	return(plotMat)
 }
 

@@ -37,8 +37,8 @@ writeGMT <- function(file, glist, geneset_desc='') {
 		stop('Check glist format. glist should be a one-level list of genesets.')
 	}
 
-	concat = sapply(glist, function(v) paste(v, collapse='\t'))
-	out = paste0(names(concat), '\t',geneset_desc,'\t', concat)
+	concat <- sapply(glist, function(v) paste(v, collapse='\t'))
+	out <- paste0(names(concat), '\t',geneset_desc,'\t', concat)
 
 	writeLines(out, con=file)
 }
@@ -72,35 +72,35 @@ hypergeoTestForGeneset <- function(query, refGMT, gspace) {
 	if(!all(query %in% gspace)) {
 		stop(paste(length(setdiff(query, gspace)),'query items were found outside of background space. Check inputs.'))
 	}
-	query = intersect(query, gspace)
-	refGMT = lapply(refGMT, function(g) intersect(g,gspace))
+	query <- intersect(query, gspace)
+	refGMT <- lapply(refGMT, function(g) intersect(g,gspace))
 
 	if(length(query) == 0) stop('Query length is zero.')
 
 	exc <- which(sapply(refGMT, length) <= 10))
 	if(length(exc) != 0) {
 		warning(paste('Ref set no', paste(exc, collapse=', '), 'had less than 10 genes and were excluded.'))
-		refGMT = refGMT[which(sapply(refGMT, length) > 10)]
+		refGMT <- refGMT[which(sapply(refGMT, length) > 10)]
 	}
 
-	N = length(gspace)							# no of balls in urn
-	k = length(query)							# no of balls drawn from urn (DEG no)
-	enrRes = lapply(refGMT, function(refgenes) {
-		q = length(intersect(refgenes, query))	# no of white balls drawn
-		m = length(intersect(gspace, refgenes)) # no of white balls in urn
-		I = intersect(refgenes, query)
+	N <- length(gspace)							# no of balls in urn
+	k <- length(query)							# no of balls drawn from urn (DEG no)
+	enrRes <- lapply(refGMT, function(refgenes) {
+		q <- length(intersect(refgenes, query))	# no of white balls drawn
+		m <- length(intersect(gspace, refgenes)) # no of white balls in urn
+		I <- intersect(refgenes, query)
 
-		pVal = phyper(q-1, m, N-m, k, lower.tail = FALSE)
-		odds = (q / k) / (m / N)
-		jacc = q / length(union(query, refgenes))
+		pVal <- phyper(q-1, m, N-m, k, lower.tail = FALSE)
+		odds <- (q / k) / (m / N)
+		jacc <- q / length(union(query, refgenes))
 
 		return(data.frame(pVal = pVal, oddsRatio=odds, tan = jacc, int=q, bg=N))
 		})
 
-	enrRes = do.call(rbind, enrRes)
-	enrRes$ID = names(refGMT)
-	enrRes$logP = -log10(enrRes$pVal)
-	enrRes = enrRes[,c('ID','pVal','logP','oddsRatio','tan','int','bg')]
+	enrRes <- do.call(rbind, enrRes)
+	enrRes$ID <- names(refGMT)
+	enrRes$logP <- -log10(enrRes$pVal)
+	enrRes <- enrRes[,c('ID','pVal','logP','oddsRatio','tan','int','bg')]
 	return(enrRes)	
 }
 
