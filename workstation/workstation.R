@@ -1,5 +1,6 @@
-## Supported formats : ebayes, DEseq2
 
+
+###================================================================================
 
 # (replaces geneListDistMat)
 getPairmat <- function(pairdf, metric='ef') {

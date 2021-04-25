@@ -139,3 +139,44 @@ getOverlapDF <- function(gls, tgls) {
 }
 
 
+
+#' Draw MA, volcano plot
+#'
+#' Draw MA plot from resultDF generated from limma (data.frame format). DESeq2 results should have column names matching limma.
+#' @param resultDF result dataframe generated from limma or DEseq2. If DESeq2, column name should be 'adj.P.Val','logFC','AveExpr'
+#' @param qco adjusted p value cut off
+#' @param fco fold change cut off
+#' @param ttl_pre main title prefix.
+#' @return plot
+#' @export
+#' @examples
+#' \dontrun{
+#'	drawMA(resultDF, qco=0.1, fco=2.0, ttl_pre='title')
+#' }
+
+drawMA <- function(resultDF, qco, fco, ttl_pre) {
+	ui = which(resultDF$adj.P.Val < qco & resultDF$logFC >  log2(fco))
+	di = which(resultDF$adj.P.Val < qco & resultDF$logFC < -log2(fco))
+	gcnt = paste('up:',length(ui), 'dn:',length(di))
+
+	# MA
+	plot(logFC ~ AveExpr, data = resultDF, pch = 20, main = paste(ttl_pre, 'fc', fco, 'qv', qco, gcnt), cex=0.05)
+	points(logFC ~ AveExpr, data = resultDF[c(ui,di),], pch = 20, col = 'red', cex=0.25)
+	abline(h=0, col='blue', lty=2)
+}
+
+#' @describeIn drawMA
+#' Draw volcano plot
+#' @export
+
+drawVol <- function(resultDF, qco, fco, ttl_pre) {
+	ui = which(resultDF$adj.P.Val < qco & resultDF$logFC >  log2(fco))
+	di = which(resultDF$adj.P.Val < qco & resultDF$logFC < -log2(fco))
+	gcnt = paste('up:',length(ui), 'dn:',length(di))
+
+	# volcano
+	plot(-log10(adj.P.Val) ~ logFC, data = resultDF, pch = 20, main = paste(ttl_pre, 'fc', fco, 'qv', qco, gcnt), cex=0.05)
+	points(-log10(adj.P.Val) ~ logFC, data = resultDF[c(ui,di),], pch = 20, col = 'red', cex=0.25)
+	abline(v=0, col='blue', lty=2)
+}
+

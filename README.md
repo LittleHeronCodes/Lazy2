@@ -11,7 +11,7 @@ Custom functions from Lazy for personal use, now as a package!
 - [] Functions : `hypergeoTestForGeneset` : multiprocessing into option
 - [o] Functions : **Hypergeometric test results background set return check.**
 - [o] Functions : **GSEA plot function using fgsea.** function modified from `plotEnrichment`
-- [] Functions : Draw MA plot, log fc result get for microarray no replicate.
+- [o] Functions : Draw MA plot, ~log fc result get for microarray no replicate.~
 - [o] Functions : ggplot2 custom themes.
 - [] Datasets  : Add mouse gene info
 
