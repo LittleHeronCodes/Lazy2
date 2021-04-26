@@ -2,7 +2,7 @@
 % Please edit documentation in R/DEG_list_helper.R
 \name{ent2sym}
 \alias{ent2sym}
-\title{gene mapper for entrez and symbol}
+\title{Gene ID mapper for entrez and symbol}
 \usage{
 ent2sym(genes, geneMap = NULL)
 }
@@ -15,8 +15,10 @@ ent2sym(genes, geneMap = NULL)
 genes in wanted IDs
 }
 \description{
-Map Entrez ID to Hugo symbol and vice versa.
-Uses LazygeneInfo if no gene map data frame is provided at geneMap.
+Map Entrez ID to HGNC symbol and vice versa.
+Uses LazygeneInfo if no gene ID information is provided at geneMap.
+geneMap, if provided, should be a data frame with at least two columns named 'hgnc_symbol' and 'entrez'.
+ent2sym is meant for quick ID conversion and uses match, which does not handle many-to-one or many-to-many relationships.
 }
 \examples{
 ent2sym('TP53')

@@ -77,7 +77,7 @@ hypergeoTestForGeneset <- function(query, refGMT, gspace) {
 
 	if(length(query) == 0) stop('Query length is zero.')
 
-	exc <- which(sapply(refGMT, length) <= 10))
+	exc <- which(sapply(refGMT, length) <= 10)
 	if(length(exc) != 0) {
 		warning(paste('Ref set no', paste(exc, collapse=', '), 'had less than 10 genes and were excluded.'))
 		refGMT <- refGMT[which(sapply(refGMT, length) > 10)]
@@ -121,7 +121,7 @@ hypergeoTestForGeneset2 <- function (query, refGMT, gspace, ncore = 1) {
 
 	if(length(query) == 0) stop('Query length is zero.')
 
-	exc <- which(sapply(refGMT, length) <= 10))
+	exc <- which(sapply(refGMT, length) <= 10)
 	if(length(exc) != 0) {
 		warning(paste('Ref set no', paste(exc, collapse=', '), 'had less than 10 genes and were excluded.'))
 		refGMT = refGMT[which(sapply(refGMT, length) > 10)]
