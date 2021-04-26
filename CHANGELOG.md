@@ -1,11 +1,16 @@
 # Changelog
 
-## Ver 0.0.4.0 [2021.02.21]
+## Ver 0.0.4.0 [2021.04.25]
+
+* 
+
+## Ver 0.0.3.3 [2021.02.21]
 
 * Added more descriptions for each function
 * Resurrected `convertDEGList2Matrix` to be used in finding consensus genes
 * `readGMT` fix
 * Returned `ClusterProfiler` dependency for KEGG, GO enrichments
+* Last commit before branching for ver 0.0.4
 
 ### Functions changed
 

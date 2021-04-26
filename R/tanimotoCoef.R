@@ -10,13 +10,13 @@
 #' B = c(3:7)
 #' tanimotoCoef(A, B)
 
-tanimotoCoef = function(A, B, T=NULL) {
+tanimotoCoef <- function(A, B, T = NULL) {
 	if(!is.null(T)) {
-		A = intersect(A, T)
-		B = intersect(B, T)
+		A <- intersect(A, T)
+		B <- intersect(B, T)
 	}
-	int = intersect(A, B)
-	uni = union(A, B)
+	int <- intersect(A, B)
+	uni <- union(A, B)
 	return(length(int) / length(uni))
 }
 
@@ -37,12 +37,14 @@ tanimotoCoef = function(A, B, T=NULL) {
 #' getEnrichmentFactor(A, B, total)
 
 getEnrichmentFactor <- function(setA,setB,setT, psc=0) {
-	ef = NA
-	A = length(setA)
-	B = length(setB)
-	T = length(setT)
-	I = length(intersect(setA, setB))
-	if((A / T * B) != 0) ef = (I+psc) / (A / T * B + psc)
+	ef <- NA
+	A <- length(setA)
+	B <- length(setB)
+	T <- length(setT)
+	I <- length(intersect(setA, setB))
+	if((A / T * B) != 0) {
+		ef <- (I+psc) / (A / T * B + psc)
+	}
 	return(ef)
 }
 
@@ -62,17 +64,17 @@ getEnrichmentFactor <- function(setA,setB,setT, psc=0) {
 #' @export
 
 hypergeoTest <- function(query, reference, bgspace) {
-	query = intersect(query, bgspace)
-	reference = intersect(reference, bgspace)
+	query <- intersect(query, bgspace)
+	reference <- intersect(reference, bgspace)
 
-	N = length(bgspace)							# no of balls in urn
-	k = length(query)							# no of balls drawn from urn (DEG no)
-	m = length(reference) 						# no of white balls in urn
-	q = length(intersect(reference, query))		# no of white balls drawn
+	N <- length(bgspace)							# no of balls in urn
+	k <- length(query)							# no of balls drawn from urn (DEG no)
+	m <- length(reference) 						# no of white balls in urn
+	q <- length(intersect(reference, query))		# no of white balls drawn
 
-	pVal = phyper(q-1, m, N-m, k, lower.tail = FALSE)
-	odds = (q / k) / (m / N)
-	return(data.frame(pVal = pVal, oddsRatio=odds, int=q, bg=N))
+	pVal <- phyper(q-1, m, N-m, k, lower.tail = FALSE)
+	odds <- (q / k) / (m / N)
+	return(data.frame(pVal = pVal, oddsRatio = odds, int = q, bg = N))
 }
 
 
