@@ -94,10 +94,10 @@ hypergeoTestForGeneset <- function(query, refGMT, gspace) {
 		odds <- (q / k) / (m / N)
 		jacc <- q / length(union(query, refgenes))
 
-		return(data.frame(pVal = pVal, oddsRatio=odds, tan = jacc, int=q, bg=N))
+		return(data.table(pVal = pVal, oddsRatio=odds, tan = jacc, int=q, bg=N))
 		})
 
-	enrRes <- do.call(rbind, enrRes)
+	enrRes = rbindlist(enrRes)
 	enrRes$ID <- names(refGMT)
 	enrRes$logP <- -log10(enrRes$pVal)
 	enrRes <- enrRes[,c('ID','pVal','logP','oddsRatio','tan','int','bg')]
@@ -112,12 +112,13 @@ hypergeoTestForGeneset <- function(query, refGMT, gspace) {
 
 hypergeoTestForGeneset2 <- function (query, refGMT, gspace, ncore = 1) {
 	require(parallel)
+	require(data.table)
 
 	if(!all(query %in% gspace)) {
 		stop(paste(length(setdiff(query, gspace)),'Query items were found outside of background space. Check inputs.'))
 	}
 	query = intersect(query, gspace)
-	refGMT = lapply(refGMT, function(g) intersect(g,gspace))
+	refGMT = parallel::mclapply(refGMT, function(g) intersect(g,gspace), mc.cores=ncore)
 
 	if(length(query) == 0) stop('Query length is zero.')
 
@@ -137,10 +138,12 @@ hypergeoTestForGeneset2 <- function (query, refGMT, gspace, ncore = 1) {
         odds = (q / k) / (m / N)
         jacc = q / length(union(query, refgenes))
 
-        return(data.frame(pVal = pVal, oddsRatio = odds, tan = jacc, int = q, bg = N))
+        return(data.table(pVal = pVal, oddsRatio = odds, tan = jacc, int = q, bg = N))
     }, mc.cores = ncore)
 
-    enrRes = do.call(rbind, enrRes)
+    # enrRes = do.call(rbind, enrRes)
+    enrRes = rbindlist(enrRes)
+	
     enrRes$ID = names(refGMT)
     enrRes$logP = -log10(enrRes$pVal)
     enrRes = enrRes[, c('ID', 'pVal', 'logP', 'oddsRatio', 'tan', 'int', 'bg')]
