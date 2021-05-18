@@ -158,7 +158,7 @@ drawMA <- function(resultDF, qco, fco, ttl_pre) {
 	ui = which(resultDF$adj.P.Val < qco & resultDF$logFC >  log2(fco))
 	di = which(resultDF$adj.P.Val < qco & resultDF$logFC < -log2(fco))
 	gcnt = paste('up:',length(ui), 'dn:',length(di))
-	ylim = c(-max(abs(resultDF$logFC)), max(abs(resultDF$logFC)))
+	ylim = c(-max(abs(resultDF$logFC), na.rm=TRUE), max(abs(resultDF$logFC), na.rm=TRUE))
 	mtitle = paste(ttl_pre, 'fc', fco, 'qv', qco, gcnt)
 
 	# MA
@@ -175,7 +175,7 @@ drawVol <- function(resultDF, qco, fco, ttl_pre) {
 	ui = which(resultDF$adj.P.Val < qco & resultDF$logFC >  log2(fco))
 	di = which(resultDF$adj.P.Val < qco & resultDF$logFC < -log2(fco))
 	gcnt = paste('up:',length(ui), 'dn:',length(di))
-	xlim = c(-max(abs(resultDF$logFC)), max(abs(resultDF$logFC)))
+	xlim = c(-max(abs(resultDF$logFC), na.rm=TRUE), max(abs(resultDF$logFC), na.rm=TRUE))
 	mtitle = paste(ttl_pre, 'fc', fco, 'qv', qco, gcnt)
 
 	# volcano
