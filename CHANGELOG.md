@@ -1,8 +1,14 @@
 # Changelog
 
-## Ver 0.0.4.0 [2021.04.25]
 
-* 
+## Ver 0.1.1.9000 [2021.05.18]
+
+* `drawMA`, `drawVol` symmetrical axis for logFC
+
+## Ver 0.0.4.1 [2021.04.25]
+
+* `hypergeoTestSetForGenes` now uses data.table
+
 
 ## Ver 0.0.3.3 [2021.02.21]
 
