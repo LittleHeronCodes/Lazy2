@@ -158,9 +158,11 @@ drawMA <- function(resultDF, qco, fco, ttl_pre) {
 	ui = which(resultDF$adj.P.Val < qco & resultDF$logFC >  log2(fco))
 	di = which(resultDF$adj.P.Val < qco & resultDF$logFC < -log2(fco))
 	gcnt = paste('up:',length(ui), 'dn:',length(di))
+	ylim = c(-max(abs(resultDF$logFC)), max(abs(resultDF$logFC)))
+	mtitle = paste(ttl_pre, 'fc', fco, 'qv', qco, gcnt)
 
 	# MA
-	plot(logFC ~ AveExpr, data = resultDF, pch = 20, main = paste(ttl_pre, 'fc', fco, 'qv', qco, gcnt), cex=0.05)
+	plot(logFC ~ AveExpr, data = resultDF, pch = 20, main = mtitle, cex=0.05, ylim=ylim)
 	points(logFC ~ AveExpr, data = resultDF[c(ui,di),], pch = 20, col = 'red', cex=0.25)
 	abline(h=0, col='blue', lty=2)
 }
@@ -173,9 +175,11 @@ drawVol <- function(resultDF, qco, fco, ttl_pre) {
 	ui = which(resultDF$adj.P.Val < qco & resultDF$logFC >  log2(fco))
 	di = which(resultDF$adj.P.Val < qco & resultDF$logFC < -log2(fco))
 	gcnt = paste('up:',length(ui), 'dn:',length(di))
+	xlim = c(-max(abs(resultDF$logFC)), max(abs(resultDF$logFC)))
+	mtitle = paste(ttl_pre, 'fc', fco, 'qv', qco, gcnt)
 
 	# volcano
-	plot(-log10(adj.P.Val) ~ logFC, data = resultDF, pch = 20, main = paste(ttl_pre, 'fc', fco, 'qv', qco, gcnt), cex=0.05)
+	plot(-log10(adj.P.Val) ~ logFC, data = resultDF, pch = 20, main = mtitle, cex=0.05, xlim=xlim)
 	points(-log10(adj.P.Val) ~ logFC, data = resultDF[c(ui,di),], pch = 20, col = 'red', cex=0.25)
 	abline(v=0, col='blue', lty=2)
 }
