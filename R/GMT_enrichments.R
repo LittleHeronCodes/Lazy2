@@ -69,6 +69,7 @@ writeGMT <- function(file, glist, geneset_desc='') {
 #' }
 
 hypergeoTestForGeneset <- function(query, refGMT, gspace) {
+	require(data.table)
 	if(!all(query %in% gspace)) {
 		stop(paste(length(setdiff(query, gspace)),'query items were found outside of background space. Check inputs.'))
 	}
