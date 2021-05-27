@@ -20,6 +20,7 @@ Imports:
 	gtable (>= 0.3.0),
 	RColorBrewer (>= 1.1),
 	reshape2 (>= 1.4.3),
+	parallel,
 	tidyr (>= 0.8.3)
 Suggets:
 	circlize (>= 0.4.6),

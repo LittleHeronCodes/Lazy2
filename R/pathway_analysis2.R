@@ -3,7 +3,7 @@
 #' Run pathway analysis (hypergeometric test) for gene list. Wrapper function for hypergeoTestForGeneset.
 #' @param glist List of query genes. (DEG list)
 #' @param refgmt Reference gene set list. (Pathway set in list form)
-#' @param tglist List of gene space, same length as glist.
+#' @param tglist List of background gene space, same length as glist.
 #' @param ncore Number of cores to use.
 #' @return List of enricher Object: up, down
 #' @export
@@ -17,12 +17,12 @@ Gen_enrichment <- function(glist, refgmt, tglist, ncore=1) {
 	if(ncore > 1) {
 		enrobj <- mclapply(names(glist), function(aid) { hypergeoTestForGeneset(glist[[aid]], refgmt, tglist[[aid]]) }, mc.cores = ncore)
 	}
-	enrobj <- mclapply(names(glist), function(aid) {
-		hgeos <- hypergeoTestForGeneset(glist[[aid]], refgmt, tglist[[aid]])
+	enrobj <- lapply(enrobj, function(hgeos) {
+		# hgeos <- hypergeoTestForGeneset(glist[[aid]], refgmt, tglist[[aid]])
 		hgeos$qVal <- p.adjust(hgeos$pVal, method='fdr')
 		hgeos$logQ <- -log10(hgeos$qVal)
 		return(hgeos)
-		}, mc.cores = ncore)
+		})
 	names(enrobj) <- names(glist)
 	return(enrobj)
 }

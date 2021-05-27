@@ -1,5 +1,10 @@
 # Changelog
 
+## Ver 0.1.2.9000 [2021.05.24]
+
+* `hypergeoTestForGeneset` : warning message fixed for better readibility when too many gene sets are filtered. Stop if length of reference set is zero after filtering.
+* `Gen_enrichment` : `hypergeoTestForGeneset` has been running twice in parallel mode for some reason??
+* Added dependency import `parallel`.
 
 ## Ver 0.1.1.9000 [2021.05.18]
 

@@ -50,7 +50,8 @@ writeGMT <- function(file, glist, geneset_desc='') {
 #' 
 #' @param query  gene set to query (ex. Differentially Expressed Genes)
 #' @param refGMT list of reference gene set (ex. Pathways)
-#' @param gspace gene space to query in
+#' @param gspace background gene space
+#' @param minGeneSet minimum size of gene set. (used to filter refGMT)
 #' @return data frame
 #' \describe{
 #' 	  \item{pVal}{hypergeometric test p values from phyper}
@@ -68,7 +69,7 @@ writeGMT <- function(file, glist, geneset_desc='') {
 #' hypergeoTestForGeneset(gset, glist, LETTERS)
 #' }
 
-hypergeoTestForGeneset <- function(query, refGMT, gspace) {
+hypergeoTestForGeneset <- function(query, refGMT, gspace, minGeneSet=10) {
 	require(data.table)
 	if(!all(query %in% gspace)) {
 		stop(paste(length(setdiff(query, gspace)),'query items were found outside of background space. Check inputs.'))
@@ -78,11 +79,17 @@ hypergeoTestForGeneset <- function(query, refGMT, gspace) {
 
 	if(length(query) == 0) stop('Query length is zero.')
 
-	exc <- which(sapply(refGMT, length) <= 10)
+	exc <- which(sapply(refGMT, length) <= minGeneSet)
 	if(length(exc) != 0) {
-		warning(paste('Ref set no', paste(exc, collapse=', '), 'had less than 10 genes and were excluded.'))
-		refGMT <- refGMT[which(sapply(refGMT, length) > 10)]
+		if(length(exc) <= 5) {
+			mesg <- paste('Ref set no', paste(exc, collapse=', '), 'had less than 10 genes and were excluded.')
+		} else {
+			mesg <- paste(length(exc), ' entries in refGMT had less than 10 genes and were excluded.')
+		}
+		warning(mesg)
+		refGMT <- refGMT[which(sapply(refGMT, length) > minGeneSet)]
 	}
+	if(length(refGMT) == 0) stop('Length of refGMT after filtering is zero.')
 
 	N <- length(gspace)							# no of balls in urn
 	k <- length(query)							# no of balls drawn from urn (DEG no)
@@ -111,7 +118,7 @@ hypergeoTestForGeneset <- function(query, refGMT, gspace) {
 #' Using multiprocessing
 #' @export
 
-hypergeoTestForGeneset2 <- function (query, refGMT, gspace, ncore = 1) {
+hypergeoTestForGeneset2 <- function (query, refGMT, gspace, minGeneSet=10, ncore = 1) {
 	require(parallel)
 	require(data.table)
 
@@ -123,11 +130,17 @@ hypergeoTestForGeneset2 <- function (query, refGMT, gspace, ncore = 1) {
 
 	if(length(query) == 0) stop('Query length is zero.')
 
-	exc <- which(sapply(refGMT, length) <= 10)
+	exc <- which(sapply(refGMT, length) <= minGeneSet)
 	if(length(exc) != 0) {
-		warning(paste('Ref set no', paste(exc, collapse=', '), 'had less than 10 genes and were excluded.'))
-		refGMT = refGMT[which(sapply(refGMT, length) > 10)]
+		if(length(exc) <= 5) {
+			mesg <- paste('Ref set no', paste(exc, collapse=', '), 'had less than 10 genes and were excluded.')
+		} else {
+			mesg <- paste(length(exc), 'entries in refGMT had less than 10 genes and were excluded.')
+		}
+		warning(mesg)
+		refGMT <- refGMT[which(sapply(refGMT, length) > minGeneSet)]
 	}
+	if(length(refGMT) == 0) stop('Length of refGMT after filtering is zero.')
 
     N = length(gspace)
     k = length(query)
