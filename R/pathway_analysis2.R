@@ -11,6 +11,9 @@
 
 Gen_enrichment <- function(glist, refgmt, tglist, ncore=1) {
 	require(parallel)
+	bgspace <- bgspace = unique(unlist(refgmt))
+	glist <- lapply(glist, function(gg) intersect(gg, bgspace))
+
 	if(ncore <= 1) {
 		enrobj <- lapply(names(glist), function(aid) hypergeoTestForGeneset(glist[[aid]], refgmt, tglist[[aid]]) )
 	}
@@ -18,7 +21,7 @@ Gen_enrichment <- function(glist, refgmt, tglist, ncore=1) {
 		enrobj <- mclapply(names(glist), function(aid) { hypergeoTestForGeneset(glist[[aid]], refgmt, tglist[[aid]]) }, mc.cores = ncore)
 	}
 	enrobj <- lapply(enrobj, function(hgeos) {
-		# hgeos <- hypergeoTestForGeneset(glist[[aid]], refgmt, tglist[[aid]])
+		pv <- 
 		hgeos$qVal <- p.adjust(hgeos$pVal, method='fdr')
 		hgeos$logQ <- -log10(hgeos$qVal)
 		return(hgeos)
