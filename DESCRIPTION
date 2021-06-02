@@ -1,6 +1,6 @@
 Package: Lazy2
 Title: Lazy Package
-Version: 0.1.1.9000
+Version: 0.1.1.9001
 Authors@R: 
     person(given   = "littleheron",
            family  = "butorides",
@@ -20,6 +20,7 @@ Imports:
 	gtable (>= 0.3.0),
 	RColorBrewer (>= 1.1),
 	reshape2 (>= 1.4.3),
+	parallel,
 	tidyr (>= 0.8.3)
 Suggets:
 	circlize (>= 0.4.6),

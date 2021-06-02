@@ -1,4 +1,25 @@
 
+tstatLS <- lapply(c(resultsLS.mm, resultsLS.ph), function(dff) {
+	dff <- dff[which(!is.na(dff$entGene)),]
+	dff$entGene = as.character(dff$entGene)
+	dff <- merge(dff, mmu2hsa, by.x='entGene', by.y='MGI_ENTREZ', all.x=TRUE, all.y=FALSE)
+	dff <- dff[which(!is.na(dff$HUMAN_ENTREZ)),]
+	if(!'stat' %in% colnames(dff) & 't' %in% colnames(dff)) dff$stat = dff$t
+	out <- unlist(tapply(dff$stat, dff$HUMAN_ENTREZ, function(v) v[which.max(abs(v))] ))
+	# out <- unlist(tapply(dff$logFC, dff$entGene, mean))
+	out <- sort(out, decreasing=TRUE)
+	})
+
+
+## GSEA (using fgsea)
+set.seed(1234)
+gseaLS <- mclapply(tstatLS, function(lfc) {
+	gsea = fgsea(pathways = intgpath, stats = lfc, nperm=10000, minSize=20, maxSize=500)
+	qv <- qvalue(gsea$pval)
+	gsea$qVal <- qv$qvalues
+	return(gsea)
+	}, mc.cores=20)
+
 
 ###================================================================================
 
@@ -45,9 +66,6 @@ GO_enrichment <- function(glist, organism='hsa', ont='BP', ncore=1) {
 	names(enrobj) = names(glist)
 	return(enrobj)
 }
-
-
-## GSEA (from clusterProfiler)
 
 
 
