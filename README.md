@@ -2,39 +2,36 @@
 
 Custom functions from Lazy for personal use, now as a package!
 
-## Version 0.0.4.9000 -- pre-deployment
+## Version 0.1.2 To Do
 
-- [o] Style fix : Remove all unused functions (move to scrap)
-- [o] Style fix : assign operation into arrows
-- [] Style fix : banish `df` from variables
-- [] Style fix : Package startup message in `zzz.R`.
-- [] Functions : `hypergeoTestForGeneset` : multiprocessing into option
-- [o] Functions : **Hypergeometric test results background set return check.**
-- [o] Functions : **GSEA plot function using fgsea.** function modified from `plotEnrichment`
-- [o] Functions : Draw MA plot, ~log fc result get for microarray no replicate.~
-- [o] Functions : ggplot2 custom themes.
-- [] Datasets  : Add mouse gene info
+- [x] Style fix : Remove all unused functions (move to scrap)
+- [ ] Style fix : assign operation into arrows
+- [ ] Style fix : banish `df` from variables
+- [ ] Style fix : Package startup message in `zzz.R`.
+- [ ] Functions : `hypergeoTestForGeneset` : multiprocessing into option
+- [x] Functions : **Hypergeometric test results background set return check.**
+- [x] Functions : **GSEA plot function using fgsea.** function modified from `plotEnrichment`
+- [x] Functions : Draw MA plot, ~log fc result get for microarray no replicate.~
+- [x] Functions : ggplot2 custom themes.
+- [ ] Datasets  : Add mouse gene info
 
 
-## Checklist before moving to 0.1.0
+## Checklist before moving to 0.2.0
 
 Ver 0.0.4.1 is final backward incompatible change. (deploy number : 0.1.0.9000)
 
-- [] Test all functions vigorously.
-- [] All functions used frequently in last two projects.
-- [] Descriptions in all functions.
-- [] Read last reference article on releasing R package.
-- [] Read up on gitFlow. 
+- [ ] Test all functions vigorously.
+- [x] All functions used frequently in last two projects.
+- [x] Descriptions in all functions.
+- [ ] Read last reference article on releasing R package.
+- [x] Read up on gitFlow. 
 
 
-## Future ideas
+## Version 0.2 Ideas
 
-- [] ens2sym ??
-- [] Think about utilizing cpp codes for simple calculation function. --> speed trade-off potentially not worth it
-- [] Mathematical equations into help page. (if possible)
-- [] ~`reshape2::acast` into tidyverse like~
-- [] ~Add bioMart info???~
-- [] ~Python based venn diagram function~
+- [ ] ens2sym ??
+- [ ] Think about utilizing cpp codes for simple calculation function. --> speed trade-off potentially not worth it
+- [ ] Mathematical equations into help page. (if possible)
 
 
 ---

@@ -1,6 +1,11 @@
 # Changelog
 
-## Ver 0.1.2.9000 [2021.05.24]
+## Ver 0.1.1
+
+- [v0.1.1.9001] `hypergeoTestForGeneset` : added bgRatio, gsRatio info on output
+- [v0.1.1.9001] `Gen_enrichment` : multiprocessing option uses `hypergeoTestForGeneset2`
+
+## Ver 0.1.1.9000 [2021.05.24]
 
 * `hypergeoTestForGeneset` : warning message fixed for better readibility when too many gene sets are filtered. Stop if length of reference set is zero after filtering.
 * `Gen_enrichment` : `hypergeoTestForGeneset` has been running twice in parallel mode for some reason??

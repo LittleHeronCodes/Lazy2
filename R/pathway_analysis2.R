@@ -11,18 +11,19 @@
 
 Gen_enrichment <- function(glist, refgmt, tglist, ncore=1) {
 	require(parallel)
-	bgspace <- bgspace = unique(unlist(refgmt))
+	bgspace <- unique(unlist(refgmt))
 	glist <- lapply(glist, function(gg) intersect(gg, bgspace))
 
 	if(ncore <= 1) {
 		enrobj <- lapply(names(glist), function(aid) hypergeoTestForGeneset(glist[[aid]], refgmt, tglist[[aid]]) )
 	}
 	if(ncore > 1) {
-		enrobj <- mclapply(names(glist), function(aid) { hypergeoTestForGeneset(glist[[aid]], refgmt, tglist[[aid]]) }, mc.cores = ncore)
+		enrobj <- lapply(names(glist), function(aid) hypergeoTestForGeneset2(glist[[aid]], refgmt, tglist[[aid]], ncore=ncore) )
 	}
 	enrobj <- lapply(enrobj, function(hgeos) {
-		pv <- 
-		hgeos$qVal <- p.adjust(hgeos$pVal, method='fdr')
+		pv <- ifelse(hgeos$int == 0, NA, hgeos$pVal)
+		hgeos$qVal <- p.adjust(pv, method='fdr')
+		hgeos$qVal <- ifelse(hgeos$int == 0, 1, hgeos$qVal)
 		hgeos$logQ <- -log10(hgeos$qVal)
 		return(hgeos)
 		})

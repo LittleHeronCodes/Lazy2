@@ -54,12 +54,13 @@ writeGMT <- function(file, glist, geneset_desc='') {
 #' @param minGeneSet minimum size of gene set. (used to filter refGMT)
 #' @return data frame
 #' \describe{
-#' 	  \item{pVal}{hypergeometric test p values from phyper}
-#' 	  \item{logP}{-log10(p value)}
-#' 	  \item{oddsRatio}{odds ratio}
-#' 	  \item{tanco}{tanimoto coefficient (Jaccard index)}
-#' 	  \item{int}{intersected item count}
-#' 	  \item{bg}{reference item background count}
+#' 	  \item{pVal}{: hypergeometric test p values from phyper}
+#' 	  \item{logP}{: -log10(p value)}
+#' 	  \item{oddsRatio}{: odds ratio}
+#' 	  \item{tanco}{: tanimoto coefficient (Jaccard index)}
+#' 	  \item{int}{: intersected item count}
+#' 	  \item{gsRatio}{: gene set ratio (selected genes in gene set / selected genes)}
+#' 	  \item{bgRatio}{: background ratio (total genes in gene set / total gene space)}
 #' }
 #' @export
 #' @examples
@@ -71,10 +72,11 @@ writeGMT <- function(file, glist, geneset_desc='') {
 
 hypergeoTestForGeneset <- function(query, refGMT, gspace, minGeneSet=10) {
 	require(data.table)
+
 	if(!all(query %in% gspace)) {
 		stop(paste(length(setdiff(query, gspace)),'query items were found outside of background space. Check inputs.'))
 	}
-	query <- intersect(query, gspace)
+	# query <- intersect(query, gspace)
 	refGMT <- lapply(refGMT, function(g) intersect(g,gspace))
 
 	if(length(query) == 0) stop('Query length is zero.')
@@ -101,14 +103,16 @@ hypergeoTestForGeneset <- function(query, refGMT, gspace, minGeneSet=10) {
 		pVal <- phyper(q-1, m, N-m, k, lower.tail = FALSE)
 		odds <- (q / k) / (m / N)
 		jacc <- q / length(union(query, refgenes))
+		gs.ratio <- paste0(q,'/',k)
+		bg.ratio <- paste0(m,'/',N)
 
-		return(data.table(pVal = pVal, oddsRatio=odds, tan = jacc, int=q, bg=N))
+		return(data.table(pVal = pVal, oddsRatio=odds, tan = jacc, int=q, gsRatio=gs.ratio, bgRatio=bg.ratio))
 		})
 
 	enrRes = rbindlist(enrRes)
 	enrRes$ID <- names(refGMT)
 	enrRes$logP <- -log10(enrRes$pVal)
-	enrRes <- enrRes[,c('ID','pVal','logP','oddsRatio','tan','int','bg')]
+	enrRes <- enrRes[,c('ID', 'pVal', 'logP', 'oddsRatio', 'tan', 'int', 'gsRatio', 'bgRatio')]
 	return(enrRes)	
 }
 
@@ -125,7 +129,7 @@ hypergeoTestForGeneset2 <- function (query, refGMT, gspace, minGeneSet=10, ncore
 	if(!all(query %in% gspace)) {
 		stop(paste(length(setdiff(query, gspace)),'Query items were found outside of background space. Check inputs.'))
 	}
-	query = intersect(query, gspace)
+	# query = intersect(query, gspace)
 	refGMT = parallel::mclapply(refGMT, function(g) intersect(g,gspace), mc.cores=ncore)
 
 	if(length(query) == 0) stop('Query length is zero.')
@@ -145,14 +149,17 @@ hypergeoTestForGeneset2 <- function (query, refGMT, gspace, minGeneSet=10, ncore
     N = length(gspace)
     k = length(query)
     enrRes = parallel::mclapply(refGMT, function(refgenes) {
-    	I = intersect(refgenes, query)
         q = length(intersect(refgenes, query))
         m = length(intersect(gspace, refgenes))
+    	I = intersect(refgenes, query)
+
         pVal = phyper(q - 1, m, N - m, k, lower.tail = FALSE)
         odds = (q / k) / (m / N)
         jacc = q / length(union(query, refgenes))
+        gs.ratio <- paste0(q,'/',k)
+        bg.ratio <- paste0(m,'/',N)
 
-        return(data.table(pVal = pVal, oddsRatio = odds, tan = jacc, int = q, bg = N))
+        return(data.table(pVal = pVal, oddsRatio=odds, tan = jacc, int=q, gsRatio=gs.ratio, bgRatio=bg.ratio))
     }, mc.cores = ncore)
 
     # enrRes = do.call(rbind, enrRes)
@@ -160,6 +167,6 @@ hypergeoTestForGeneset2 <- function (query, refGMT, gspace, minGeneSet=10, ncore
 	
     enrRes$ID = names(refGMT)
     enrRes$logP = -log10(enrRes$pVal)
-    enrRes = enrRes[, c('ID', 'pVal', 'logP', 'oddsRatio', 'tan', 'int', 'bg')]
+	enrRes <- enrRes[,c('ID', 'pVal', 'logP', 'oddsRatio', 'tan', 'int', 'gsRatio', 'bgRatio')]
     return(enrRes)
 }
