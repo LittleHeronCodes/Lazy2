@@ -5,7 +5,7 @@ Custom functions from Lazy for personal use, now as a package!
 ## Version 0.1.2 To Do
 
 - [x] Style fix : Remove all unused functions (move to scrap)
-- [ ] Style fix : assign operation into arrows
+- [x] Style fix : assign operation into arrows
 - [ ] Style fix : banish `df` from variables
 - [ ] Style fix : Package startup message in `zzz.R`.
 - [ ] Functions : `hypergeoTestForGeneset` : multiprocessing into option

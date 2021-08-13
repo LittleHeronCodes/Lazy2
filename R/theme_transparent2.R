@@ -10,7 +10,7 @@
 #' }
 
 theme_transparent2 <- function(base_size=12, x.text.angle=0) {
-	half_line = base_size/2
+	half_line <- base_size/2
 	xjust <- 0
 	if(x.text.angle > 5) xjust <- 1
 	.theme <- theme(

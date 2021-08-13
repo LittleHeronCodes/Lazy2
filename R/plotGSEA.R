@@ -26,7 +26,7 @@ plotEnrichment2 <- function(gset, stats, nes, qv, gseaParam=1, mtitle=NULL, ylab
 	set.seed(1234)
 
 	if(!any(gset %in% names(stats))) {
-		stop('stat')
+		stop('all genes in gset should be in names(stats).')
 	}
 
 	rnk <- rank(-stats)

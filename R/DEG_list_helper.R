@@ -155,14 +155,14 @@ getOverlapDF <- function(gls, tgls) {
 #' }
 
 drawMA <- function(resultDF, qco, fco, ttl_pre) {
-	ui = which(resultDF$adj.P.Val < qco & resultDF$logFC >  log2(fco))
-	di = which(resultDF$adj.P.Val < qco & resultDF$logFC < -log2(fco))
-	gcnt = paste('up:',length(ui), 'dn:',length(di))
-	ylim = c(-max(abs(resultDF$logFC), na.rm=TRUE), max(abs(resultDF$logFC), na.rm=TRUE))
-	mtitle = paste(ttl_pre, 'fc', fco, 'qv', qco, gcnt)
+	ui <- which(resultDF$adj.P.Val < qco & resultDF$logFC >=  log2(fco))
+	di <- which(resultDF$adj.P.Val < qco & resultDF$logFC <= -log2(fco))
+	gcnt <- paste('up:',length(ui), 'dn:',length(di))
+	ylim <- c(-max(abs(resultDF$logFC), na.rm=TRUE), max(abs(resultDF$logFC), na.rm=TRUE))
+	mtitle <- paste(ttl_pre, 'fc', fco, 'qv', qco, gcnt)
 
 	# MA
-	plot(logFC ~ AveExpr, data = resultDF, pch = 20, main = mtitle, cex=0.05, ylim=ylim)
+	plot(logFC ~ AveExpr, data = resultDF, pch = 20, main = mtitle, cex = 0.05, ylim = ylim)
 	points(logFC ~ AveExpr, data = resultDF[c(ui,di),], pch = 20, col = 'red', cex=0.25)
 	abline(h=0, col='blue', lty=2)
 }
@@ -172,11 +172,11 @@ drawMA <- function(resultDF, qco, fco, ttl_pre) {
 #' @export
 
 drawVol <- function(resultDF, qco, fco, ttl_pre) {
-	ui = which(resultDF$adj.P.Val < qco & resultDF$logFC >  log2(fco))
-	di = which(resultDF$adj.P.Val < qco & resultDF$logFC < -log2(fco))
-	gcnt = paste('up:',length(ui), 'dn:',length(di))
-	xlim = c(-max(abs(resultDF$logFC), na.rm=TRUE), max(abs(resultDF$logFC), na.rm=TRUE))
-	mtitle = paste(ttl_pre, 'fc', fco, 'qv', qco, gcnt)
+	ui <- which(resultDF$adj.P.Val < qco & resultDF$logFC >  log2(fco))
+	di <- which(resultDF$adj.P.Val < qco & resultDF$logFC < -log2(fco))
+	gcnt <- paste('up:',length(ui), 'dn:',length(di))
+	xlim <- c(-max(abs(resultDF$logFC), na.rm=TRUE), max(abs(resultDF$logFC), na.rm=TRUE))
+	mtitle <- paste(ttl_pre, 'fc', fco, 'qv', qco, gcnt)
 
 	# volcano
 	plot(-log10(adj.P.Val) ~ logFC, data = resultDF, pch = 20, main = mtitle, cex=0.05, xlim=xlim)
