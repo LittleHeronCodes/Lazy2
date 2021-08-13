@@ -1,8 +1,8 @@
 #' CMAP Style Enrichment Calculation
 #'
 #' Calculate enrichment factor from a dataframe by rank cutoff.
-#' @param df input data frame
-#' @param enrich_element category column from df to enrich
+#' @param data input data frame
+#' @param enrich_element category column from data to enrich
 #' @param rank_by column used to sort rank
 #' @param cutoff cut percentile. default 0.05
 #' @param min_count minimum count to be valid. default 3
@@ -11,27 +11,27 @@
 #' @export
 
 ## Calculate enrichment factor for drugs
-enrichmentFactorForDataFrame <- function(df, enrich_element, rank_by, cutoff = 0.05, min_count = 3, psc=1) {
+enrichmentFactorForDataFrame <- function(data, enrich_element, rank_by, cutoff = 0.05, min_count = 3, psc=1) {
 
 	# index to use
-	include <- names(which(table(df[, enrich_element]) >= min_count))
-	if( length(include) < length(unique(df[, enrich_element]))*.10 ) {
+	include <- names(which(table(data[, enrich_element]) >= min_count))
+	if( length(include) < length(unique(data[, enrich_element]))*.10 ) {
 		stop("Less than 10% factors were included. There may be a problem with the inputs or set lower min_count.")
 	}
-	df <- df[which(df[, enrich_element] %in% include),]
+	data <- data[which(data[, enrich_element] %in% include),]
 
-	# order df by rank, get only within cut off
-	rowIdx <- which(rank(-df[,rank_by], ties.method = 'max') < nrow(df)*cutoff)
+	# order data by rank, get only within cut off
+	rowIdx <- which(rank(-data[,rank_by], ties.method = 'max') < nrow(data)*cutoff)
 
 	# actual coverage
-	cover <- length(rowIdx) / nrow(df)
+	cover <- length(rowIdx) / nrow(data)
 
 	# counts
-	cntAll <- table(df[, enrich_element])		# total for each
-	cntPct <- table(df[rowIdx, enrich_element])	# observed
+	cntAll <- table(data[, enrich_element])		# total for each
+	cntPct <- table(data[rowIdx, enrich_element])	# observed
 	idx <- names(cntPct)
-	N <- nrow(df)
-	k <- floor(nrow(df) * cover)
+	N <- nrow(data)
+	k <- floor(nrow(data) * cover)
 
 	# enrichment factor
 	ef <- (cntPct[idx]+psc) / ( cntAll[idx] * cover + psc)

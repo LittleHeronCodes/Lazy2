@@ -7,7 +7,7 @@
 #' @param qv adjusted p value provided for annotation. Runs fgsea if not provided.
 #' @param gseaParam gseaParam from plotEnrichment.
 #' @param mtitle main title
-#' @param ylab y axis name
+#' @param ytitle y axis name
 #' @param ticksSize ticks lwd for geneset bars.
 #' @param base_size font base size. default 7
 #' @param line.col line colour for GSEA running score.
@@ -18,8 +18,8 @@
 #' @export
 
 ## GSEA plot
-plotEnrichment2 <- function(gset, stats, nes, qv, gseaParam=1, mtitle=NULL, ylab='',
-	ticksSize=0.4, base_size=7, line.col='green', lwd=2, ylim=NULL, draw=TRUE, statbar=FALSE) {
+plotEnrichment2 <- function(gset, stats, nes, qv, gseaParam=1, mtitle=NULL, ytitle='',
+	ticksSize=0.4, base_size=7, line.col='green', lwd=2, ylims=NULL, draw=TRUE, statbar=FALSE) {
 
 	require(gtable)
 	require(fgsea)
@@ -56,19 +56,19 @@ plotEnrichment2 <- function(gset, stats, nes, qv, gseaParam=1, mtitle=NULL, ylab
 	txt <- sprintf('NES : %.2f  \nFDR : %.2e  ', nes, qv)
 
 	# set y axis ticks
-	if(is.null(ylim)) ylim <- c(floor(min(bottoms)*20), ceiling(max(tops)*20))/20
+	if(is.null(ylims)) ylims <- c(floor(min(bottoms)*20), ceiling(max(tops)*20))/20
 
-	if( (ylim[2] - ylim[1]) > 0.55 ) {
+	if( (ylims[2] - ylims[1]) > 0.55 ) {
 		br <- 0.2
-		ln1 <- seq(ceiling(ylim[1]*5)/5, floor(ylim[2]*5)/5, br)
+		ln1 <- seq(ceiling(ylims[1]*5)/5, floor(ylims[2]*5)/5, br)
 	} else {
 		br <- 0.1
-		ln1 <- seq(ceiling(ylim[1]*10)/10, floor(ylim[2]*10)/10, br)
+		ln1 <- seq(ceiling(ylims[1]*10)/10, floor(ylims[2]*10)/10, br)
 	}
 	txt_y_pos <- ifelse(es < 0, max(c(ln1,tops)), min(c(ln1, bottoms)))
 	max_es <- ifelse(es > 0, max(tops), min(bottoms))
 
-	xlim <- c(0, ceiling(length(stats)/500)*500)
+	xlims <- c(0, ceiling(length(stats)/500)*500)
 	half_line <- base_size/2
 
 	# running score
@@ -77,8 +77,8 @@ plotEnrichment2 <- function(gset, stats, nes, qv, gseaParam=1, mtitle=NULL, ylab
 	  geom_hline(yintercept = max_es, colour = 'red', linetype = 'dashed', size = lwd*0.8) +
 	  geom_line(colour = line.col, size = lwd) +
 	  annotate('text', x = max(toPlot$x), y = txt_y_pos, label = txt, hjust = 1, vjust = .5, size = rel(3.0)) +
-	  scale_y_continuous(breaks = ln1, limits = ylim) + xlim(xlim[1], xlim[2]) +
-	  labs(y = ylab, title = mtitle) + 
+	  scale_y_continuous(breaks = ln1, limits = ylims) + xlim(xlims[1], xlims[2]) +
+	  labs(y = ytitle, title = mtitle) + 
 	  theme_common_gsea(base_size = base_size) +
 	  theme(
 	    plot.title = element_text(hjust = 0.5, vjust = 0.2, face = 'bold', margin = unit(c(0,0,1.5,0), 'mm')),
@@ -91,7 +91,7 @@ plotEnrichment2 <- function(gset, stats, nes, qv, gseaParam=1, mtitle=NULL, ylab
 	# gene set bar
 	g2 <- ggplot(data.frame(x=pathway),aes(x = x, y = -diff/3, xend = x, yend = diff/3)) +
 	  geom_segment(size = ticksSize, colour = 'grey35') +
-	  scale_x_continuous(breaks = c(seq(xlim[1], xlim[2], 5000), xlim[2]), limits = xlim) +
+	  scale_x_continuous(breaks = c(seq(xlims[1], xlims[2], 5000), xlims[2]), limits = xlims) +
 	  theme_common_gsea(base_size = base_size) + 
 	  theme(plot.margin = margin(0, half_line*2.5, half_line, half_line))
 
@@ -102,7 +102,7 @@ plotEnrichment2 <- function(gset, stats, nes, qv, gseaParam=1, mtitle=NULL, ylab
 		g2 <- g2 + theme(plot.margin = margin(0, half_line*2.5, 0, half_line))
 		g3 <- ggplot(data.frame(x = seq_along(stats), stat = stats), aes(x = x, y = 0, xend = x, yend = stat)) +
 		  geom_segment(size = ticksSize, colour = 'grey35') +
-		  scale_x_continuous(breaks = c(seq(xlim[1], xlim[2], 5000), xlim[2]), limits = xlim) +
+		  scale_x_continuous(breaks = c(seq(xlims[1], xlims[2], 5000), xlims[2]), limits = xlims) +
 		  theme_common_gsea(base_size = base_size) +
 		  theme(plot.margin = margin(0, half_line*2.5, half_line, half_line))
 	}
@@ -116,7 +116,7 @@ plotEnrichment2 <- function(gset, stats, nes, qv, gseaParam=1, mtitle=NULL, ylab
 		gr <- rbind(gr1, gr2, gr3)
 	} else {
 		ht.ratio <- c(7,1)
-		gr <- rbind(gr1, gr2)		
+		gr <- rbind(gr1, gr2)
 	}
 
 	# gr$widths <- grid::unit.pmax(gr1$widths, gr2$widths, gr3$widths)

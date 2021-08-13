@@ -3,7 +3,7 @@
 #' gmt file reader. A GMT file format is a tab delimited text file containing gene sets.
 #' Each line should contain one geneset, delimited by tab. Genes should start from 3rd field.
 #' 
-#' @param file GMT file path
+#' @param gmtfile GMT file path
 #' @param as.df Return as data frame?
 #' @param glist List of gene set. Should be un-nested level one named list.
 #' @param geneset_desc Description meta information for gene set. Either length one or same length vector as glist.
@@ -32,7 +32,7 @@ readGMT <- function(gmtfile, as.df=FALSE) {
 #' @describeIn readGMT write gmt file for geneset list.
 #' @export
 
-writeGMT <- function(file, glist, geneset_desc='') {
+writeGMT <- function(gmtfile, glist, geneset_desc='') {
 	if( !(is.list(glist) & all(sapply(glist,is.character))) ) {
 		stop('Check glist format. glist should be a one-level list of genesets.')
 	}
@@ -40,7 +40,7 @@ writeGMT <- function(file, glist, geneset_desc='') {
 	concat <- sapply(glist, function(v) paste(v, collapse='\t'))
 	out <- paste0(names(concat), '\t',geneset_desc,'\t', concat)
 
-	writeLines(out, con=file)
+	writeLines(out, con=gmtfile)
 }
 
 
