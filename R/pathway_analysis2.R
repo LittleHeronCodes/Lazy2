@@ -55,7 +55,7 @@ enrobj2Matrix <- function(enrobj, val.col='pvalue', log=TRUE) {
 	# detect log values
 	is_log <- FALSE
 	if(any(quantile(hmplot[,val.col], na.rm=TRUE) > 1)) is_log <- TRUE
-	if(log & is_log) cat('val.col is already in log values.'); log <- FALSE
+	if(log & is_log) cat('val.col is already in log values.\n'); log <- FALSE
 	if(log & !is_log) {
 		hmplot$logV <- -log10(hmplot[,val.col])
 		plotMat <- reshape2::acast(hmplot, ID~set, value.var=logV, fill = NA)
