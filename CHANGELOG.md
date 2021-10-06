@@ -1,7 +1,8 @@
 # Changelog
 
 ## Ver 0.1.1
-
+- [v0.1.1.9002] `Gen_enrichment` : pseudocount for Odds Ratio option pass to `hypergeoTestForGeneset`.
+- [v0.1.1.9002] `hypergeoTestForGeneset` : pseudocount for Odds Ratio.
 - [v0.1.1.9001] `hypergeoTestForGeneset` : added bgRatio, gsRatio info on output
 - [v0.1.1.9001] `Gen_enrichment` : multiprocessing option uses `hypergeoTestForGeneset2`
 

@@ -70,7 +70,7 @@ writeGMT <- function(gmtfile, glist, geneset_desc='') {
 #' hypergeoTestForGeneset(gset, glist, LETTERS)
 #' }
 
-hypergeoTestForGeneset <- function(query, refGMT, gspace, minGeneSet=10, ef_psc=0) {
+hypergeoTestForGeneset <- function(query, refGMT, gspace, minGeneSet=10, ef.psc=0) {
 	require(data.table)
 
 	if(!all(query %in% gspace)) {
@@ -101,7 +101,7 @@ hypergeoTestForGeneset <- function(query, refGMT, gspace, minGeneSet=10, ef_psc=
 		I <- intersect(refgenes, query)
 
 		pVal <- phyper(q-1, m, N-m, k, lower.tail = FALSE)
-		odds <- ((q / k) + ef_psc) / ((m / N) + ef_psc)
+		odds <- (q + ef.psc) / (m / N * k + ef.psc)
 		jacc <- q / length(union(query, refgenes))
 		gs.ratio <- paste0(q,'/',k)
 		bg.ratio <- paste0(m,'/',N)
@@ -122,7 +122,7 @@ hypergeoTestForGeneset <- function(query, refGMT, gspace, minGeneSet=10, ef_psc=
 #' Using multiprocessing
 #' @export
 
-hypergeoTestForGeneset2 <- function (query, refGMT, gspace, minGeneSet=10, ncore = 1) {
+hypergeoTestForGeneset2 <- function (query, refGMT, gspace, minGeneSet=10, ncore = 1, ef.psc=0) {
 	require(parallel)
 	require(data.table)
 
@@ -154,7 +154,8 @@ hypergeoTestForGeneset2 <- function (query, refGMT, gspace, minGeneSet=10, ncore
     	I = intersect(refgenes, query)
 
         pVal = phyper(q - 1, m, N - m, k, lower.tail = FALSE)
-        odds = (q / k) / (m / N)
+        # odds = (q / k) / (m / N)
+        odds = (q + ef.psc) / (m / N * k + ef.psc)
         jacc = q / length(union(query, refgenes))
         gs.ratio <- paste0(q,'/',k)
         bg.ratio <- paste0(m,'/',N)
