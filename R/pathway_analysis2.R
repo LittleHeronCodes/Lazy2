@@ -9,16 +9,16 @@
 #' @export
 
 
-Gen_enrichment <- function(glist, refgmt, tglist, ncore=1) {
+Gen_enrichment <- function(glist, refgmt, tglist, ncore=1, ef.psc=0) {
 	require(parallel)
 	bgspace <- unique(unlist(refgmt))
 	glist <- lapply(glist, function(gg) intersect(gg, bgspace))
 
 	if(ncore <= 1) {
-		enrobj <- lapply(names(glist), function(aid) hypergeoTestForGeneset(glist[[aid]], refgmt, tglist[[aid]]) )
+		enrobj <- lapply(names(glist), function(aid) hypergeoTestForGeneset(glist[[aid]], refgmt, tglist[[aid]], ef.psc=ef.psc) )
 	}
 	if(ncore > 1) {
-		enrobj <- lapply(names(glist), function(aid) hypergeoTestForGeneset2(glist[[aid]], refgmt, tglist[[aid]], ncore=ncore) )
+		enrobj <- lapply(names(glist), function(aid) hypergeoTestForGeneset2(glist[[aid]], refgmt, tglist[[aid]], ncore=ncore, ef.psc=ef.psc) )
 	}
 	enrobj <- lapply(enrobj, function(hgeos) {
 		pv <- ifelse(hgeos$int == 0, NA, hgeos$pVal)
