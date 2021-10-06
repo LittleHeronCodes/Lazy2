@@ -3,7 +3,7 @@
 #' gmt file reader. A GMT file format is a tab delimited text file containing gene sets.
 #' Each line should contain one geneset, delimited by tab. Genes should start from 3rd field.
 #' 
-#' @param file GMT file path
+#' @param gmtfile GMT file path
 #' @param as.df Return as data frame?
 #' @param glist List of gene set. Should be un-nested level one named list.
 #' @param geneset_desc Description meta information for gene set. Either length one or same length vector as glist.
@@ -32,7 +32,7 @@ readGMT <- function(gmtfile, as.df=FALSE) {
 #' @describeIn readGMT write gmt file for geneset list.
 #' @export
 
-writeGMT <- function(file, glist, geneset_desc='') {
+writeGMT <- function(gmtfile, glist, geneset_desc='') {
 	if( !(is.list(glist) & all(sapply(glist,is.character))) ) {
 		stop('Check glist format. glist should be a one-level list of genesets.')
 	}
@@ -40,7 +40,7 @@ writeGMT <- function(file, glist, geneset_desc='') {
 	concat <- sapply(glist, function(v) paste(v, collapse='\t'))
 	out <- paste0(names(concat), '\t',geneset_desc,'\t', concat)
 
-	writeLines(out, con=file)
+	writeLines(out, con=gmtfile)
 }
 
 
@@ -81,7 +81,7 @@ hypergeoTestForGeneset <- function(query, refGMT, gspace, minGeneSet=10, ef.psc=
 
 	if(length(query) == 0) stop('Query length is zero.')
 
-	exc <- which(sapply(refGMT, length) <= minGeneSet)
+	exc <- which(sapply(refGMT, length) < minGeneSet)
 	if(length(exc) != 0) {
 		if(length(exc) <= 5) {
 			mesg <- paste('Ref set no', paste(exc, collapse=', '), 'had less than 10 genes and were excluded.')
@@ -89,7 +89,7 @@ hypergeoTestForGeneset <- function(query, refGMT, gspace, minGeneSet=10, ef.psc=
 			mesg <- paste(length(exc), ' entries in refGMT had less than 10 genes and were excluded.')
 		}
 		warning(mesg)
-		refGMT <- refGMT[which(sapply(refGMT, length) > minGeneSet)]
+		refGMT <- refGMT[which(sapply(refGMT, length) >= minGeneSet)]
 	}
 	if(length(refGMT) == 0) stop('Length of refGMT after filtering is zero.')
 
@@ -101,7 +101,6 @@ hypergeoTestForGeneset <- function(query, refGMT, gspace, minGeneSet=10, ef.psc=
 		I <- intersect(refgenes, query)
 
 		pVal <- phyper(q-1, m, N-m, k, lower.tail = FALSE)
-		# odds <- (q / k) / (m / N)
 		odds <- (q + ef.psc) / (m / N * k + ef.psc)
 		jacc <- q / length(union(query, refgenes))
 		gs.ratio <- paste0(q,'/',k)

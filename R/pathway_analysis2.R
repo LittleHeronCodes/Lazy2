@@ -9,16 +9,16 @@
 #' @export
 
 
-Gen_enrichment <- function(glist, refgmt, tglist, ncore=1, ef.psc=0) {
+Gen_enrichment <- function(glist, refgmt, tglist, minGeneSet=10, ncore=1, ef.psc=0) {
 	require(parallel)
 	bgspace <- unique(unlist(refgmt))
 	glist <- lapply(glist, function(gg) intersect(gg, bgspace))
 
 	if(ncore <= 1) {
-		enrobj <- lapply(names(glist), function(aid) hypergeoTestForGeneset(glist[[aid]], refgmt, tglist[[aid]], ef.psc=ef.psc) )
+		enrobj <- lapply(names(glist), function(aid) hypergeoTestForGeneset(glist[[aid]], refgmt, tglist[[aid]], minGeneSet, ef.psc=ef.psc) )
 	}
 	if(ncore > 1) {
-		enrobj <- lapply(names(glist), function(aid) hypergeoTestForGeneset2(glist[[aid]], refgmt, tglist[[aid]], ncore=ncore, ef.psc=ef.psc) )
+		enrobj <- lapply(names(glist), function(aid) hypergeoTestForGeneset2(glist[[aid]], refgmt, tglist[[aid]], minGeneSet, ncore=ncore, ef.psc=ef.psc) )
 	}
 	enrobj <- lapply(enrobj, function(hgeos) {
 		pv <- ifelse(hgeos$int == 0, NA, hgeos$pVal)
@@ -55,7 +55,7 @@ enrobj2Matrix <- function(enrobj, val.col='pvalue', log=TRUE) {
 	# detect log values
 	is_log <- FALSE
 	if(any(quantile(hmplot[,val.col], na.rm=TRUE) > 1)) is_log <- TRUE
-	if(log & is_log) cat('val.col is already in log values.'); log <- FALSE
+	if(log & is_log) cat('val.col is already in log values.\n'); log <- FALSE
 	if(log & !is_log) {
 		hmplot$logV <- -log10(hmplot[,val.col])
 		plotMat <- reshape2::acast(hmplot, ID~set, value.var=logV, fill = NA)

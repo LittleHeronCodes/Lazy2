@@ -2,17 +2,17 @@
 #'
 #' Modified transparent theme from ggpubr
 #' @param base_size font base size. default 12
-#' @param x.text.angle rotate x labels
+#' @param x_angle rotate x labels
 #' @export
 #' @examples
 #' \dontrun{
 #' theme_set(theme_transparent2())
 #' }
 
-theme_transparent2 <- function(base_size=12, x.text.angle=0) {
-	half_line = base_size/2
+theme_transparent2 <- function(base_size=12, x_angle=0) {
+	half_line <- base_size/2
 	xjust <- 0
-	if(x.text.angle > 5) xjust <- 1
+	if(x_angle > 5) xjust <- 1
 	.theme <- theme(
 		text = element_text(face = 'bold', size = base_size),# family='Sans'),
 		panel.grid.major = element_blank(), panel.grid.minor = element_blank(), 
@@ -27,10 +27,21 @@ theme_transparent2 <- function(base_size=12, x.text.angle=0) {
 		legend.background = element_rect(fill = "transparent", colour = NA), 
 		strip.background = element_rect(fill = "#F2F2F2", colour = "black", size = 0.7), 
 		# plot.margin = margin(half_line, half_line, half_line, half_line), # to reduce space
-		plot.margin = unit(c(1,1,1,1), 'mm'), #margin(half_line, half_line, half_line, half_line), # to reduce space
-		complete = TRUE)
-	if(x.text.angle != 0)
-		.theme <- .theme + theme(axis.text.x = element_text(angle = x.text.angle, hjust = xjust, vjust = xjust))
+		plot.margin = unit(c(1,1,1,1), 'mm'),
+		complete = FALSE)
+	if(x_angle != 0)
+		.theme <- .theme + theme(axis.text.x = element_text(angle = x_angle, hjust = xjust, vjust = xjust))
+	.theme
+}
+
+theme_transparent <- function() {
+	.theme <- theme(
+		legend.key = element_blank(), 
+		panel.grid.major = element_blank(), panel.grid.minor = element_blank(), 
+		panel.background = element_rect(fill = "transparent", colour = NA), panel.ontop = TRUE,
+		plot.background = element_rect(fill = "transparent",colour = NA),
+		legend.background = element_rect(fill = "transparent", colour = NA), 
+		complete = FALSE)
 	.theme
 }
 
