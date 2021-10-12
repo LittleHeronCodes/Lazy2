@@ -48,10 +48,11 @@ writeGMT <- function(gmtfile, glist, geneset_desc='') {
 #' 
 #' Gene list hypergeometric test against gmt format list of gene set. Can be used for custom pathway analysis or CMAP style query.
 #' 
-#' @param query  gene set to query (ex. Differentially Expressed Genes)
-#' @param refGMT list of reference gene set (ex. Pathways)
-#' @param gspace background gene space
-#' @param minGeneSet minimum size of gene set. (used to filter refGMT)
+#' @param query  gene set to query (eg. Differentially Expressed Genes)
+#' @param refGMT list of reference gene set (eg. Pathways)
+#' @param gspace background gene space. Should contain all genes in query.
+#' @param minGeneSet minimum size of gene set. This is used to filter refGMT. Default 10
+#' @param ef.psc pseudocount when calculating enrichment factor (oddsRatio). Default 0
 #' @return data frame
 #' \describe{
 #' 	  \item{pVal}{: hypergeometric test p values from phyper}
@@ -76,7 +77,6 @@ hypergeoTestForGeneset <- function(query, refGMT, gspace, minGeneSet=10, ef.psc=
 	if(!all(query %in% gspace)) {
 		stop(paste(length(setdiff(query, gspace)),'query items were found outside of background space. Check inputs.'))
 	}
-	# query <- intersect(query, gspace)
 	refGMT <- lapply(refGMT, function(g) intersect(g,gspace))
 
 	if(length(query) == 0) stop('Query length is zero.')
@@ -93,11 +93,11 @@ hypergeoTestForGeneset <- function(query, refGMT, gspace, minGeneSet=10, ef.psc=
 	}
 	if(length(refGMT) == 0) stop('Length of refGMT after filtering is zero.')
 
-	N <- length(gspace)							# no of balls in urn
-	k <- length(query)							# no of balls drawn from urn (DEG no)
+	N <- length(gspace)								# no of balls in urn
+	k <- length(query)								# no of balls drawn from urn (DEG no)
 	enrRes <- lapply(refGMT, function(refgenes) {
-		q <- length(intersect(refgenes, query))	# no of white balls drawn
-		m <- length(intersect(gspace, refgenes)) # no of white balls in urn
+		q <- length(intersect(refgenes, query))		# no of white balls drawn
+		m <- length(intersect(gspace, refgenes)) 	# no of white balls in urn
 		I <- intersect(refgenes, query)
 
 		pVal <- phyper(q-1, m, N-m, k, lower.tail = FALSE)
@@ -112,6 +112,12 @@ hypergeoTestForGeneset <- function(query, refGMT, gspace, minGeneSet=10, ef.psc=
 	enrRes = rbindlist(enrRes)
 	enrRes$ID <- names(refGMT)
 	enrRes$logP <- -log10(enrRes$pVal)
+
+	## code for p-value adjustment while filtering out 1 values
+	# enres$qVal <- 1
+	# idx <- which(enres$pVal != 1)
+	# enres$qVal[idx] <- p.adjust(enres$pVal[idx], method='fdr')
+
 	enrRes <- enrRes[,c('ID', 'pVal', 'logP', 'oddsRatio', 'tan', 'int', 'gsRatio', 'bgRatio')]
 	return(enrRes)	
 }
