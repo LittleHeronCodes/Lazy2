@@ -1,5 +1,16 @@
 # Changelog
 
+## Ver 0.1.2
+- [v0.1.2.9000] Style fix : Remove all unused functions (move to scrap)
+- [v0.1.2.9000] Style fix : assign operation into arrows
+- [v0.1.2.9000] Style fix : banish `df` from variables
+- [v0.1.2.9000] Functions : **Hypergeometric test results background set return check.**
+- [v0.1.2.9000] Functions : **GSEA plot function using fgsea.** function modified from `plotEnrichment`
+- [v0.1.2.9000] Functions : Draw MA plot.
+- [v0.1.2.9000] Functions : ggplot2 custom themes.
+- [v0.1.2.9000] Functions : `hypergeoTestForGeneset` : returns intersected genes
+- [v0.1.2.9000] Functions : `Gen_enrichment` : return dataframe column reorder
+
 ## Ver 0.1.1
 - [v0.1.1.9002] `Gen_enrichment` : pseudocount for Odds Ratio option pass to `hypergeoTestForGeneset`.
 - [v0.1.1.9002] `hypergeoTestForGeneset` : pseudocount for Odds Ratio.

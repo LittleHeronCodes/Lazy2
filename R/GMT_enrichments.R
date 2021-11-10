@@ -106,13 +106,13 @@ hypergeoTestForGeneset <- function(query, refGMT, gspace, minGeneSet=10, ef.psc=
 		gs.ratio <- paste0(q,'/',k)
 		bg.ratio <- paste0(m,'/',N)
 
-		return(data.table(pVal = pVal, oddsRatio=odds, tan = jacc, int=q, gsRatio=gs.ratio, bgRatio=bg.ratio))
+		return(data.table(pVal=pVal, oddsRatio=odds, tan=jacc, int=q, gsRatio=gs.ratio, bgRatio=bg.ratio, intGenes=list(I)))
 		})
 
-	enrRes = rbindlist(enrRes)
+	enrRes <- rbindlist(enrRes)
 	enrRes$ID <- names(refGMT)
 	enrRes$logP <- -log10(enrRes$pVal)
-	enrRes <- enrRes[,c('ID', 'pVal', 'logP', 'oddsRatio', 'tan', 'int', 'gsRatio', 'bgRatio')]
+	enrRes <- enrRes[,c('ID', 'pVal', 'logP', 'oddsRatio', 'tan', 'int', 'gsRatio', 'bgRatio', 'intGenes')]
 	return(enrRes)	
 }
 
@@ -160,7 +160,7 @@ hypergeoTestForGeneset2 <- function (query, refGMT, gspace, minGeneSet=10, ncore
         gs.ratio <- paste0(q,'/',k)
         bg.ratio <- paste0(m,'/',N)
 
-        return(data.table(pVal = pVal, oddsRatio=odds, tan = jacc, int=q, gsRatio=gs.ratio, bgRatio=bg.ratio))
+        return(data.table(pVal = pVal, oddsRatio=odds, tan = jacc, int=q, gsRatio=gs.ratio, bgRatio=bg.ratio, intGenes=list(I)))
     }, mc.cores = ncore)
 
     # enrRes = do.call(rbind, enrRes)
@@ -168,6 +168,6 @@ hypergeoTestForGeneset2 <- function (query, refGMT, gspace, minGeneSet=10, ncore
 	
     enrRes$ID = names(refGMT)
     enrRes$logP = -log10(enrRes$pVal)
-	enrRes <- enrRes[,c('ID', 'pVal', 'logP', 'oddsRatio', 'tan', 'int', 'gsRatio', 'bgRatio')]
+	enrRes <- enrRes[,c('ID', 'pVal', 'logP', 'oddsRatio', 'tan', 'int', 'gsRatio', 'bgRatio', 'intGenes')]
     return(enrRes)
 }
