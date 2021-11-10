@@ -105,11 +105,12 @@ hypergeoTestForGeneset <- function(query, refGMT, gspace, minGeneSet=10, ef.psc=
 		jacc <- q / length(union(query, refgenes))
 		gs.ratio <- paste0(q,'/',k)
 		bg.ratio <- paste0(m,'/',N)
+		enrgenes <- list(intersect(refgenes, query))
 
-		return(data.table(pVal = pVal, oddsRatio=odds, tan = jacc, int=q, gsRatio=gs.ratio, bgRatio=bg.ratio))
+		return(data.table(pVal = pVal, oddsRatio=odds, tan = jacc, int=q, gsRatio=gs.ratio, bgRatio=bg.ratio, intgenes=enrgenes))
 		})
 
-	enrRes = rbindlist(enrRes)
+	enrRes <- rbindlist(enrRes)
 	enrRes$ID <- names(refGMT)
 	enrRes$logP <- -log10(enrRes$pVal)
 
@@ -118,7 +119,7 @@ hypergeoTestForGeneset <- function(query, refGMT, gspace, minGeneSet=10, ef.psc=
 	# idx <- which(enres$pVal != 1)
 	# enres$qVal[idx] <- p.adjust(enres$pVal[idx], method='fdr')
 
-	enrRes <- enrRes[,c('ID', 'pVal', 'logP', 'oddsRatio', 'tan', 'int', 'gsRatio', 'bgRatio')]
+	enrRes <- enrRes[,c('ID', 'pVal', 'logP', 'oddsRatio', 'tan', 'int', 'gsRatio', 'bgRatio','intgenes')]
 	return(enrRes)	
 }
 
