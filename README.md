@@ -8,13 +8,14 @@ Custom functions from Lazy for personal use, now as a package!
 - [x] Style fix : assign operation into arrows
 - [x] Style fix : banish `df` from variables
 - [ ] Style fix : Package startup message in `zzz.R`.
-- [ ] Functions : `hypergeoTestForGeneset` : multiprocessing into option
 - [x] Functions : **Hypergeometric test results background set return check.**
 - [x] Functions : **GSEA plot function using fgsea.** function modified from `plotEnrichment`
 - [x] Functions : Draw MA plot, ~log fc result get for microarray no replicate.~
 - [x] Functions : ggplot2 custom themes.
 - [x] Functions : `hypergeoTestForGeneset` : returns intersected genes
 - [x] Functions : `Gen_enrichment` : return dataframe column reorder
+- [ ] Functions : `hypergeoTestForGeneset` : multiprocessing into option
+- [ ] Functions : `hypergeoTestForGeneset` : logQ calculation into function from `Gen_enrichment` (in progress, untested)
 - [ ] Datasets  : Add mouse gene info
 
 

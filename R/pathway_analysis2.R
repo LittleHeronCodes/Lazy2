@@ -20,14 +20,14 @@ Gen_enrichment <- function(glist, refgmt, tglist, minGeneSet=10, ncore=1, ef.psc
 	if(ncore > 1) {
 		enrobj <- lapply(names(glist), function(aid) hypergeoTestForGeneset2(glist[[aid]], refgmt, tglist[[aid]], minGeneSet, ncore=ncore, ef.psc=ef.psc) )
 	}
-	enrobj <- lapply(enrobj, function(hgeos) {
-		pv <- ifelse(hgeos$int == 0, NA, hgeos$pVal)
-		hgeos$qVal <- p.adjust(pv, method='fdr')
-		hgeos$qVal <- ifelse(hgeos$int == 0, 1, hgeos$qVal)
-		hgeos$logQ <- -log10(hgeos$qVal)
-		hgeos <- hgeos[,c('ID','pVal','logP','qVal','logQ','oddsRatio','tan','int','gsRatio','bgRatio','intGenes')]
-		return(hgeos)
-		})
+	# enrobj <- lapply(enrobj, function(hgeos) {
+	# 	pv <- ifelse(hgeos$int == 0, NA, hgeos$pVal)
+	# 	hgeos$qVal <- p.adjust(pv, method='fdr')
+	# 	hgeos$qVal <- ifelse(hgeos$int == 0, 1, hgeos$qVal)
+	# 	hgeos$logQ <- -log10(hgeos$qVal)
+	# 	hgeos <- hgeos[,c('ID','pVal','logP','qVal','logQ','oddsRatio','tan','int','gsRatio','bgRatio','intGenes')]
+	# 	return(hgeos)
+	# 	})
 	names(enrobj) <- names(glist)
 	return(enrobj)
 }

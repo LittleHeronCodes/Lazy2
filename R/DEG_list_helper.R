@@ -13,12 +13,12 @@
 #' ent2sym('TP53')
 
 ent2sym <- function(genes, geneMap=NULL) {
-	if(is.null(geneMap)) geneMap = Lazy2::LazygeneInfo
-	genes = as.character(genes)
+	if(is.null(geneMap)) geneMap <- Lazy2::LazygeneInfo
+	genes <- as.character(genes)
 	if(all(grepl('^[0-9]+$', genes))) {
-		out = geneMap$hgnc_symbol[match(genes, geneMap$entrez)]		
+		out <- geneMap$hgnc_symbol[match(genes, geneMap$entrez)]		
 	} else {
-		out = geneMap$entrez[match(genes, geneMap$hgnc_symbol)]
+		out <- geneMap$entrez[match(genes, geneMap$hgnc_symbol)]
 	}
 	return(as.character(out))
 }
@@ -155,13 +155,13 @@ getOverlapDF <- function(gls, tgls) {
 #' }
 
 drawMA <- function(resultDF, qco, fco, ttl_pre, ylim=NULL) {
-	ui = which(resultDF$adj.P.Val < qco & resultDF$logFC >  log2(fco))
-	di = which(resultDF$adj.P.Val < qco & resultDF$logFC < -log2(fco))
-	gcnt = paste('up:',length(ui), 'dn:',length(di))
+	ui <- which(resultDF$adj.P.Val < qco & resultDF$logFC >  log2(fco))
+	di <- which(resultDF$adj.P.Val < qco & resultDF$logFC < -log2(fco))
+	gcnt <- paste('up:',length(ui), 'dn:',length(di))
 	if(is.null(ylim)) {
-		ylim = c(-max(abs(resultDF$logFC), na.rm=TRUE), max(abs(resultDF$logFC), na.rm=TRUE))		
+		ylim <- c(-max(abs(resultDF$logFC), na.rm=TRUE), max(abs(resultDF$logFC), na.rm=TRUE))		
 	}
-	mtitle = paste(ttl_pre, 'fc', fco, 'qv', qco, gcnt)
+	mtitle <- paste(ttl_pre, 'fc', fco, 'qv', qco, gcnt)
 
 	# MA
 	plot(logFC ~ AveExpr, data = resultDF, pch = 20, main = mtitle, cex = 0.05, ylim = ylim)
@@ -174,13 +174,13 @@ drawMA <- function(resultDF, qco, fco, ttl_pre, ylim=NULL) {
 #' @export
 
 drawVol <- function(resultDF, qco, fco, ttl_pre, xlim=NULL) {
-	ui = which(resultDF$adj.P.Val < qco & resultDF$logFC >  log2(fco))
-	di = which(resultDF$adj.P.Val < qco & resultDF$logFC < -log2(fco))
-	gcnt = paste('up:',length(ui), 'dn:',length(di))
+	ui <- which(resultDF$adj.P.Val < qco & resultDF$logFC >  log2(fco))
+	di <- which(resultDF$adj.P.Val < qco & resultDF$logFC < -log2(fco))
+	gcnt <- paste('up:',length(ui), 'dn:',length(di))
 	if(is.null(xlim)) {
-		xlim = c(-max(abs(resultDF$logFC), na.rm=TRUE), max(abs(resultDF$logFC), na.rm=TRUE))
+		xlim <- c(-max(abs(resultDF$logFC), na.rm=TRUE), max(abs(resultDF$logFC), na.rm=TRUE))
 	}
-	mtitle = paste(ttl_pre, 'fc', fco, 'qv', qco, gcnt)
+	mtitle <- paste(ttl_pre, 'fc', fco, 'qv', qco, gcnt)
 
 	# volcano
 	plot(-log10(adj.P.Val) ~ logFC, data = resultDF, pch = 20, main = mtitle, cex=0.05, xlim=xlim)

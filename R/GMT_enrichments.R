@@ -112,7 +112,14 @@ hypergeoTestForGeneset <- function(query, refGMT, gspace, minGeneSet=10, ef.psc=
 	enrRes <- rbindlist(enrRes)
 	enrRes$ID <- names(refGMT)
 	enrRes$logP <- -log10(enrRes$pVal)
-	enrRes <- enrRes[,c('ID', 'pVal', 'logP', 'oddsRatio', 'tan', 'int', 'gsRatio', 'bgRatio', 'intGenes')]
+
+	pv <- ifelse(enrRes$int == 0, NA, enrRes$pVal)
+	enrRes$qVal <- p.adjust(pv, method='fdr')
+	enrRes$qVal <- ifelse(enrRes$int == 0, 1, enrRes$qVal)
+	enrRes$logQ <- -log10(enrRes$qVal)
+
+	enrRes <- enrRes[,c('ID','pVal','logP','qVal','logQ','oddsRatio','tan','int','gsRatio','bgRatio','intGenes')]
+	# enrRes <- enrRes[,c('ID', 'pVal', 'logP', 'oddsRatio', 'tan', 'int', 'gsRatio', 'bgRatio', 'intGenes')]
 	return(enrRes)	
 }
 
@@ -130,7 +137,7 @@ hypergeoTestForGeneset2 <- function (query, refGMT, gspace, minGeneSet=10, ncore
 		stop(paste(length(setdiff(query, gspace)),'Query items were found outside of background space. Check inputs.'))
 	}
 	# query = intersect(query, gspace)
-	refGMT = parallel::mclapply(refGMT, function(g) intersect(g,gspace), mc.cores=ncore)
+	refGMT <- parallel::mclapply(refGMT, function(g) intersect(g,gspace), mc.cores=ncore)
 
 	if(length(query) == 0) stop('Query length is zero.')
 
@@ -146,28 +153,34 @@ hypergeoTestForGeneset2 <- function (query, refGMT, gspace, minGeneSet=10, ncore
 	}
 	if(length(refGMT) == 0) stop('Length of refGMT after filtering is zero.')
 
-    N = length(gspace)
-    k = length(query)
-    enrRes = parallel::mclapply(refGMT, function(refgenes) {
-        q = length(intersect(refgenes, query))
-        m = length(intersect(gspace, refgenes))
-    	I = intersect(refgenes, query)
+	N <- length(gspace)
+	k <- length(query)
+	enrRes <- parallel::mclapply(refGMT, function(refgenes) {
+		q <- length(intersect(refgenes, query))
+		m <- length(intersect(gspace, refgenes))
+		I <- intersect(refgenes, query)
 
-        pVal = phyper(q - 1, m, N - m, k, lower.tail = FALSE)
-        # odds = (q / k) / (m / N)
-        odds = (q + ef.psc) / (m / N * k + ef.psc)
-        jacc = q / length(union(query, refgenes))
-        gs.ratio <- paste0(q,'/',k)
-        bg.ratio <- paste0(m,'/',N)
+		pVal <- phyper(q - 1, m, N - m, k, lower.tail = FALSE)
+		odds <- (q + ef.psc) / (m / N * k + ef.psc)
+		jacc <- q / length(union(query, refgenes))
+		gs.ratio <- paste0(q,'/',k)
+		bg.ratio <- paste0(m,'/',N)
 
-        return(data.table(pVal = pVal, oddsRatio=odds, tan = jacc, int=q, gsRatio=gs.ratio, bgRatio=bg.ratio, intGenes=list(I)))
-    }, mc.cores = ncore)
+		return(data.table(pVal = pVal, oddsRatio=odds, tan = jacc, int=q, gsRatio=gs.ratio, bgRatio=bg.ratio, intGenes=list(I)))
+	}, mc.cores = ncore)
 
-    # enrRes = do.call(rbind, enrRes)
-    enrRes = rbindlist(enrRes)
+	# enrRes = do.call(rbind, enrRes)
+	enrRes <- rbindlist(enrRes)
+	enrRes$ID <- names(refGMT)
+	enrRes$logP <- -log10(enrRes$pVal)
+
+	pv <- ifelse(enrRes$int == 0, NA, enrRes$pVal)
+	enrRes$qVal <- p.adjust(pv, method='fdr')
+	enrRes$qVal <- ifelse(enrRes$int == 0, 1, enrRes$qVal)
+	enrRes$logQ <- -log10(enrRes$qVal)
+
+	enrRes <- enrRes[,c('ID','pVal','logP','qVal','logQ','oddsRatio','tan','int','gsRatio','bgRatio','intGenes')]
 	
-    enrRes$ID = names(refGMT)
-    enrRes$logP = -log10(enrRes$pVal)
-	enrRes <- enrRes[,c('ID', 'pVal', 'logP', 'oddsRatio', 'tan', 'int', 'gsRatio', 'bgRatio', 'intGenes')]
-    return(enrRes)
+	# enrRes <- enrRes[,c('ID', 'pVal', 'logP', 'oddsRatio', 'tan', 'int', 'gsRatio', 'bgRatio', 'intGenes')]
+	return(enrRes)
 }
