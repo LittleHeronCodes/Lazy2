@@ -80,8 +80,8 @@ reload(inst('Lazy2'))
 
 **major.minor.patch.dev**
 
-- minor : function add, modify, not interchangeable with previous versions
-- patch : bug fix, tweaks
+- minor : function add, modify, new builds (manual updates)
+- patch : minor bug fix, function tweaks
 - dev : 9000 
 
 
