@@ -82,7 +82,7 @@ reload(inst('Lazy2'))
 
 - minor : function add, modify, not interchangeable with previous versions
 - patch : bug fix, tweaks
-- dev : ???
+- dev : 9000 
 
 
 ---

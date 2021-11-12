@@ -4,14 +4,14 @@
 \alias{Gen_enrichment}
 \title{Gene list pathway analysis by hypergeometric test}
 \usage{
-Gen_enrichment(glist, refgmt, tglist, ncore = 1)
+Gen_enrichment(glist, refgmt, tglist, minGeneSet = 10, ncore = 1, ef.psc = 0)
 }
 \arguments{
 \item{glist}{List of query genes. (DEG list)}
 
 \item{refgmt}{Reference gene set list. (Pathway set in list form)}
 
-\item{tglist}{List of gene space, same length as glist.}
+\item{tglist}{List of background gene space, same length as glist.}
 
 \item{ncore}{Number of cores to use.}
 }

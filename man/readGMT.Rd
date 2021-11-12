@@ -7,12 +7,12 @@
 \usage{
 readGMT(gmtfile, as.df = FALSE)
 
-writeGMT(file, glist, geneset_desc = "")
+writeGMT(gmtfile, glist, geneset_desc = "")
 }
 \arguments{
-\item{as.df}{Return as data frame?}
+\item{gmtfile}{GMT file path}
 
-\item{file}{GMT file path}
+\item{as.df}{Return as data frame?}
 
 \item{glist}{List of gene set. Should be un-nested level one named list.}
 

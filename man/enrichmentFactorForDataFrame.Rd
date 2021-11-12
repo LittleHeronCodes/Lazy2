@@ -5,7 +5,7 @@
 \title{CMAP Style Enrichment Calculation}
 \usage{
 enrichmentFactorForDataFrame(
-  df,
+  data,
   enrich_element,
   rank_by,
   cutoff = 0.05,
@@ -14,9 +14,9 @@ enrichmentFactorForDataFrame(
 )
 }
 \arguments{
-\item{df}{input data frame}
+\item{data}{input data frame}
 
-\item{enrich_element}{category column from df to enrich}
+\item{enrich_element}{category column from data to enrich}
 
 \item{rank_by}{column used to sort rank}
 
