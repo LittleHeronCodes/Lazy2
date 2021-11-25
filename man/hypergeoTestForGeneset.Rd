@@ -5,26 +5,36 @@
 \alias{hypergeoTestForGeneset2}
 \title{Hypergeometric test for gmt style list}
 \usage{
-hypergeoTestForGeneset(query, refGMT, gspace)
+hypergeoTestForGeneset(query, refGMT, gspace, minGeneSet = 10, ef.psc = 0)
 
-hypergeoTestForGeneset2(query, refGMT, gspace, ncore = 1)
+hypergeoTestForGeneset2(
+  query,
+  refGMT,
+  gspace,
+  minGeneSet = 10,
+  ncore = 1,
+  ef.psc = 0
+)
 }
 \arguments{
 \item{query}{gene set to query (ex. Differentially Expressed Genes)}
 
 \item{refGMT}{list of reference gene set (ex. Pathways)}
 
-\item{gspace}{gene space to query in}
+\item{gspace}{background gene space}
+
+\item{minGeneSet}{minimum size of gene set. (used to filter refGMT)}
 }
 \value{
 data frame
 \describe{
-	  \item{pVal}{hypergeometric test p values from phyper}
-	  \item{logP}{-log10(p value)}
-	  \item{oddsRatio}{odds ratio}
-	  \item{tanco}{tanimoto coefficient (Jaccard index)}
-	  \item{int}{intersected item count}
-	  \item{bg}{reference item background count}
+	  \item{pVal}{: hypergeometric test p values from phyper}
+	  \item{logP}{: -log10(p value)}
+	  \item{oddsRatio}{: odds ratio}
+	  \item{tanco}{: tanimoto coefficient (Jaccard index)}
+	  \item{int}{: intersected item count}
+	  \item{gsRatio}{: gene set ratio (selected genes in gene set / selected genes)}
+	  \item{bgRatio}{: background ratio (total genes in gene set / total gene space)}
 }
 }
 \description{

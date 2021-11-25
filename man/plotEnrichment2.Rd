@@ -12,12 +12,12 @@ plotEnrichment2(
   qv,
   gseaParam = 1,
   mtitle = NULL,
-  ylab = "",
+  ytitle = "",
   ticksSize = 0.4,
   base_size = 7,
   line.col = "green",
   lwd = 2,
-  ylim = NULL,
+  ylims = NULL,
   draw = TRUE,
   statbar = FALSE
 )
@@ -37,7 +37,7 @@ theme_common_gsea(base_size = 7)
 
 \item{mtitle}{main title}
 
-\item{ylab}{y axis name}
+\item{ytitle}{y axis name}
 
 \item{ticksSize}{ticks lwd for geneset bars.}
 

@@ -4,12 +4,12 @@
 \alias{theme_transparent2}
 \title{Transparent theme for ggplot}
 \usage{
-theme_transparent2(base_size = 12, x.text.angle = 0)
+theme_transparent2(base_size = 12, x_angle = 0)
 }
 \arguments{
 \item{base_size}{font base size. default 12}
 
-\item{x.text.angle}{rotate x labels}
+\item{x_angle}{rotate x labels}
 }
 \description{
 Modified transparent theme from ggpubr

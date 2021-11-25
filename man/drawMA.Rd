@@ -5,9 +5,9 @@
 \alias{drawVol}
 \title{Draw MA, volcano plot}
 \usage{
-drawMA(resultDF, qco, fco, ttl_pre)
+drawMA(resultDF, qco, fco, ttl_pre, ylim = NULL)
 
-drawVol(resultDF, qco, fco, ttl_pre)
+drawVol(resultDF, qco, fco, ttl_pre, xlim = NULL)
 }
 \arguments{
 \item{resultDF}{result dataframe generated from limma or DEseq2. If DESeq2, column name should be 'adj.P.Val','logFC','AveExpr'}
