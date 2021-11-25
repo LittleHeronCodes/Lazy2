@@ -52,6 +52,7 @@ enrobj2Matrix <- function(enrobj, val.col='pvalue', log=TRUE) {
 		return(dff)
 	})
 	hmplot <- do.call(rbind, LS)
+	# hmplot <- rbindlist(enrobj, idcol='set')
 
 	# detect log values
 	is_log <- FALSE
@@ -66,7 +67,6 @@ enrobj2Matrix <- function(enrobj, val.col='pvalue', log=TRUE) {
 	plotMat <- plotMat[order(apply(plotMat,1, sum, na.rm=TRUE), decreasing=TRUE),]
 	return(plotMat)
 }
-
 
 
 

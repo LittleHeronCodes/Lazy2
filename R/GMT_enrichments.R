@@ -84,9 +84,9 @@ hypergeoTestForGeneset <- function(query, refGMT, gspace, minGeneSet=10, ef.psc=
 	exc <- which(sapply(refGMT, length) < minGeneSet)
 	if(length(exc) != 0) {
 		if(length(exc) <= 5) {
-			mesg <- paste('Ref set no', paste(exc, collapse=', '), 'had less than 10 genes and were excluded.')
+			mesg <- paste('Ref set no.', paste(exc, collapse=', '), 'had less than', minGeneSet,'genes and were excluded.')
 		} else {
-			mesg <- paste(length(exc), ' entries in refGMT had less than 10 genes and were excluded.')
+			mesg <- paste(length(exc), ' entries in refGMT had less than', minGeneSet,'genes and were excluded.')
 		}
 		warning(mesg)
 		refGMT <- refGMT[which(sapply(refGMT, length) >= minGeneSet)]
