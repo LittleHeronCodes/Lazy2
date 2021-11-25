@@ -18,6 +18,7 @@ Custom functions from Lazy for personal use, now as a package!
 - [x] Functions : **GSEA plot function using fgsea.** function modified from `plotEnrichment`
 - [x] Functions : Draw MA plot, ~log fc result get for microarray no replicate.~
 - [x] Functions : ggplot2 custom themes.
+- [x] Functions : Pathway analysis functions now returns intersected items as well.
 - [x] Functions : `hypergeoTestForGeneset` : returns intersected genes
 - [x] Functions : `Gen_enrichment` : return dataframe column reorder
 - [x] Functions : `hypergeoTestForGeneset` : logQ calculation into function from `Gen_enrichment` (in progress, untested)
