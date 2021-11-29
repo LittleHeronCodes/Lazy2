@@ -3,13 +3,14 @@
 Custom functions from Lazy for personal use, now as a package!
 
 
-## Version 0.1.3 To Do
+## Version 0.1.4 To Do
 
 - [ ] Style fix : Package startup message in `zzz.R`.
 - [ ] Functions : `hypergeoTestForGeneset` : multiprocessing into option
 - [ ] Datasets  : Add mouse gene info
+- [x] Datasets  : Add last update info on data help page for `LazygeneInfo`
 
-## Version 0.1.2
+## Version 0.1.3
 
 - [x] Style fix : Remove all unused functions (move to scrap)
 - [x] Style fix : assign operation into arrows
