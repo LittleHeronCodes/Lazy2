@@ -7,6 +7,7 @@ Custom functions from Lazy for personal use, now as a package!
 
 - [ ] Style fix : Package startup message in `zzz.R`.
 - [ ] Functions : `hypergeoTestForGeneset` : multiprocessing into option
+- [ ] Functions : `extractGeneList` : p value column into option. (Also check if column actually exists)
 - [ ] Datasets  : Add mouse gene info
 - [x] Datasets  : Add last update info on data help page for `LazygeneInfo`
 
