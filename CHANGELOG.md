@@ -1,8 +1,9 @@
 # Changelog
 
 ## Ver 0.1.3.9000 [2021.11.25]
-- [v0.1.3.9000] Functions : logP, p adjusting part moved from `Gen_enrichment` to `hypergeoTestForGeneset`.
+- [v0.1.3.9000] Functions : logP, p adjusting part moved from `Gen_enrichment` to `hypergeoTestForGeneset.
 - [v0.1.3.9000] Datasets  : `Lazygeneinfo` HGNC data update, rebuild (2021-11-11)
+- [v0.1.3.9001] Functions : `hypergeoTestForGeneset`fixed intGenes list returning problems.
 
 ## Ver 0.1.2
 - [v0.1.2.9001] Functions : `hypergeoTestForGeneset` : fixed warning message.
