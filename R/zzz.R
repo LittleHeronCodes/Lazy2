@@ -6,17 +6,17 @@
 
 	today <- format(Sys.time(), "%m%d")
 	if(today == "0101") {
-		msg <- paste0(msg, "\tHappy New Year!")
+		msg <- paste0(msg, "\nHappy New Year!")
 	}
 	if(today == "0401") {
-		msg <- paste0(msg, "\tApril fools!")
+		msg <- paste0(msg, "\nApril fools!")
 		# msg <- paste0(msg, "\nSYSTEM SELF DESTRUCT IN 5 MINUTES")
 	}
 	if(today == "0504") {
-		msg <- paste0(msg, "\tMay the Fourth be with you!")
+		msg <- paste0(msg, "\nMay the Fourth be with you!")
 	}
 	if(today == "1225") {
-		msg <- paste0(msg, "\tMerry Christmas!")
+		msg <- paste0(msg, "\nMerry Christmas!")
 	}
 
 	packageStartupMessage(msg)
