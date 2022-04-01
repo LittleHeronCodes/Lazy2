@@ -17,13 +17,15 @@ hypergeoTestForGeneset2(
 )
 }
 \arguments{
-\item{query}{gene set to query (ex. Differentially Expressed Genes)}
+\item{query}{gene set to query (eg. Differentially Expressed Genes)}
 
-\item{refGMT}{list of reference gene set (ex. Pathways)}
+\item{refGMT}{list of reference gene set (eg. Pathways)}
 
-\item{gspace}{background gene space}
+\item{gspace}{background gene space. Should contain all genes in query.}
 
-\item{minGeneSet}{minimum size of gene set. (used to filter refGMT)}
+\item{minGeneSet}{minimum size of gene set. This is used to filter refGMT. Default 10}
+
+\item{ef.psc}{pseudocount when calculating enrichment factor (oddsRatio). Default 0}
 }
 \value{
 data frame

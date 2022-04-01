@@ -24,6 +24,7 @@ data(LazygeneInfo)
 \description{
 Human gene ID dataframe containing Entrez, HGNC ID, Gene name, Gene symbol, Ensembl ID, gene type
 Used for ent2sym and more gene mapper functions.
+Last update : 2021-11-11 HGNC, build date 2021-11-25
 }
 \examples{
 data(LazygeneInfo)
