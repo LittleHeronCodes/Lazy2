@@ -18,9 +18,9 @@ geneInfo <- hgnc %>%
   mutate(hgnc_id = gsub('^HGNC:','',hgnc_id), entrez = as.character(entrez)) %>%
   arrange(entrez, hgnc_id)
 
-LazygeneInfo <- geneInfo
+LazygeneInfo <- as.data.frame(geneInfo)
 
-usethis::use_data(LazygeneInfo)
+usethis::use_data(LazygeneInfo, overwrite=TRUE)
 
 #   entrez hgnc_id                          hgnc_gene hgnc_symbol           gene_type
 # 1      1       5             alpha-1-B glycoprotein        A1BG protein-coding gene

@@ -3,13 +3,14 @@
 Custom functions from Lazy for personal use, now as a package!
 
 
-## Version 0.1.3 To Do
+## Version 0.1.4 To Do
 
-- [ ] Style fix : Package startup message in `zzz.R`.
+- [x] Style fix : Package startup message in `zzz.R`. Show version number.
 - [ ] Functions : `hypergeoTestForGeneset` : multiprocessing into option
-- [ ] Datasets  : Add mouse gene info
+- [ ] Functions : `extractGeneList` : p value column into option. (Also check if column actually exists)
+- [x] Datasets  : Add last update info on data help page for `LazygeneInfo`
 
-## Version 0.1.2
+## Version 0.1.3
 
 - [x] Style fix : Remove all unused functions (move to scrap)
 - [x] Style fix : assign operation into arrows
@@ -27,7 +28,7 @@ Custom functions from Lazy for personal use, now as a package!
 
 ## Checklist before moving to 0.2.0
 
-Ver 0.0.4.1 is final backward incompatible change. (deploy number : 0.1.0.9000)
+Ver 0.2.0 is final backward incompatible change.
 
 - [ ] Test all functions vigorously.
 - [x] All functions used frequently in last two projects.
@@ -38,7 +39,9 @@ Ver 0.0.4.1 is final backward incompatible change. (deploy number : 0.1.0.9000)
 
 ## Version 0.2 Ideas
 
+- [ ] R version 4 compatibility check
 - [ ] ens2sym ??
+- [ ] Datasets  : Add mouse gene info
 - [ ] Think about utilizing cpp codes for simple calculation function. --> speed trade-off potentially not worth it
 - [ ] Mathematical equations into help page. (if possible)
 
@@ -101,3 +104,4 @@ reload(inst('Lazy2'))
 * [Writing R Packages by Karl Broman](https://kbroman.org/Tools4RR/assets/lectures/08_rpack_withnotes.pdf)
 * [Releasing a package](https://r-pkgs.org/release.html)
 * [A successful Git branching model](https://nvie.com/posts/a-successful-git-branching-model/)
+* [Exploring Package Startup messages](https://www.rostrum.blog/2021/08/27/zzz/)

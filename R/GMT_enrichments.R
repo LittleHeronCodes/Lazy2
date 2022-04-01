@@ -105,9 +105,9 @@ hypergeoTestForGeneset <- function(query, refGMT, gspace, minGeneSet=10, ef.psc=
 		jacc <- q / length(union(query, refgenes))
 		gs.ratio <- paste0(q,'/',k)
 		bg.ratio <- paste0(m,'/',N)
-		enrgenes <- list(intersect(refgenes, query))
+		# enrgenes <- list(intersect(refgenes, query))
 
-		return(data.table(pVal=pVal, oddsRatio=odds, tan=jacc, int=q, gsRatio=gs.ratio, bgRatio=bg.ratio, intgenes=enrgenes))
+		return(data.table(pVal=pVal, oddsRatio=odds, tan=jacc, int=q, gsRatio=gs.ratio, bgRatio=bg.ratio, intGenes=list(I)))
 		})
 
 	enrRes <- rbindlist(enrRes)
