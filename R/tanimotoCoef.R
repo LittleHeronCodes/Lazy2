@@ -37,6 +37,9 @@ tanimotoCoef <- function(A, B, T = NULL) {
 #' getEnrichmentFactor(A, B, total)
 
 getEnrichmentFactor <- function(setA,setB,setT, psc=0) {
+	setA <- intersect(setA, setT)
+	setB <- intersect(setB, setT)
+	
 	ef <- NA
 	A <- length(setA)
 	B <- length(setB)
@@ -47,6 +50,7 @@ getEnrichmentFactor <- function(setA,setB,setT, psc=0) {
 	}
 	return(ef)
 }
+
 
 #' Hypergeometric test
 #'
