@@ -3,7 +3,7 @@
 #' Calculates Tanimoto coefficients (Jaccard Index) given two set vectors.
 #' @param A set input1 as vectors
 #' @param B set input2 as vectors
-#' @param T background space (if given, will intersect set before calculating)
+#' @param T background space (if given, A and B are intersected with T before calculating, causing the function to run slower)
 #' @export
 #' @examples
 #' A = c(1:5)
