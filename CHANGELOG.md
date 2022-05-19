@@ -1,5 +1,9 @@
 # Changelog
 
+## Ver 0.1.5.9000 [2022.05.11]
+- [v0.1.5.9000] Functions : `Gen_enrichment` : Fix background gene space.
+- [v0.1.5.9000] Functions : `getEnrichmentFactor` : Fix total space for setA and setB.
+
 ## Ver 0.1.4.9000 [2022.04.01]
 - [v0.1.4.9000] Style fix : Package startup message in `zzz.R`. Show version number among other things.
 - [v0.1.4.9000] Datasets  : `Lazygeneinfo` HGNC data update, rebuild (2021-11-12). (for real)

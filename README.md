@@ -3,13 +3,12 @@
 Custom functions from Lazy for personal use, now as a package!
 
 
-## Version 0.1.4 To Do
+## Version 0.1.5 To Do
 
-- [x] Style fix : Package startup message in `zzz.R`. Show version number.
 - [ ] Functions : `hypergeoTestForGeneset` : multiprocessing into option.
 - [x] Functions : `getEnrichmentFactor` : Fix total space for setA and setB.
 - [ ] Functions : `extractGeneList` : p value column into option. (Also check if column actually exists)
-- [x] Datasets  : Add last update info on data help page for `LazygeneInfo`
+- [x] Functions : `Gen_enrichment` : Fix background gene space.
 
 
 ## Checklist before moving to 0.2.0

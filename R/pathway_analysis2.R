@@ -13,6 +13,7 @@ Gen_enrichment <- function(glist, refgmt, tglist, minGeneSet=10, ncore=1, ef.psc
 	require(parallel)
 	bgspace <- unique(unlist(refgmt))
 	glist <- lapply(glist, function(gg) intersect(gg, bgspace))
+	tglist <- lapply(tglist, function(gg) intersect(gg, bgspace))
 
 	if(ncore <= 1) {
 		enrobj <- lapply(names(glist), function(aid) hypergeoTestForGeneset(glist[[aid]], refgmt, tglist[[aid]], minGeneSet, ef.psc=ef.psc) )
