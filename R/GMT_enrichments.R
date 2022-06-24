@@ -121,7 +121,6 @@ hypergeoTestForGeneset <- function(query, refGMT, gspace, minGeneSet=10, ef.psc=
 	enrRes$logQ <- -log10(enrRes$qVal)
 
 	enrRes <- enrRes[,c('ID','pVal','logP','qVal','logQ','oddsRatio','tan','int','gsRatio','bgRatio','intGenes')]
-	# enrRes <- enrRes[,c('ID', 'pVal', 'logP', 'oddsRatio', 'tan', 'int', 'gsRatio', 'bgRatio', 'intGenes')]
 	return(enrRes)	
 }
 
@@ -143,7 +142,7 @@ hypergeoTestForGeneset2 <- function (query, refGMT, gspace, minGeneSet=10, ncore
 
 	if(length(query) == 0) stop('Query length is zero.')
 
-	exc <- which(sapply(refGMT, length) <= minGeneSet)
+	exc <- which(sapply(refGMT, length) < minGeneSet)
 	if(length(exc) != 0) {
 		if(length(exc) <= 5) {
 			mesg <- paste('Ref set no', paste(exc, collapse=', '), 'had less than 10 genes and were excluded.')
@@ -151,7 +150,7 @@ hypergeoTestForGeneset2 <- function (query, refGMT, gspace, minGeneSet=10, ncore
 			mesg <- paste(length(exc), 'entries in refGMT had less than 10 genes and were excluded.')
 		}
 		warning(mesg)
-		refGMT <- refGMT[which(sapply(refGMT, length) > minGeneSet)]
+		refGMT <- refGMT[which(sapply(refGMT, length) >= minGeneSet)]
 	}
 	if(length(refGMT) == 0) stop('Length of refGMT after filtering is zero.')
 
@@ -171,7 +170,6 @@ hypergeoTestForGeneset2 <- function (query, refGMT, gspace, minGeneSet=10, ncore
 		return(data.table(pVal = pVal, oddsRatio=odds, tan = jacc, int=q, gsRatio=gs.ratio, bgRatio=bg.ratio, intGenes=list(I)))
 	}, mc.cores = ncore)
 
-	# enrRes = do.call(rbind, enrRes)
 	enrRes <- rbindlist(enrRes)
 	enrRes$ID <- names(refGMT)
 	enrRes$logP <- -log10(enrRes$pVal)
@@ -182,7 +180,5 @@ hypergeoTestForGeneset2 <- function (query, refGMT, gspace, minGeneSet=10, ncore
 	enrRes$logQ <- -log10(enrRes$qVal)
 
 	enrRes <- enrRes[,c('ID','pVal','logP','qVal','logQ','oddsRatio','tan','int','gsRatio','bgRatio','intGenes')]
-	
-	# enrRes <- enrRes[,c('ID', 'pVal', 'logP', 'oddsRatio', 'tan', 'int', 'gsRatio', 'bgRatio', 'intGenes')]
 	return(enrRes)
 }
