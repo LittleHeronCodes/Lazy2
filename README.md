@@ -9,6 +9,7 @@ Custom functions from Lazy for personal use, now as a package!
 - [x] Functions : `getEnrichmentFactor` : Fix total space for setA and setB.
 - [ ] Functions : `extractGeneList` : p value column into option. (Also check if column actually exists)
 - [x] Functions : `Gen_enrichment` : Fix background gene space.
+- [ ] Issues    : Pathway analysis gene space problem. Need to update gene space after removing pathways less than minimum gene space.
 
 
 ## Checklist before moving to 0.2.0
