@@ -1,5 +1,13 @@
 # Changelog
 
+## Ver 0.1.5.9002 [2022.07.27]
+- [v0.1.5.9000] Functions : `Gen_enrichment` : Fix background gene space.
+- [v0.1.5.9000] Functions : `getEnrichmentFactor` : Fix total space for setA and setB.
+- [v0.1.5.9001] Functions : `hypergeoTestForGeneset` : minimum gene set filtering  
+  - `refGMT[which(sapply(refGMT, length) > minGeneSet)]` --> `refGMT[which(sapply(refGMT, length) >= minGeneSet)]`
+- [v0.1.5.9002] Functions : `writeGMT` : Minor tweaks to check for `geneset_desc`, change variable `glist` to `genelist`.
+- [v0.1.5.9002] Style fix : `DESCRIPTION` : Added ORCID.
+
 ## Ver 0.1.4.9000 [2022.04.01]
 - [v0.1.4.9000] Style fix : Package startup message in `zzz.R`. Show version number among other things.
 - [v0.1.4.9000] Datasets  : `Lazygeneinfo` HGNC data update, rebuild (2021-11-12). (for real)

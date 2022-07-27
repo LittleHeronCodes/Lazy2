@@ -3,27 +3,13 @@
 Custom functions from Lazy for personal use, now as a package!
 
 
-## Version 0.1.4 To Do
+## Version 0.1.5 To Do
 
-- [x] Style fix : Package startup message in `zzz.R`. Show version number.
-- [ ] Functions : `hypergeoTestForGeneset` : multiprocessing into option
+- [ ] Functions : `hypergeoTestForGeneset` : multiprocessing into option.
+- [x] Functions : `getEnrichmentFactor` : Fix total space for setA and setB.
 - [ ] Functions : `extractGeneList` : p value column into option. (Also check if column actually exists)
-- [x] Datasets  : Add last update info on data help page for `LazygeneInfo`
-
-## Version 0.1.3
-
-- [x] Style fix : Remove all unused functions (move to scrap)
-- [x] Style fix : assign operation into arrows
-- [x] Style fix : banish `df` from variables
-- [x] Functions : **Hypergeometric test results background set return check.**
-- [x] Functions : **GSEA plot function using fgsea.** function modified from `plotEnrichment`
-- [x] Functions : Draw MA plot, ~log fc result get for microarray no replicate.~
-- [x] Functions : ggplot2 custom themes.
-- [x] Functions : Pathway analysis functions now returns intersected items as well.
-- [x] Functions : `hypergeoTestForGeneset` : returns intersected genes
-- [x] Functions : `Gen_enrichment` : return dataframe column reorder
-- [x] Functions : `hypergeoTestForGeneset` : logQ calculation into function from `Gen_enrichment` (in progress, untested)
-- [x] Datasets  : `Lazygeneinfo` HGNC data update, rebuild (2021-11-11)
+- [x] Functions : `Gen_enrichment` : Fix background gene space.
+- [ ] Issues    : Pathway analysis gene space problem. Need to update gene space after removing pathways less than minimum gene space.
 
 
 ## Checklist before moving to 0.2.0
@@ -92,7 +78,7 @@ reload(inst('Lazy2'))
 
 - minor : function add, modify, new builds (manual updates)
 - patch : minor bug fix, function tweaks
-- dev : 9000 
+- dev : 9000. Indicating in development. 
 
 
 ---

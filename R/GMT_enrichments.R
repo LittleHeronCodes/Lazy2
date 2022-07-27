@@ -5,8 +5,8 @@
 #' 
 #' @param gmtfile GMT file path
 #' @param as.df Return as data frame?
-#' @param glist List of gene set. Should be un-nested level one named list.
-#' @param geneset_desc Description meta information for gene set. Either length one or same length vector as glist.
+#' @param genelist List of gene set. Should be un-nested level one named list.
+#' @param geneset_desc Description meta information for gene set. Either length one or a named vector of same length as glist.
 #' @return Gene set dataframe of 2 column or list
 #' @export
 #' @examples
@@ -32,12 +32,15 @@ readGMT <- function(gmtfile, as.df=FALSE) {
 #' @describeIn readGMT write gmt file for geneset list.
 #' @export
 
-writeGMT <- function(gmtfile, glist, geneset_desc='') {
-	if( !(is.list(glist) & all(sapply(glist,is.character))) ) {
-		stop('Check glist format. glist should be a one-level list of genesets.')
+writeGMT <- function(gmtfile, genelist, geneset_desc='') {
+	if( !(is.list(genelist) & all(sapply(genelist, is.character))) ) {
+		stop('Check genelist format. genelist should be a one-level list of genesets.')
+	}
+	if(length(names(geneset_desc)) != 0) {
+		geneset_desc <- geneset_desc[names(genelist)]
 	}
 
-	concat <- sapply(glist, function(v) paste(v, collapse='\t'))
+	concat <- sapply(genelist, function(v) paste(v, collapse='\t'))
 	out <- paste0(names(concat), '\t',geneset_desc,'\t', concat)
 
 	writeLines(out, con=gmtfile)
@@ -121,7 +124,6 @@ hypergeoTestForGeneset <- function(query, refGMT, gspace, minGeneSet=10, ef.psc=
 	enrRes$logQ <- -log10(enrRes$qVal)
 
 	enrRes <- enrRes[,c('ID','pVal','logP','qVal','logQ','oddsRatio','tan','int','gsRatio','bgRatio','intGenes')]
-	# enrRes <- enrRes[,c('ID', 'pVal', 'logP', 'oddsRatio', 'tan', 'int', 'gsRatio', 'bgRatio', 'intGenes')]
 	return(enrRes)	
 }
 
@@ -143,7 +145,7 @@ hypergeoTestForGeneset2 <- function (query, refGMT, gspace, minGeneSet=10, ncore
 
 	if(length(query) == 0) stop('Query length is zero.')
 
-	exc <- which(sapply(refGMT, length) <= minGeneSet)
+	exc <- which(sapply(refGMT, length) < minGeneSet)
 	if(length(exc) != 0) {
 		if(length(exc) <= 5) {
 			mesg <- paste('Ref set no', paste(exc, collapse=', '), 'had less than 10 genes and were excluded.')
@@ -151,7 +153,7 @@ hypergeoTestForGeneset2 <- function (query, refGMT, gspace, minGeneSet=10, ncore
 			mesg <- paste(length(exc), 'entries in refGMT had less than 10 genes and were excluded.')
 		}
 		warning(mesg)
-		refGMT <- refGMT[which(sapply(refGMT, length) > minGeneSet)]
+		refGMT <- refGMT[which(sapply(refGMT, length) >= minGeneSet)]
 	}
 	if(length(refGMT) == 0) stop('Length of refGMT after filtering is zero.')
 
@@ -171,7 +173,6 @@ hypergeoTestForGeneset2 <- function (query, refGMT, gspace, minGeneSet=10, ncore
 		return(data.table(pVal = pVal, oddsRatio=odds, tan = jacc, int=q, gsRatio=gs.ratio, bgRatio=bg.ratio, intGenes=list(I)))
 	}, mc.cores = ncore)
 
-	# enrRes = do.call(rbind, enrRes)
 	enrRes <- rbindlist(enrRes)
 	enrRes$ID <- names(refGMT)
 	enrRes$logP <- -log10(enrRes$pVal)
@@ -182,7 +183,5 @@ hypergeoTestForGeneset2 <- function (query, refGMT, gspace, minGeneSet=10, ncore
 	enrRes$logQ <- -log10(enrRes$qVal)
 
 	enrRes <- enrRes[,c('ID','pVal','logP','qVal','logQ','oddsRatio','tan','int','gsRatio','bgRatio','intGenes')]
-	
-	# enrRes <- enrRes[,c('ID', 'pVal', 'logP', 'oddsRatio', 'tan', 'int', 'gsRatio', 'bgRatio', 'intGenes')]
 	return(enrRes)
 }

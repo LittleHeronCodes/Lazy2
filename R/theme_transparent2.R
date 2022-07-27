@@ -39,7 +39,7 @@ theme_transparent <- function() {
 		legend.key = element_blank(), 
 		panel.grid.major = element_blank(), panel.grid.minor = element_blank(), 
 		panel.background = element_rect(fill = "transparent", colour = NA), panel.ontop = TRUE,
-		plot.background = element_rect(fill = "transparent",colour = NA),
+		plot.background = element_rect(fill = "transparent", colour = NA),
 		legend.background = element_rect(fill = "transparent", colour = NA), 
 		complete = FALSE)
 	.theme
