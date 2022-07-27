@@ -1,13 +1,13 @@
 Package: Lazy2
 Title: Lazy Package
-Version: 0.1.5.9001
+Version: 0.1.5.9002
 Authors@R: 
     person(given   = "littleheron",
            family  = "butorides",
            role    = c("aut", "cre"),
-           email   = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: Lazy package of custom functions for personal use.
+           email   = "ygyoon17@ewhain.net",
+           comment = c(ORCID = "0000-0003-0955-4344"))
+Description: Lazy package of custom functions for personal use in bioinformatic analyses.
 License: None
 Encoding: UTF-8
 LazyData: true

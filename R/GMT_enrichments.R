@@ -5,8 +5,8 @@
 #' 
 #' @param gmtfile GMT file path
 #' @param as.df Return as data frame?
-#' @param glist List of gene set. Should be un-nested level one named list.
-#' @param geneset_desc Description meta information for gene set. Either length one or same length vector as glist.
+#' @param genelist List of gene set. Should be un-nested level one named list.
+#' @param geneset_desc Description meta information for gene set. Either length one or a named vector of same length as glist.
 #' @return Gene set dataframe of 2 column or list
 #' @export
 #' @examples
@@ -32,12 +32,15 @@ readGMT <- function(gmtfile, as.df=FALSE) {
 #' @describeIn readGMT write gmt file for geneset list.
 #' @export
 
-writeGMT <- function(gmtfile, glist, geneset_desc='') {
-	if( !(is.list(glist) & all(sapply(glist,is.character))) ) {
-		stop('Check glist format. glist should be a one-level list of genesets.')
+writeGMT <- function(gmtfile, genelist, geneset_desc='') {
+	if( !(is.list(genelist) & all(sapply(genelist, is.character))) ) {
+		stop('Check genelist format. genelist should be a one-level list of genesets.')
+	}
+	if(length(names(geneset_desc)) != 0) {
+		geneset_desc <- geneset_desc[names(genelist)]
 	}
 
-	concat <- sapply(glist, function(v) paste(v, collapse='\t'))
+	concat <- sapply(genelist, function(v) paste(v, collapse='\t'))
 	out <- paste0(names(concat), '\t',geneset_desc,'\t', concat)
 
 	writeLines(out, con=gmtfile)
