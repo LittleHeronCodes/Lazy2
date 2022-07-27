@@ -3,33 +3,50 @@
 Custom functions from Lazy for personal use, now as a package!
 
 
-## Version 0.1.5 To Do
+## Version 0.1.6 To Do
 
 - [ ] Functions : `hypergeoTestForGeneset` : multiprocessing into option.
 - [x] Functions : `getEnrichmentFactor` : Fix total space for setA and setB.
 - [ ] Functions : `extractGeneList` : p value column into option. (Also check if column actually exists)
-- [x] Functions : `Gen_enrichment` : Fix background gene space.
+- [x] Functions : `Gen_enrichment` : Fix background gene 
 - [ ] Issues    : Pathway analysis gene space problem. Need to update gene space after removing pathways less than minimum gene space.
+- [x] Issues    :R version 4 compatibility check
+- [ ] Functions :ens2sym ??
+- [ ] Datasets  : Add mouse gene info
 
 
 ## Checklist before moving to 0.2.0
 
 Ver 0.2.0 is final backward incompatible change.
 
-- [ ] Test all functions vigorously.
+- [x] Test all functions vigorously.
 - [x] All functions used frequently in last two projects.
 - [x] Descriptions in all functions.
-- [ ] Read last reference article on releasing R package.
+- [x] Read last reference article on releasing R package.
 - [x] Read up on gitFlow. 
 
 
 ## Version 0.2 Ideas
 
-- [ ] R version 4 compatibility check
-- [ ] ens2sym ??
-- [ ] Datasets  : Add mouse gene info
 - [ ] Think about utilizing cpp codes for simple calculation function. --> speed trade-off potentially not worth it
 - [ ] Mathematical equations into help page. (if possible)
+
+
+## Note to Self
+
+* Be sure to run `DATASET.R` when adding new data.
+* Package must be rebuilt to update manuals.
+* Test build on local before deployment.
+* Reduce dependency.
+
+
+### Version Numbers
+
+**major.minor.patch.dev**
+
+- minor : function add, modify, new builds (manual updates)
+- patch : minor bug fix, function tweaks
+- dev : 9000. Indicating in development. 
 
 
 ---
@@ -65,21 +82,6 @@ install()
 # reload package
 reload(inst('Lazy2'))
 ```
-
-## Note to Self
-
-* Be sure to run `DATASET.R` when adding new data.
-* Test build on local before deployment.
-* Reduce dependency.
-
-### Version Numbers
-
-**major.minor.patch.dev**
-
-- minor : function add, modify, new builds (manual updates)
-- patch : minor bug fix, function tweaks
-- dev : 9000. Indicating in development. 
-
 
 ---
 
