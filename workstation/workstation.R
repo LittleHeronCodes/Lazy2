@@ -1,4 +1,40 @@
 
+
+## Functions to help draw plot
+getSize <- function(pt) {
+	# pt = draw(hp, heatmap_legend_side='left', merge=TRUE, padding = unit(c(2, 20, 2, 20), "mm"))
+	W = ceiling(convertX(sum(component_width(pt)  + unit(1,'mm')), 'in',valueOnly=TRUE))
+	H = ceiling(convertX(sum(component_height(pt) + unit(1,'mm')), 'in',valueOnly=TRUE))
+	return(c(W, H))
+}
+
+
+drawHeatmap_hgeo2 <- function(plotMat, colpal, cell_size=5,
+	colsplit=NULL, rowsplit=NULL, name='-log10Q',legend_dir='vertical', ha=NULL, ...) {
+	
+	colgap <- ifelse(!is.null(colsplit), rep(1.5,length(unique(colsplit))-1), 1)
+	rowgap <- ifelse(!is.null(rowsplit), rep(1.5,length(unique(rowsplit))-1), 1)
+	wmm <- cell_size * 1.1 * ncol(plotMat) + ifelse(!is.null(colsplit), sum(colgap), 0)
+	hmm <- cell_size * 1.0 * nrow(plotMat)
+	
+	# Draw heatmap
+	hp <- Heatmap(plotMat, name = name, col=colpal, bottom_annotation = ha,
+			row_names_gp=gpar(col='grey2'), column_names_gp=gpar(col='grey2'), column_names_rot = 60,
+			width = unit(wmm, 'mm'), height = unit(hmm, 'mm'),
+			column_split=colsplit, column_gap= unit(colgap, 'mm'),
+			row_split=rowsplit, row_gap= unit(rowgap, 'mm'),
+			rect_gp = gpar(col = "gray12", lty = 1, lwd = 0.2),
+			# cluster_rows = cluster, show_row_dend = cluster, show_row_names = TRUE,
+			cluster_columns = FALSE, show_column_dend = FALSE, show_column_names = TRUE,
+			border=TRUE, row_names_max_width = max_text_width( rownames(plotMat) ),
+			column_title_gp = gpar(size=11),
+			heatmap_legend_param=list(border=TRUE, direction=legend_dir),
+	...)
+	hp
+}
+
+
+
 tstatLS <- lapply(c(resultsLS.mm, resultsLS.ph), function(dff) {
 	dff <- dff[which(!is.na(dff$entGene)),]
 	dff$entGene = as.character(dff$entGene)

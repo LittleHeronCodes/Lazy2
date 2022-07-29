@@ -7,6 +7,7 @@
   - `refGMT[which(sapply(refGMT, length) > minGeneSet)]` --> `refGMT[which(sapply(refGMT, length) >= minGeneSet)]`
 - [v0.1.5.9002] Functions : `writeGMT` : Minor tweaks to check for `geneset_desc`, change variable `glist` to `genelist`.
 - [v0.1.5.9002] Style fix : `DESCRIPTION` : Added ORCID.
+- [v0.1.5.9002] Functions : `getOverlapDF` : Added option `unique_combn` to for output without duplicated combinations.
 
 ## Ver 0.1.4.9000 [2022.04.01]
 - [v0.1.4.9000] Style fix : Package startup message in `zzz.R`. Show version number among other things.

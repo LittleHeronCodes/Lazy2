@@ -114,6 +114,7 @@ geneCount <- function(geneList) { sapply(geneList, function(ls) sapply(ls, lengt
 #' Metric : hypergeometric test p value, enrichment factor, tanimoto coef.
 #' @param gls Unnested list of genes
 #' @param tgls List of gene space for each entry in gls
+#' @param unique_combn Only return unique combination (no replicates) Default FALSE, will be set to TRUE in later versions
 #' @return dataframe
 #' @export
 #' @examples
@@ -122,8 +123,16 @@ geneCount <- function(geneList) { sapply(geneList, function(ls) sapply(ls, lengt
 #' pairm <- reshape2::acast(pairdf, ix1~ix2, value.var='ef')
 #' }
 
-getOverlapDF <- function(gls, tgls) {
-	pairdf <- expand.grid(names(gls), names(gls), stringsAsFactors=FALSE)
+getOverlapDF <- function(gls, tgls, unique_combn=FALSE) {
+
+	if(unique_combn) {
+		pairdf <- data.frame(t(combn(names(gls), 2)))
+		colnames(pairdf) <- c('Var1','Var2')
+	} else {
+		pairdf <- expand.grid(names(gls), names(gls), stringsAsFactors=FALSE)
+		pairdf <- pairdf[order(factor(pairdf$Var1, levels = names(gls))),]
+	}
+
 	LS <- apply(pairdf, 1, function(v) {
 		ix1 = as.character(v[1])
 		ix2 = as.character(v[2])
@@ -135,7 +144,7 @@ getOverlapDF <- function(gls, tgls) {
 		tan = tanimotoCoef(setA, setB)
 		data.frame(ix1 = ix1, ix2 = ix2, hgeo = hgeo, ef = eff, tan=tan)
 		})
-	pairdf <- do.call(rbind, LS)	
+	pairdf <- do.call(rbind, LS)
 }
 
 
