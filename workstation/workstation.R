@@ -9,13 +9,14 @@ getSize <- function(pt) {
 }
 
 
-drawHeatmap_hgeo2 <- function(plotMat, colpal, cell_size=5,
-	colsplit=NULL, rowsplit=NULL, name='-log10Q',legend_dir='vertical', ha=NULL, ...) {
+
+drawHeatmap_hgeo2 <- function(plotMat, colpal, cell_size=4.9, asp=1.0,
+	colsplit=NULL, rowsplit=NULL, name='-log10Q', legend_dir='vertical', ha=NULL, ...) {
 	
 	colgap <- ifelse(!is.null(colsplit), rep(1.5,length(unique(colsplit))-1), 1)
 	rowgap <- ifelse(!is.null(rowsplit), rep(1.5,length(unique(rowsplit))-1), 1)
-	wmm <- cell_size * 1.1 * ncol(plotMat) + ifelse(!is.null(colsplit), sum(colgap), 0)
-	hmm <- cell_size * 1.0 * nrow(plotMat)
+	wmm <- cell_size * 1.0 * ncol(plotMat) + ifelse(!is.null(colsplit), sum(colgap), 0)
+	hmm <- cell_size * asp * nrow(plotMat) + ifelse(!is.null(rowsplit), sum(rowgap), 0)
 	
 	# Draw heatmap
 	hp <- Heatmap(plotMat, name = name, col=colpal, bottom_annotation = ha,
@@ -32,6 +33,9 @@ drawHeatmap_hgeo2 <- function(plotMat, colpal, cell_size=5,
 	...)
 	hp
 }
+
+
+
 
 
 

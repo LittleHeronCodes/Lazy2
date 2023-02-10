@@ -5,7 +5,8 @@ Custom functions from Lazy for personal use, now as a package!
 
 ## Version 0.1.6 To Do
 
-- [ ] Functions : `hypergeoTestForGeneset` : multiprocessing into option.
+- [ ] ~Functions : `hypergeoTestForGeneset` : multiprocessing into option.~
+- [x] Functions : `hypergeoTestForGeneset` : Faster computing.
 - [x] Functions : `getEnrichmentFactor` : Fix total space for setA and setB.
 - [ ] Functions : `extractGeneList` : p value column into option. (Also check if column actually exists)
 - [x] Functions : `Gen_enrichment` : Fix background gene 
@@ -13,6 +14,7 @@ Custom functions from Lazy for personal use, now as a package!
 - [x] Issues    :R version 4 compatibility check
 - [ ] Functions :ens2sym ??
 - [ ] Datasets  : Add mouse gene info
+- [ ] Datasets  : Update LazygeneInfo
 
 
 ## Checklist before moving to 0.2.0

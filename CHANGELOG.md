@@ -1,6 +1,13 @@
 # Changelog
 
-## Ver 0.1.5.9002 [2022.07.27]
+## Ver 0.1.6.9000 [2023.02.10]
+- [v0.1.6.9000] General   : Removed some commented out codes.
+- [v0.1.6.9000] Functions : `hypergeoTestForGeneset` : vectorized calculations to cut down on computing time.
+- [v0.1.6.9000] Functions : Removed `hypergeoTestForGeneset2`.
+  - Accordingly, `Gen_enrichment` no longer uses `hypergeoTestForGeneset2` and will instead give each signature in gene list a thread on given ncore option.
+- [v0.1.6.9000] Functions : Simpler `theme_transparent3`.
+
+## Ver 0.1.5.9000 [2022.07.27]
 - [v0.1.5.9000] Functions : `Gen_enrichment` : Fix background gene space.
 - [v0.1.5.9000] Functions : `getEnrichmentFactor` : Fix total space for setA and setB.
 - [v0.1.5.9001] Functions : `hypergeoTestForGeneset` : minimum gene set filtering  

@@ -136,7 +136,7 @@ plotEnrichment2 <- function(gset, stats, nes, qv, gseaParam=1, mtitle=NULL, ytit
 
 
 #' @describeIn plotEnrichment2
-#' Using multiprocessing
+#' ggplot theme used in plotEnrichment2
 #' @export
 
 theme_common_gsea <- function(base_size=7) {
