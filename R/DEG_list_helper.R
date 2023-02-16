@@ -34,7 +34,7 @@ ent2sym <- function(genes, geneMap=NULL) {
 #' @param qco adjusted p value cut-offs. Used to filter adj.P.Val column.
 #' @param cnt DEG count constrains (not used).
 #' @param remove_ambi Remove genes both in up and down?
-#' @return 
+#' @return Nested list of DEGs
 #' @export 
 
 extractGeneList <- function(resultsLS, fco, qco, cnt=NULL, remove_ambi=FALSE) {
@@ -72,7 +72,7 @@ extractGeneList <- function(resultsLS, fco, qco, cnt=NULL, remove_ambi=FALSE) {
 #'
 #' Remove DEGs if they're both in Down and Up.
 #' @param geneList gene list
-#' @return 
+#' @return gene list with ambiguous genes removed
 #' @export
 #' @examples
 #' \dontrun{
@@ -80,7 +80,6 @@ extractGeneList <- function(resultsLS, fco, qco, cnt=NULL, remove_ambi=FALSE) {
 #' }
 
 removeAmbigDEGs <- function(geneList) {
-	require(purrr)
 	ambi <- map2(geneList$up, geneList$dn, function(x,y) intersect(x,y) )
 	geneList$up <- map2(geneList$up, ambi, function(x,y) setdiff(x,y) )
 	geneList$dn <- map2(geneList$dn, ambi, function(x,y) setdiff(x,y) )
@@ -92,7 +91,6 @@ removeAmbigDEGs <- function(geneList) {
 #' Count number of genes in geneList
 #' 
 #' Lazy function for gene number for geneList
-#' 
 #' @param geneList Nested DEG list. See example for gene list structure. 
 #' @export
 #' @examples
@@ -114,6 +112,7 @@ geneCount <- function(geneList) { sapply(geneList, function(ls) sapply(ls, lengt
 #' Metric : hypergeometric test p value, enrichment factor, tanimoto coef.
 #' @param gls Unnested list of genes
 #' @param tgls List of gene space for each entry in gls
+#' @param unique_combn Only return unique combination (no replicates) Default FALSE, will be set to TRUE in later versions
 #' @return dataframe
 #' @export
 #' @examples
@@ -122,8 +121,16 @@ geneCount <- function(geneList) { sapply(geneList, function(ls) sapply(ls, lengt
 #' pairm <- reshape2::acast(pairdf, ix1~ix2, value.var='ef')
 #' }
 
-getOverlapDF <- function(gls, tgls) {
-	pairdf <- expand.grid(names(gls), names(gls), stringsAsFactors=FALSE)
+getOverlapDF <- function(gls, tgls, unique_combn=FALSE) {
+
+	if(unique_combn) {
+		pairdf <- data.frame(t(combn(names(gls), 2)))
+		colnames(pairdf) <- c('Var1','Var2')
+	} else {
+		pairdf <- expand.grid(names(gls), names(gls), stringsAsFactors=FALSE)
+		pairdf <- pairdf[order(factor(pairdf$Var1, levels = names(gls))),]
+	}
+
 	LS <- apply(pairdf, 1, function(v) {
 		ix1 = as.character(v[1])
 		ix2 = as.character(v[2])
@@ -135,7 +142,7 @@ getOverlapDF <- function(gls, tgls) {
 		tan = tanimotoCoef(setA, setB)
 		data.frame(ix1 = ix1, ix2 = ix2, hgeo = hgeo, ef = eff, tan=tan)
 		})
-	pairdf <- do.call(rbind, LS)	
+	pairdf <- do.call(rbind, LS)
 }
 
 
@@ -146,7 +153,9 @@ getOverlapDF <- function(gls, tgls) {
 #' @param resultDF result dataframe generated from limma or DEseq2. If DESeq2, column name should be 'adj.P.Val','logFC','AveExpr'
 #' @param qco adjusted p value cut off
 #' @param fco fold change cut off
-#' @param ttl_pre main title prefix.
+#' @param ttl_pre main title prefix
+#' @param xlim x-axis limit
+#' @param ylim y-axis limit
 #' @return plot
 #' @export
 #' @examples

@@ -26,9 +26,11 @@ hypergeoTestForGeneset2(
 \item{minGeneSet}{minimum size of gene set. This is used to filter refGMT. Default 10}
 
 \item{ef.psc}{pseudocount when calculating enrichment factor (oddsRatio). Default 0}
+
+\item{ncore}{number of cores used in hypergeoTestForGeneset2 (soon to be removed)}
 }
 \value{
-data frame
+Data frame of gene set analysis results
 \describe{
 	  \item{pVal}{: hypergeometric test p values from phyper}
 	  \item{logP}{: -log10(p value)}
@@ -44,13 +46,11 @@ Gene list hypergeometric test against gmt format list of gene set. Can be used f
 }
 \section{Functions}{
 \itemize{
-\item \code{hypergeoTestForGeneset2}: Using multiprocessing
-}}
+\item \code{hypergeoTestForGeneset2()}: Using multiprocessing (Deprecated)
 
+}}
 \examples{
-\dontrun{
 gset = c('A','B','C')
 glist = list(ID1 = LETTERS[1:10], ID2 = LETTERS[4:25])
 hypergeoTestForGeneset(gset, glist, LETTERS)
-}
 }

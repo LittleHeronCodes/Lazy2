@@ -11,7 +11,7 @@ tanimotoCoef(A, B, T = NULL)
 
 \item{B}{set input2 as vectors}
 
-\item{T}{background space (if given, will intersect set before calculating)}
+\item{T}{background space (if given, A and B are intersected with T before calculating, causing the function to run slower)}
 }
 \description{
 Calculates Tanimoto coefficients (Jaccard Index) given two set vectors.

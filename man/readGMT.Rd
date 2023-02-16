@@ -7,16 +7,16 @@
 \usage{
 readGMT(gmtfile, as.df = FALSE)
 
-writeGMT(gmtfile, glist, geneset_desc = "")
+writeGMT(gmtfile, genelist, geneset_desc = "")
 }
 \arguments{
 \item{gmtfile}{GMT file path}
 
 \item{as.df}{Return as data frame?}
 
-\item{glist}{List of gene set. Should be un-nested level one named list.}
+\item{genelist}{List of gene set. Should be un-nested level one named list.}
 
-\item{geneset_desc}{Description meta information for gene set. Either length one or same length vector as glist.}
+\item{geneset_desc}{Description meta information for gene set. Either length one or a named vector of same length as glist.}
 }
 \value{
 Gene set dataframe of 2 column or list
@@ -27,9 +27,9 @@ Each line should contain one geneset, delimited by tab. Genes should start from 
 }
 \section{Functions}{
 \itemize{
-\item \code{writeGMT}: write gmt file for geneset list.
-}}
+\item \code{writeGMT()}: write gmt file for geneset list.
 
+}}
 \examples{
 \dontrun{
 readGMT('file/path.gmt')

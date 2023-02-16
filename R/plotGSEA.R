@@ -1,6 +1,6 @@
 #' plotEnrichment2
 #'
-#' Plot running score for GSEA enrichment plot. Function modified from plotEnrichment.
+#' Plot running score for GSEA enrichment plot. Function modified from plotEnrichment function in fgsea package.
 #' @param gset gene set to calculate enrichment in character vector.
 #' @param stats gene level statistics. This should be a named vector where names match gene ids in gset.
 #' @param nes NES provided for annotation. Runs fgsea if not provided.
@@ -12,17 +12,18 @@
 #' @param base_size font base size. default 7
 #' @param line.col line colour for GSEA running score.
 #' @param lwd line width for GSEA running score.
+#' @param ylims y-axis limits.
 #' @param draw draw plot. default TRUE
 #' @param statbar show statistics tick at bottom of plot.
 #' @return enrichment plot
+#' @import grid
+#' @importFrom fgsea fgsea calcGseaStat
 #' @export
 
 ## GSEA plot
 plotEnrichment2 <- function(gset, stats, nes, qv, gseaParam=1, mtitle=NULL, ytitle='',
 	ticksSize=0.4, base_size=7, line.col='green', lwd=2, ylims=NULL, draw=TRUE, statbar=FALSE) {
 
-	require(gtable)
-	require(fgsea)
 	set.seed(1234)
 
 	if(!any(gset %in% names(stats))) {
@@ -136,7 +137,7 @@ plotEnrichment2 <- function(gset, stats, nes, qv, gseaParam=1, mtitle=NULL, ytit
 
 
 #' @describeIn plotEnrichment2
-#' Using multiprocessing
+#' ggplot theme used in plotEnrichment2
 #' @export
 
 theme_common_gsea <- function(base_size=7) {

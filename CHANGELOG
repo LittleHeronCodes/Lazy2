@@ -1,12 +1,21 @@
 # Changelog
 
-## Ver 0.1.5.9002 [2022.07.27]
+## Ver 0.1.6.9000 [2023.02.16]
+- [v0.1.6.9000] General   : Removed some commented out codes.
+- [v0.1.6.9000] Functions : `hypergeoTestForGeneset` : vectorized calculations to cut down on computing time.
+- [v0.1.6.9000] Functions : Removed `hypergeoTestForGeneset2`.
+  - Accordingly, `Gen_enrichment` no longer uses `hypergeoTestForGeneset2` and will instead give each signature in gene list a thread on given ncore option.
+- [v0.1.6.9000] Functions : Simpler `theme_transparent3`.
+- [v0.1.6.9001] General   : Package build check and problem fixes with devtools. (Variables, function import dependency fixes)
+
+## Ver 0.1.5.9000 [2022.07.27]
 - [v0.1.5.9000] Functions : `Gen_enrichment` : Fix background gene space.
 - [v0.1.5.9000] Functions : `getEnrichmentFactor` : Fix total space for setA and setB.
 - [v0.1.5.9001] Functions : `hypergeoTestForGeneset` : minimum gene set filtering  
   - `refGMT[which(sapply(refGMT, length) > minGeneSet)]` --> `refGMT[which(sapply(refGMT, length) >= minGeneSet)]`
 - [v0.1.5.9002] Functions : `writeGMT` : Minor tweaks to check for `geneset_desc`, change variable `glist` to `genelist`.
 - [v0.1.5.9002] Style fix : `DESCRIPTION` : Added ORCID.
+- [v0.1.5.9002] Functions : `getOverlapDF` : Added option `unique_combn` to for output without duplicated combinations.
 
 ## Ver 0.1.4.9000 [2022.04.01]
 - [v0.1.4.9000] Style fix : Package startup message in `zzz.R`. Show version number among other things.
