@@ -56,6 +56,7 @@ writeGMT <- function(gmtfile, genelist, geneset_desc='') {
 #' @param gspace background gene space. Should contain all genes in query.
 #' @param minGeneSet minimum size of gene set. This is used to filter refGMT. Default 10
 #' @param ef.psc pseudocount when calculating enrichment factor (oddsRatio). Default 0
+#' @param ncore number of cores used in hypergeoTestForGeneset2 (soon to be removed)
 #' @return Data frame of gene set analysis results
 #' \describe{
 #' 	  \item{pVal}{: hypergeometric test p values from phyper}
@@ -73,7 +74,6 @@ writeGMT <- function(gmtfile, genelist, geneset_desc='') {
 #' hypergeoTestForGeneset(gset, glist, LETTERS)
 
 hypergeoTestForGeneset <- function(query, refGMT, gspace, minGeneSet=10, ef.psc=0) {
-	require(data.table)
 
 	# match gene space
 	if(!all(query %in% gspace)) {
@@ -134,12 +134,11 @@ hypergeoTestForGeneset <- function(query, refGMT, gspace, minGeneSet=10, ef.psc=
 
 #' @describeIn hypergeoTestForGeneset
 #' Using multiprocessing (Deprecated)
+#' @importFrom data.table rbindlist
 #' @export
 
 hypergeoTestForGeneset2 <- function (query, refGMT, gspace, minGeneSet=10, ncore = 1, ef.psc=0) {
 	.Deprecated("hypergeoTestForGeneset")
-	require(parallel)
-	require(data.table)
 
 	if(!all(query %in% gspace)) {
 		stop(paste(length(setdiff(query, gspace)),'Query items were found outside of background space. Check inputs.'))
@@ -163,7 +162,7 @@ hypergeoTestForGeneset2 <- function (query, refGMT, gspace, minGeneSet=10, ncore
 
 	N <- length(gspace)
 	k <- length(query)
-	enrRes <- parallel::mclapply(refGMT, function(refgenes) {
+	enrRes <- mclapply(refGMT, function(refgenes) {
 		q <- length(intersect(refgenes, query))
 		m <- length(intersect(gspace, refgenes))
 		I <- intersect(refgenes, query)

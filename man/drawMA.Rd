@@ -16,7 +16,11 @@ drawVol(resultDF, qco, fco, ttl_pre, xlim = NULL)
 
 \item{fco}{fold change cut off}
 
-\item{ttl_pre}{main title prefix.}
+\item{ttl_pre}{main title prefix}
+
+\item{ylim}{y-axis limit}
+
+\item{xlim}{x-axis limit}
 }
 \value{
 plot
@@ -26,9 +30,9 @@ Draw MA plot from resultDF generated from limma (data.frame format). DESeq2 resu
 }
 \section{Functions}{
 \itemize{
-\item \code{drawVol}: Draw volcano plot
-}}
+\item \code{drawVol()}: Draw volcano plot
 
+}}
 \examples{
 \dontrun{
 drawMA(resultDF, qco=0.1, fco=2.0, ttl_pre='title')

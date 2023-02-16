@@ -11,7 +11,6 @@
 #' @export
 
 Gen_enrichment2 <- function(glist, refgmt, tglist, minGeneSet=10, ncore=1, ef.psc=0) {
-	require(parallel)
 
 	bgspace <- unique(unlist(refgmt))
 	glist <- lapply(glist, function(gg) intersect(gg, bgspace))
@@ -35,13 +34,15 @@ Gen_enrichment2 <- function(glist, refgmt, tglist, minGeneSet=10, ncore=1, ef.ps
 #' @param val.col Column to output.
 #' @param log Should the output be log10 transformed? (used if p value is input)
 #' @return List of enricher Object: up, down
+#' @importFrom dplyr rename
+#' @importFrom reshape2 acast
 #' @export
 
 
 enrobj2Matrix <- function(enrobj, val.col='pvalue', log=TRUE) {
 	LS <- lapply(names(enrobj), function(set) {
 		dff <- data.frame(enrobj[[set]])
-		if('Description' %in% names(dff)) dff <- dff %>% dplyr::rename(termID=ID, ID=Description)
+		if('Description' %in% names(dff)) dff <- dff %>% dplyr::rename("termID"="ID", "ID"="Description")
 		dff$set <- set
 		dff <- dff[order(dff$set),]
 		return(dff)
@@ -54,7 +55,7 @@ enrobj2Matrix <- function(enrobj, val.col='pvalue', log=TRUE) {
 	if(log & is_log) cat('val.col seems to already be in log values.\n'); log <- FALSE
 	if(log & !is_log) {
 		hmplot$logV <- -log10(hmplot[,val.col])
-		plotMat <- reshape2::acast(hmplot, ID~set, value.var=logV, fill = NA)
+		plotMat <- reshape2::acast(hmplot, ID~set, value.var="logV", fill = NA)
 	}
 
 	if(!log) plotMat <- reshape2::acast(hmplot, ID~set, value.var=val.col, fill = NA)

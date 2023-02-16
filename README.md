@@ -56,9 +56,11 @@ Ver 0.2.0 is final backward incompatible change.
 ## Testing Build
 
 ```r
-getwd()	#'path/to/alt/RLib'
+getwd()	#'path/to/alt/RLib/Lazy2'
 library(devtools)
-build('Lazy2')
+build()
+document()
+check()
 ```
 
 ## Installation Guide

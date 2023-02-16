@@ -4,12 +4,14 @@
 \alias{getOverlapDF}
 \title{Get pairwise overlap significance for a list}
 \usage{
-getOverlapDF(gls, tgls)
+getOverlapDF(gls, tgls, unique_combn = FALSE)
 }
 \arguments{
 \item{gls}{Unnested list of genes}
 
 \item{tgls}{List of gene space for each entry in gls}
+
+\item{unique_combn}{Only return unique combination (no replicates) Default FALSE, will be set to TRUE in later versions}
 }
 \value{
 dataframe

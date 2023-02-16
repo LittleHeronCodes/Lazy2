@@ -10,7 +10,7 @@ removeAmbigDEGs(geneList)
 \item{geneList}{gene list}
 }
 \value{
-
+gene list with ambiguous genes removed
 }
 \description{
 Remove DEGs if they're both in Down and Up.

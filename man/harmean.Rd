@@ -8,6 +8,8 @@ harmean(v, ...)
 }
 \arguments{
 \item{v}{numeric vector}
+
+\item{...}{further arguments to be passed to or from methods}
 }
 \description{
 Calculate harmonic mean. Harmonic means are often used to calculate means of p-values.

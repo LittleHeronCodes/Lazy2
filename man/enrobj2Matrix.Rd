@@ -11,7 +11,7 @@ enrobj2Matrix(enrobj, val.col = "pvalue", log = TRUE)
 
 \item{val.col}{Column to output.}
 
-\item{log}{Log transform? (used if p value is outputted)}
+\item{log}{Should the output be log10 transformed? (used if p value is input)}
 }
 \value{
 List of enricher Object: up, down

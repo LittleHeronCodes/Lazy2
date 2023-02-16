@@ -86,6 +86,7 @@ hypergeoTest <- function(query, reference, bgspace) {
 #'
 #' Calculate harmonic mean. Harmonic means are often used to calculate means of p-values.
 #' @param v numeric vector
+#' @param ... further arguments to be passed to or from methods
 #' @export
 #' @examples
 #' v <- seq(0.01,.99, .01)

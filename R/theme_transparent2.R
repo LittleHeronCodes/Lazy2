@@ -2,7 +2,10 @@
 #'
 #' Theme for transparent ggplot figures. function adopts from theme_grey.
 #' @param base_size font base size. default 12
-#' @param x_angle rotate x labels
+#' @param base_family base font family.
+#' @param base_line_size base line size. default base_size / 22
+#' @param base_rect_size base rectangle size. default base_size / 22
+#' @return ggplot theme
 #' @export
 #' @examples
 #' \dontrun{

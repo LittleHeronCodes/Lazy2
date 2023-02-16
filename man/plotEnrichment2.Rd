@@ -47,6 +47,8 @@ theme_common_gsea(base_size = 7)
 
 \item{lwd}{line width for GSEA running score.}
 
+\item{ylims}{y-axis limits.}
+
 \item{draw}{draw plot. default TRUE}
 
 \item{statbar}{show statistics tick at bottom of plot.}
@@ -55,10 +57,10 @@ theme_common_gsea(base_size = 7)
 enrichment plot
 }
 \description{
-Plot running score for GSEA enrichment plot. Function modified from plotEnrichment.
+Plot running score for GSEA enrichment plot. Function modified from plotEnrichment function in fgsea package.
 }
 \section{Functions}{
 \itemize{
-\item \code{theme_common_gsea}: Using multiprocessing
-}}
+\item \code{theme_common_gsea()}: ggplot theme used in plotEnrichment2
 
+}}
