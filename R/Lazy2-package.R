@@ -4,10 +4,10 @@
 #' @import ggplot2
 #' @import graphics
 #' @import stats
+#' @import magrittr
 #' @importFrom data.table data.table
 #' @importFrom utils combn packageDescription stack
 #' @importFrom purrr map2
-#' @importFrom magrittr '%>%'
 #' @importFrom parallel mclapply
 
 #' @keywords internal
