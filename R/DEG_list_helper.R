@@ -53,7 +53,7 @@ extractGeneList <- function(resultsLS, fco, qco, cnt=NULL, remove_ambi=FALSE) {
 	geneList <- list(up = list(), dn = list(), to=list())
 	for(aid in names(resultsLS)) {
 		resultDF.f <- resultsLS[[aid]]
-		resultDF.f <- resultDF.f[which(!is.na(resutlDF.f$entGene)),]
+		resultDF.f <- resultDF.f[which(!is.na(resultDF.f$entGene)),]
 		# resultDF.f <- subset(resultDF.f, !is.na(entGene) )
 		# resultDF.f <- resultsLS[[aid]] %>% filter( !is.na(entGene) )
 
