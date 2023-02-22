@@ -10,7 +10,7 @@
 #' @return List of enricher Object: up, down
 #' @export
 
-Gen_enrichment2 <- function(glist, refgmt, tglist, minGeneSet=10, ncore=1, ef.psc=0) {
+Gen_enrichment <- function(glist, refgmt, tglist, minGeneSet=10, ncore=1, ef.psc=0) {
 
 	bgspace <- unique(unlist(refgmt))
 	glist <- lapply(glist, function(gg) intersect(gg, bgspace))
