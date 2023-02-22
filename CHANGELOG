@@ -3,10 +3,12 @@
 ## Ver 0.1.6.9000 [2023.02.16]
 - [v0.1.6.9000] General   : Removed some commented out codes.
 - [v0.1.6.9000] Functions : `hypergeoTestForGeneset` : vectorized calculations to cut down on computing time.
-- [v0.1.6.9000] Functions : Removed `hypergeoTestForGeneset2`.
+- [v0.1.6.9000] Functions : Deprecation warning for `hypergeoTestForGeneset2`.
   - Accordingly, `Gen_enrichment` no longer uses `hypergeoTestForGeneset2` and will instead give each signature in gene list a thread on given ncore option.
 - [v0.1.6.9000] Functions : Simpler `theme_transparent3`.
 - [v0.1.6.9001] General   : Package build check and problem fixes with devtools. (Variables, function import dependency fixes)
+- [v0.1.6.9002] General   : Piping fix.
+- [v0.1.6.9002] Functions : `Gen_enrichment` function..
 
 ## Ver 0.1.5.9000 [2022.07.27]
 - [v0.1.5.9000] Functions : `Gen_enrichment` : Fix background gene space.
