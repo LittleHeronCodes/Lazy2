@@ -9,7 +9,7 @@
 Lazy package of custom functions for personal use in bioinformatic analyses.
 }
 \author{
-\strong{Maintainer}: littleheron butorides \email{ygyoon17@ewhain.net} (\href{https://orcid.org/0000-0003-0955-4344}{ORCID})
+\strong{Maintainer}: Yeogha Yoon \email{ygyoon17@ewhain.net} (\href{https://orcid.org/0000-0003-0955-4344}{ORCID})
 
 }
 \keyword{internal}

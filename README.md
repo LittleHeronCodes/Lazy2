@@ -3,18 +3,18 @@
 Custom functions from Lazy for personal use, now as a package!
 
 
-## Version 0.1.6 To Do
+## Version 0.2.0 To Do
 
-- [ ] ~Functions : `hypergeoTestForGeneset` : multiprocessing into option.~
 - [x] Functions : `hypergeoTestForGeneset` : Faster computing.
 - [x] Functions : `getEnrichmentFactor` : Fix total space for setA and setB.
 - [ ] Functions : `extractGeneList` : p value column into option. (Also check if column actually exists)
 - [x] Functions : `Gen_enrichment` : Fix background gene 
 - [ ] Issues    : Pathway analysis gene space problem. Need to update gene space after removing pathways less than minimum gene space.
-- [x] Issues    :R version 4 compatibility check
-- [ ] Functions :ens2sym ??
+- [x] Issues    : R version 4 compatibility check
+- [ ] Functions : ens2sym
 - [ ] Datasets  : Add mouse gene info
 - [ ] Datasets  : Update LazygeneInfo
+- [ ] Functions : ent2sym -- fix empty strings in entrez id vector registering as "not entrez"
 
 
 ## Checklist before moving to 0.2.0
