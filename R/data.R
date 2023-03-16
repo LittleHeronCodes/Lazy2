@@ -15,10 +15,9 @@
 #' 	 \item{ensembl}{Ensembl ID}
 #' 	 \item{gene_type}{gene type}
 #' }
-#' 
+#'
 #' @keywords genes
 #' @source \href{https://www.gencodegenes.org/human/}{Gencode Metadata}
 #' @examples
 #' data(LazygeneInfo)
 "LazygeneInfo"
-
