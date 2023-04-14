@@ -11,6 +11,7 @@
 #' @export
 
 Gen_enrichment <- function(glist, refgmt, tglist, minGeneSet = 10, ncore = 1, ef.psc = 0) {
+    # .Deprecated("glist_enrichment")
     bgspace <- unique(unlist(refgmt))
     glist <- lapply(glist, function(gg) intersect(gg, bgspace))
     tglist <- lapply(tglist, function(gg) intersect(gg, bgspace))
