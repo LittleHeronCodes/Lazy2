@@ -17,7 +17,7 @@ tanimotoCoef(A, B, T = NULL)
 Calculates Tanimoto coefficients (Jaccard Index) given two set vectors.
 }
 \examples{
-A = c(1:5)
-B = c(3:7)
+A <- c(1:5)
+B <- c(3:7)
 tanimotoCoef(A, B)
 }

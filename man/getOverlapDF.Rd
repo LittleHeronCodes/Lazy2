@@ -17,12 +17,12 @@ getOverlapDF(gls, tgls, unique_combn = FALSE)
 dataframe
 }
 \description{
-Calculate genelist set overlap (replaces pairsOverlap). 
+Calculate genelist set overlap (replaces pairsOverlap).
 Metric : hypergeometric test p value, enrichment factor, tanimoto coef.
 }
 \examples{
 \dontrun{
 pairdf <- getOverlapDF(geneList$up, geneList$to)
-pairm <- reshape2::acast(pairdf, ix1~ix2, value.var='ef')
+pairm <- reshape2::acast(pairdf, ix1 ~ ix2, value.var = "ef")
 }
 }

@@ -50,7 +50,7 @@ Gene list hypergeometric test against gmt format list of gene set. Can be used f
 
 }}
 \examples{
-gset = c('A','B','C')
-glist = list(ID1 = LETTERS[1:10], ID2 = LETTERS[4:25])
+gset <- c("A", "B", "C")
+glist <- list(ID1 = LETTERS[1:10], ID2 = LETTERS[4:25])
 hypergeoTestForGeneset(gset, glist, LETTERS)
 }

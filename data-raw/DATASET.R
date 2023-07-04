@@ -6,6 +6,7 @@ library(usethis)
 
 ## Gene Info processing from HGNC raw file
 ## Downloaded from HGNC genenames.org/download/custom
+# TODO: update this
 hgnc <- fread('data-raw/HGNC_Gene_Info_20211112.csv', quote='')
 colnames(hgnc) <- gsub(' ', '_', colnames(hgnc))
 colnames(hgnc) <- gsub('\\(supplied_by.*\\)', '', colnames(hgnc))
@@ -20,6 +21,7 @@ geneInfo <- hgnc %>%
 
 LazygeneInfo <- as.data.frame(geneInfo)
 
+# IMPORTANT! run this line before building
 usethis::use_data(LazygeneInfo, overwrite=TRUE)
 
 #   entrez hgnc_id                          hgnc_gene hgnc_symbol           gene_type
@@ -31,3 +33,5 @@ usethis::use_data(LazygeneInfo, overwrite=TRUE)
 # 6     13      17          arylacetamide deacetylase       AADAC protein-coding gene
 
 
+## Mouse gene info
+# TODO: add mouse gene info from gtf file as loadable data

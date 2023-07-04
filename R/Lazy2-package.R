@@ -16,3 +16,6 @@
 ## usethis namespace: start
 ## usethis namespace: end
 NULL
+
+# global variable definition for ggplot used in plotEnrichment2
+globalVariables(c("x_values", "y_values"))
