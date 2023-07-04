@@ -1,5 +1,10 @@
 # Changelog
 
+## Ver 0.1.7.9000 [2023.07.04]
+- [v0.1.7.9000] General   : Fixed R CMD check returning the 'no visible binding' note for ggplot inputs.
+- [v0.1.7.9000] Functions : `ent2sym` no longer register empty strings in entrez id vector as "not entrez".
+
+
 ## Ver 0.1.6.9000 [2023.02.16]
 - [v0.1.6.9000] General   : Removed some commented out codes.
 - [v0.1.6.9000] Functions : `hypergeoTestForGeneset` : vectorized calculations to cut down on computing time.

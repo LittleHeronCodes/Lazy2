@@ -16,6 +16,6 @@ no of unique values in x
 count unique values in a vector
 }
 \examples{
-a = c(1,2,3,NA,6,NA,7,7,1)
+a <- c(1, 2, 3, NA, 6, NA, 7, 7, 1)
 countUni(a)
 }

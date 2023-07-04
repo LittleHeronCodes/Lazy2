@@ -16,7 +16,7 @@ ent2sym <- function(genes, geneMap = NULL) {
     if (is.null(geneMap)) geneMap <- Lazy2::LazygeneInfo
     genes <- as.character(genes)
 
-    if (all(grepl("^[0-9]+$", genes[which(!is.na(genes))]))) {
+    if (all(grepl("^[0-9]+$", genes[which(!is.na(genes) & genes != "")]))) {
         out <- geneMap$hgnc_symbol[match(genes, geneMap$entrez)]
     } else {
         out <- geneMap$entrez[match(genes, geneMap$hgnc_symbol)]

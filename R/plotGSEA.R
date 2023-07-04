@@ -43,7 +43,7 @@ plotEnrichment2 <- function(gset, stats, nes, qv, gseaParam = 1, mtitle = NULL, 
     n <- length(statsAdj)
     xs <- as.vector(rbind(pathway - 1, pathway))
     ys <- as.vector(rbind(bottoms, tops))
-    toPlot <- data.frame(x = c(0, xs, n + 1), y = c(0, ys, 0))
+    toPlot <- data.frame(x_values = c(0, xs, n + 1), y_values = c(0, ys, 0))
     diff <- (max(tops) - min(bottoms)) / 8
     es <- c(tops, bottoms)[which.max(abs(c(tops, bottoms)))]
 
@@ -72,12 +72,12 @@ plotEnrichment2 <- function(gset, stats, nes, qv, gseaParam = 1, mtitle = NULL, 
     half_line <- base_size / 2
 
     # running score
-    g1 <- ggplot(toPlot, aes(x = x, y = y)) +
+    g1 <- ggplot(toPlot, aes(x = x_values, y = y_values)) +
         geom_point(color = line.col, size = 0.1) +
         geom_hline(yintercept = 0, colour = "black", linetype = "dashed", size = lwd * 0.8) +
         geom_hline(yintercept = max_es, colour = "red", linetype = "dashed", size = lwd * 0.8) +
         geom_line(colour = line.col, size = lwd) +
-        annotate("text", x = max(toPlot$x), y = txt_y_pos, label = txt, hjust = 1, vjust = .5, size = rel(3.0)) +
+        annotate("text", x = max(toPlot$x_values), y = txt_y_pos, label = txt, hjust = 1, vjust = .5, size = rel(3.0)) +
         scale_y_continuous(breaks = ln1, limits = ylims) +
         xlim(xlims[1], xlims[2]) +
         labs(y = ytitle, title = mtitle) +
@@ -91,7 +91,7 @@ plotEnrichment2 <- function(gset, stats, nes, qv, gseaParam = 1, mtitle = NULL, 
         )
 
     # gene set bar
-    g2 <- ggplot(data.frame(x = pathway), aes(x = x, y = -diff / 3, xend = x, yend = diff / 3)) +
+    g2 <- ggplot(data.frame(x = pathway), aes(x = x_values, y = -diff / 3, xend = x_values, yend = diff / 3)) +
         geom_segment(size = ticksSize, colour = "grey35") +
         scale_x_continuous(breaks = c(seq(xlims[1], xlims[2], 5000), xlims[2]), limits = xlims) +
         theme_common_gsea(base_size = base_size) +
@@ -99,10 +99,11 @@ plotEnrichment2 <- function(gset, stats, nes, qv, gseaParam = 1, mtitle = NULL, 
 
     # rank score bar (t stat, logFC etc)
     if (statbar) {
-        lead <- toPlot[which(toPlot$y == es), ]
-        g1 <- g1 + geom_segment(x = lead$x, xend = lead$x, y = 0, yend = es, color = "red", linetype = 3, size = lwd * 0.25)
+        lead <- toPlot[which(toPlot$y_values == es), ]
+        g1 <- g1 + geom_segment(x = lead$x_values, xend = lead$x_values, y = 0, yend = es, color = "red", linetype = 3, size = lwd * 0.25)
         g2 <- g2 + theme(plot.margin = margin(0, half_line * 2.5, 0, half_line))
-        g3 <- ggplot(data.frame(x = seq_along(stats), stat = stats), aes(x = x, y = 0, xend = x, yend = stat)) +
+		tmpdf <- data.frame(x_values = seq_along(stats), stat = stats)
+        g3 <- ggplot(tmpdf, aes(x = x_values, y = 0, xend = x_values, yend = stat)) +
             geom_segment(size = ticksSize, colour = "grey35") +
             scale_x_continuous(breaks = c(seq(xlims[1], xlims[2], 5000), xlims[2]), limits = xlims) +
             theme_common_gsea(base_size = base_size) +

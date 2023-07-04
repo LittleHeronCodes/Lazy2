@@ -20,8 +20,8 @@ Enrichment factor represents the "enrichment" of overlap between two sets in a g
 This is calculated as (observed count) / (expected count).
 }
 \examples{
-A = c(1:5)
-B = c(3:7)
-total = c(1:10)
+A <- c(1:5)
+B <- c(3:7)
+total <- c(1:10)
 getEnrichmentFactor(A, B, total)
 }

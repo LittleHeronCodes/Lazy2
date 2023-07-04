@@ -32,6 +32,6 @@ Each line should contain one geneset, delimited by tab. Genes should start from 
 }}
 \examples{
 \dontrun{
-readGMT('file/path.gmt')
+readGMT("file/path.gmt")
 }
 }

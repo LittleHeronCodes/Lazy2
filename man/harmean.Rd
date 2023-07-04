@@ -15,6 +15,6 @@ harmean(v, ...)
 Calculate harmonic mean. Harmonic means are often used to calculate means of p-values.
 }
 \examples{
-v <- seq(0.01,.99, .01)
+v <- seq(0.01, .99, .01)
 harmean(v)
 }

@@ -21,5 +21,5 @@ geneMap, if provided, should be a data frame with at least two columns named 'hg
 ent2sym is meant for quick ID conversion and uses match, which does not handle many-to-one or many-to-many relationships.
 }
 \examples{
-ent2sym('TP53')
+ent2sym("TP53")
 }

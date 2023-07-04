@@ -35,6 +35,6 @@ Draw MA plot from resultDF generated from limma (data.frame format). DESeq2 resu
 }}
 \examples{
 \dontrun{
-drawMA(resultDF, qco=0.1, fco=2.0, ttl_pre='title')
+drawMA(resultDF, qco = 0.1, fco = 2.0, ttl_pre = "title")
 }
 }

@@ -1,6 +1,6 @@
 Package: Lazy2
 Title: Lazy Package
-Version: 0.1.6.9002
+Version: 0.1.7.9000
 Authors@R: 
     person(given   = "Yeogha",
            family  = "Yoon",

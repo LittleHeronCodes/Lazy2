@@ -16,6 +16,6 @@ NA removed vectors
 Remove NA values from a vector
 }
 \examples{
-a = c(1,2,3,NA,6,NA,7)
+a <- c(1, 2, 3, NA, 6, NA, 7)
 removeNAs(a)
 }
