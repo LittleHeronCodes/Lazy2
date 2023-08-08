@@ -49,7 +49,8 @@ writeGMT <- function(gmtfile, genelist, geneset_desc = "") {
 
 #' Hypergeometric test for gmt style list
 #'
-#' Gene list hypergeometric test against gmt format list of gene set. Can be used for custom pathway analysis or CMAP style query.
+#' Gene list hypergeometric test against gmt format list of gene set. 
+#' Can be used for custom pathway analysis or CMAP style query.
 #'
 #' @param query  gene set to query (eg. Differentially Expressed Genes)
 #' @param refGMT list of reference gene set (eg. Pathways)
@@ -114,8 +115,14 @@ hypergeoTestForGeneset <- function(query, refGMT, gspace, minGeneSet = 10, ef.ps
     bg.ratio <- paste0(ms, "/", N)
 
     enrRes <- data.table(
-        ID = names(refGMT), pVal = pvals, oddsRatio = odds,
-        tan = jacc, int = qs, gsRatio = gs.ratio, bgRatio = bg.ratio, intGenes = intscts
+        ID = names(refGMT), 
+        pVal = pvals, 
+        oddsRatio = odds,
+        tan = jacc, 
+        int = qs, 
+        gsRatio = gs.ratio, 
+        bgRatio = bg.ratio, 
+        intGenes = intscts
     )
 
     enrRes$logP <- -log10(enrRes$pVal)

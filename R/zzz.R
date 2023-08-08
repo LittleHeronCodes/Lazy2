@@ -9,15 +9,16 @@
 		msg <- paste0(msg, "\n\n*-*-*-*-*-*-*-*-*-*\n* Happy New Year! *\n*-*-*-*-*-*-*-*-*-*\n")
 	}
 	if(today == "0401") {
-		msg <- paste0(msg, "\nError: April fools!")
+		msg <- paste0(msg, "\n\n=====================\n[ERROR]: April fools!\n=====================\n")
 	}
 	if(today == "0504") {
 		msg <- paste0(msg, "\nMay the Fourth be with you!")
 	}
-	if(today == "1225") {
-		msg <- paste0(msg, "\n\n*-*-*-*-*-*-*-*-*-*\n* Merry Christmas! *\n*-*-*-*-*-*-*-*-*-*\n")
+	if(today %in% c("1224", "1225")) {
+		msg <- paste0(msg, "\n\n*-*-*-*-*-*-*-*-*-*\n* Merry Christmas!*\n*-*-*-*-*-*-*-*-*-*\n")
 	}
 
 	packageStartupMessage(msg)
 }
+
 
