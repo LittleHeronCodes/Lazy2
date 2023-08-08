@@ -17,10 +17,14 @@ Gen_enrichment <- function(glist, refgmt, tglist, minGeneSet = 10, ncore = 1, ef
     tglist <- lapply(tglist, function(gg) intersect(gg, bgspace))
 
     if (ncore <= 1) {
-        enrobj <- lapply(names(glist), function(aid) hypergeoTestForGeneset(glist[[aid]], refgmt, tglist[[aid]], minGeneSet, ef.psc = ef.psc))
+        enrobj <- lapply(names(glist), function(aid) {
+			hypergeoTestForGeneset(glist[[aid]], refgmt, tglist[[aid]], minGeneSet, ef.psc = ef.psc)
+			})
     }
     if (ncore > 1) {
-        enrobj <- mclapply(names(glist), function(aid) hypergeoTestForGeneset(glist[[aid]], refgmt, tglist[[aid]], minGeneSet, ef.psc = ef.psc), mc.cores = ncore)
+        enrobj <- mclapply(names(glist), function(aid) {
+			hypergeoTestForGeneset(glist[[aid]], refgmt, tglist[[aid]], minGeneSet, ef.psc = ef.psc)
+		}, mc.cores = ncore)
     }
     names(enrobj) <- names(glist)
     return(enrobj)

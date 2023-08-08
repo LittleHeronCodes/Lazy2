@@ -54,8 +54,6 @@ extractGeneList <- function(resultsLS, fco, qco, cnt = NULL, remove_ambi = FALSE
     for (aid in names(resultsLS)) {
         resultDF.f <- resultsLS[[aid]]
         resultDF.f <- resultDF.f[which(!is.na(resultDF.f$entGene)), ]
-        # resultDF.f <- subset(resultDF.f, !is.na(entGene) )
-        # resultDF.f <- resultsLS[[aid]] %>% filter( !is.na(entGene) )
 
         geneList$up[[aid]] <- with(resultDF.f, unique(entGene[which(adj.P.Val < qco[aid] & logFC >= log2(fco[aid]))]))
         geneList$dn[[aid]] <- with(resultDF.f, unique(entGene[which(adj.P.Val < qco[aid] & logFC <= -log2(fco[aid]))]))

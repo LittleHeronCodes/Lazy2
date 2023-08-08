@@ -21,14 +21,24 @@
 #' @export
 
 ## GSEA plot
-plotEnrichment2 <- function(gset, stats, nes, qv, gseaParam = 1, mtitle = NULL, ytitle = "",
-                            ticksSize = 0.4, base_size = 7, line.col = "green", lwd = 2, ylims = NULL, draw = TRUE, statbar = FALSE) {
+plotEnrichment2 <- function(gset, stats, 
+							nes = NULL,	qv = NULL, 
+							gseaParam = 1, 
+							mtitle = NULL, ytitle = "",
+                            ticksSize = 0.4, base_size = 7, 
+							line.col = "green", lwd = 2, 
+							ylims = NULL, 
+							draw = TRUE, 
+							statbar = FALSE
+							) {
     set.seed(1234)
 
+	# check input
     if (!any(gset %in% names(stats))) {
         stop("all genes in gset should be in names(stats).")
     }
 
+	# running score statistics for plot
     rnk <- rank(-stats)
     ord <- order(rnk)
     stats <- stats[ord]
@@ -40,6 +50,7 @@ plotEnrichment2 <- function(gset, stats, nes, qv, gseaParam = 1, mtitle = NULL, 
     bottoms <- gseaRes$bottoms
     tops <- gseaRes$tops
 
+	# data frame for ggplot
     n <- length(statsAdj)
     xs <- as.vector(rbind(pathway - 1, pathway))
     ys <- as.vector(rbind(bottoms, tops))
@@ -48,7 +59,7 @@ plotEnrichment2 <- function(gset, stats, nes, qv, gseaParam = 1, mtitle = NULL, 
     es <- c(tops, bottoms)[which.max(abs(c(tops, bottoms)))]
 
     # run fgsea if no nes and qv given
-    if (any(is.na(c(nes, qv)))) {
+    if (any(is.null(c(nes, qv)))) {
         gseares <- fgsea(pathways = list(a = gset), stats = stats, nperm = 10000)
         nes <- gseares$NES[1]
         qv <- gseares$padj
@@ -65,10 +76,17 @@ plotEnrichment2 <- function(gset, stats, nes, qv, gseaParam = 1, mtitle = NULL, 
         br <- 0.1
         ln1 <- seq(ceiling(ylims[1] * 10) / 10, floor(ylims[2] * 10) / 10, br)
     }
+	
+	# position for text (top if ES < 0, bottom if ES > 0)
     txt_y_pos <- ifelse(es < 0, max(c(ln1, tops)), min(c(ln1, bottoms)))
+	
+	# for max ES horizontal line
     max_es <- ifelse(es > 0, max(tops), min(bottoms))
 
+	# x axis
     xlims <- c(0, ceiling(length(stats) / 500) * 500)
+	
+	# for margins
     half_line <- base_size / 2
 
     # running score
@@ -110,6 +128,7 @@ plotEnrichment2 <- function(gset, stats, nes, qv, gseaParam = 1, mtitle = NULL, 
             theme(plot.margin = margin(0, half_line * 2.5, half_line, half_line))
     }
 
+	# bind plot grobs
     gr1 <- ggplotGrob(g1)
     gr2 <- ggplotGrob(g2)
 
@@ -122,6 +141,7 @@ plotEnrichment2 <- function(gset, stats, nes, qv, gseaParam = 1, mtitle = NULL, 
         gr <- rbind(gr1, gr2)
     }
 
+	# align plots by x axis
     # gr$widths <- grid::unit.pmax(gr1$widths, gr2$widths, gr3$widths)
     gr$widths <- grid::unit.pmax(gr1$widths, gr2$widths)
 
@@ -129,6 +149,7 @@ plotEnrichment2 <- function(gset, stats, nes, qv, gseaParam = 1, mtitle = NULL, 
     panid <- gr$layout$t[grep(pattern = "panel", gr$layout$name)]
     gr$heights[panid] <- unit(ht.ratio, "null")
 
+	# draw plot
     if (draw) {
         grid.newpage()
         grid.draw(gr)
