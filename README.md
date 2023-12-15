@@ -5,8 +5,9 @@ Custom functions from Lazy for personal use, now as a package!
 
 ## Version 0.2.0 To Do
 
+- [ ] Functions : plotMA, plotVol -- turn into one function with option. (Deprecate plotVol)
+- [x] Functions : change the variable `oddsRatio` to `FE` as Fold enrichment is the more accurate term.
 - [ ] Functions : ent2sym -- better type checking
-- [ ] Functions : change the variable `oddsRatio` to `EF` as odds ratio and enrichment factor are technically different
 - [ ] Functions : `extractGeneList` : p value column into option. (Also check if column actually exists)
 - [ ] Issues    : Pathway analysis gene space problem. Need to update gene space after removing pathways less than minimum gene space.
 - [ ] Functions : ens2sym
@@ -27,7 +28,7 @@ Ver 0.2.0 is final backward incompatible change.
 
 ## Version 0.2 Ideas
 
-- [ ] Think about utilizing cpp codes for simple calculation function. --> speed trade-off potentially not worth it
+~- [ ] Think about utilizing cpp codes for simple calculation function. --> speed trade-off potentially not worth it~
 - [ ] Mathematical equations into help page. (if possible)
 
 

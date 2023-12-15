@@ -56,13 +56,13 @@ writeGMT <- function(gmtfile, genelist, geneset_desc = "") {
 #' @param refGMT list of reference gene set (eg. Pathways)
 #' @param gspace background gene space. Should contain all genes in query.
 #' @param minGeneSet minimum size of gene set. This is used to filter refGMT. Default 10
-#' @param ef.psc pseudocount when calculating enrichment factor (oddsRatio). Default 0
+#' @param ef.psc pseudocount when calculating fold enrichment. Default 0
 #' @param ncore number of cores used in hypergeoTestForGeneset2 (soon to be removed)
 #' @return Data frame of gene set analysis results
 #' \describe{
 #' 	  \item{pVal}{: hypergeometric test p values from phyper}
 #' 	  \item{logP}{: -log10(p value)}
-#' 	  \item{oddsRatio}{: odds ratio}
+#' 	  \item{FE}{: Fold enrichment. ratio of DEGs in gene set / ratio of genes in gene space}
 #' 	  \item{tanco}{: tanimoto coefficient (Jaccard index)}
 #' 	  \item{int}{: intersected item count}
 #' 	  \item{gsRatio}{: gene set ratio (selected genes in gene set / selected genes)}
@@ -109,7 +109,7 @@ hypergeoTestForGeneset <- function(query, refGMT, gspace, minGeneSet = 10, ef.ps
     ms <- sapply(refGMT, length) # no of white balls in urn
 
     pvals <- phyper(qs - 1, ms, N - ms, k, lower.tail = FALSE)
-    odds <- (qs + ef.psc) / (ms / N * k + ef.psc)
+    folden <- (qs + ef.psc) / (ms / N * k + ef.psc)
     jacc <- qs / sapply(refGMT, function(x) length(union(x, query)))
     gs.ratio <- paste0(qs, "/", k)
     bg.ratio <- paste0(ms, "/", N)
@@ -117,7 +117,7 @@ hypergeoTestForGeneset <- function(query, refGMT, gspace, minGeneSet = 10, ef.ps
     enrRes <- data.table(
         ID = names(refGMT), 
         pVal = pvals, 
-        oddsRatio = odds,
+        fe = folden,
         tan = jacc, 
         int = qs, 
         gsRatio = gs.ratio, 
@@ -133,7 +133,7 @@ hypergeoTestForGeneset <- function(query, refGMT, gspace, minGeneSet = 10, ef.ps
     enrRes$qVal <- ifelse(enrRes$int == 0, 1, enrRes$qVal)
     enrRes$logQ <- -log10(enrRes$qVal)
 
-    enrRes <- enrRes[, c("ID", "pVal", "logP", "qVal", "logQ", "oddsRatio", "tan", "int", "gsRatio", "bgRatio", "intGenes")]
+    enrRes <- enrRes[, c("ID", "pVal", "logP", "qVal", "logQ", "fe", "tan", "int", "gsRatio", "bgRatio", "intGenes")]
     return(enrRes)
 }
 
