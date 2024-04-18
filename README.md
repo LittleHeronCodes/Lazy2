@@ -7,12 +7,14 @@ Custom functions from Lazy for personal use, now as a package!
 
 - [ ] Functions : plotMA, plotVol -- turn into one function with option. (Deprecate plotVol)
 - [x] Functions : change the variable `oddsRatio` to `FE` as Fold enrichment is the more accurate term.
+- [ ] Functions : Remove `log` option from `enrobj2Matrix`
 - [ ] Functions : ent2sym -- better type checking
 - [ ] Functions : `extractGeneList` : p value column into option. (Also check if column actually exists)
 - [ ] Issues    : Pathway analysis gene space problem. Need to update gene space after removing pathways less than minimum gene space.
 - [ ] Functions : ens2sym
 - [ ] Datasets  : Add mouse gene info
 - [ ] Datasets  : Update LazygeneInfo
+- [ ] Add option to `Gen_enrichment`` on whether to silently control for background space using union set of refgmt, with default TRUE for backwards compatibility.
 
 
 ## Checklist before moving to 0.2.0
@@ -28,7 +30,7 @@ Ver 0.2.0 is final backward incompatible change.
 
 ## Version 0.2 Ideas
 
-~- [ ] Think about utilizing cpp codes for simple calculation function. --> speed trade-off potentially not worth it~
+- [ ] ~~-Think about utilizing cpp codes for simple calculation function. --> speed trade-off potentially not worth it~~
 - [ ] Mathematical equations into help page. (if possible)
 
 
@@ -42,12 +44,11 @@ Ver 0.2.0 is final backward incompatible change.
 
 ### Version Numbers
 
-**major.minor.patch.dev**
+*major.minor.patch.dev*
 
-- minor : function add, modify, new builds (manual updates)
-- patch : minor bug fix, function tweaks
-- dev : 9000. Indicating in development. 
-
+- **minor** : function add, modify, new builds (manual updates)
+- **patch** : minor bug fix, function tweaks
+- **dev** : 9000. Indicating in development. 
 
 ---
 
