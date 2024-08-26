@@ -12,6 +12,7 @@
 
 ## Calculate enrichment factor for drugs
 enrichmentFactorForDataFrame <- function(data, enrich_element, rank_by, cutoff = 0.05, min_count = 3, psc = 1) {
+    
     # index to use
     include <- names(which(table(data[, enrich_element]) >= min_count))
     if (length(include) < length(unique(data[, enrich_element])) * .10) {

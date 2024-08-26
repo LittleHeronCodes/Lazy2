@@ -75,6 +75,7 @@ writeGMT <- function(gmtfile, genelist, geneset_desc = "") {
 #' @export
 
 hypergeoTestForGeneset <- function(query, refGMT, gspace, minGeneSet = 10, ef.psc = 0) {
+    
     # match gene space
     if (!all(query %in% gspace)) {
         query <- intersect(query, gspace)
@@ -91,7 +92,9 @@ hypergeoTestForGeneset <- function(query, refGMT, gspace, minGeneSet = 10, ef.ps
     exc <- which(sapply(refGMT, length) < minGeneSet)
     if (length(exc) != 0) {
         if (length(exc) <= 5) {
-            msg <- paste("Ref set no.", paste(exc, collapse = ", "), "had less than", minGeneSet, "genes and were excluded.")
+            msg <- paste(
+                "Ref set no.", paste(exc, collapse = ", "), "had less than", minGeneSet, "genes and were excluded."
+            )
         } else {
             msg <- paste(length(exc), " entries in refGMT had less than", minGeneSet, "genes and were excluded.")
         }
@@ -102,24 +105,24 @@ hypergeoTestForGeneset <- function(query, refGMT, gspace, minGeneSet = 10, ef.ps
 
     # hypergeometric test
     N <- length(gspace) # no of balls in urn
-    k <- length(query) # no of balls drawn from urn (DEG no)
+    k <- length(query)  # no of balls drawn from urn (DEG no)
 
     intscts <- sapply(refGMT, function(x) intersect(x, query))
     qs <- sapply(intscts, length) # no of white balls drawn
-    ms <- sapply(refGMT, length) # no of white balls in urn
+    ms <- sapply(refGMT, length)  # no of white balls in urn
 
-    pvals <- phyper(qs - 1, ms, N - ms, k, lower.tail = FALSE)
+    pvals  <- phyper(qs - 1, ms, N - ms, k, lower.tail = FALSE)
     folden <- (qs + ef.psc) / (ms / N * k + ef.psc)
-    jacc <- qs / sapply(refGMT, function(x) length(union(x, query)))
+    jacc   <- qs / sapply(refGMT, function(x) length(union(x, query)))
     gs.ratio <- paste0(qs, "/", k)
     bg.ratio <- paste0(ms, "/", N)
 
     enrRes <- data.table(
-        ID = names(refGMT), 
+        ID   = names(refGMT), 
         pVal = pvals, 
-        fe = folden,
-        tan = jacc, 
-        int = qs, 
+        fe   = folden,
+        tan  = jacc, 
+        int  = qs, 
         gsRatio = gs.ratio, 
         bgRatio = bg.ratio, 
         intGenes = intscts
@@ -179,7 +182,14 @@ hypergeoTestForGeneset2 <- function(query, refGMT, gspace, minGeneSet = 10, ncor
         gs.ratio <- paste0(q, "/", k)
         bg.ratio <- paste0(m, "/", N)
 
-        out <- data.table(pVal = pVal, oddsRatio = odds, tan = jacc, int = q, gsRatio = gs.ratio, bgRatio = bg.ratio, intGenes = list(I))
+        out <- data.table(
+            pVal = pVal, 
+            oddsRatio = odds, 
+            tan = jacc, 
+            int = q, 
+            gsRatio = gs.ratio, 
+            bgRatio = bg.ratio, 
+            intGenes = list(I))
     }, mc.cores = ncore)
 
     enrRes <- rbindlist(enrRes, idcol = "ID")
