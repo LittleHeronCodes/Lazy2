@@ -4,6 +4,7 @@
 
 - [ ] Develop in R 4.3.0
 - [ ] Re-do readme to be more user centric
+- [ ] Function name changes to be consistent and in accordance to tidyverse style guide (keep old function names deprecated)
 
 
 ## :zap:Version 0.2.0 minor changes
@@ -86,6 +87,7 @@ check()
 | Bugfix                   | :bug: `:bug:`                                             |
 | Metadata                 | :card_index: `:card_index:`                               |
 | Documenting source code  | :bulb: `:bulb:`                                           |
+| Note to self             | :clipboard: `:clipboard:`                                         |
 | Work in progress         | :construction: `:construction:`                           |
 | Breaking changes         | :boom: `:boom:`                                           |
 | Critical hotfix          | :ambulance: `:ambulance:`                                 |
