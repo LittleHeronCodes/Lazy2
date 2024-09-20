@@ -13,7 +13,8 @@
 
 - [ ] Functions : `plotMA`, `plotVol` -- turn into one function with option. (Deprecate `plotVol`)
 - [x] Functions : change the variable `oddsRatio` to `FE` as fold enrichment is the more accurate term.
-- [ ] Functions : Add overlap coefficient calculation to `getOverlapDF`
+- [x] Functions : `getEnrichmentFactor` change name to `get_fold_enrichment` for more accurate term.
+- [x] Functions : Add overlap coefficient calculation to `getOverlapDF`
 - [ ] Functions : Remove `log` option from `enrobj2Matrix`
 - [ ] Functions : `extractGeneList` : p value column into option. (Also check if column actually exists)
 - [ ] Issues    : Pathway analysis gene space problem. Need to update gene space after removing pathways less than minimum gene space.
@@ -21,6 +22,7 @@
 
 ### :grey_exclamation:Low priority
 
+- [x] Style fix : Remove `return` expression as per tidyverse style guide, change to just declaring the object to return for my benefit
 - [ ] Style fix : Change script name of `theme_transparent2` to `theme_transparent3` because why is that still 2.
 - [ ] Datasets  : Add mouse gene info
 - [ ] Datasets  : Update `LazygeneInfo`
@@ -34,6 +36,7 @@
 - [ ] Test build in **R 4.3.0**
 - [ ] Backward compatibility for breaking changes
 - [ ] Update DESCRIPTION
+- [ ] Check if deprecation works the way I think it would
 - [x] All functions used frequently in last two projects.
 - [x] Descriptions in all functions.
 - [x] Read last reference article on releasing R package.

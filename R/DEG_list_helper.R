@@ -13,15 +13,15 @@
 #' @export
 
 ent2sym <- function(genes, geneMap = NULL) {
-    if (is.null(geneMap)) geneMap <- Lazy2::LazygeneInfo
-    genes <- as.character(genes)
+	if (is.null(geneMap)) geneMap <- Lazy2::LazygeneInfo
+	genes <- as.character(genes)
 
-    if (all(grepl("^[0-9]+$", genes[which(!is.na(genes) & genes != "")]))) {
-        out <- geneMap$hgnc_symbol[match(genes, geneMap$entrez)]
-    } else {
-        out <- geneMap$entrez[match(genes, geneMap$hgnc_symbol)]
-    }
-    return(as.character(out))
+	if (all(grepl("^[0-9]+$", genes[which(!is.na(genes) & genes != "")]))) {
+		out <- geneMap$hgnc_symbol[match(genes, geneMap$entrez)]
+	} else {
+		out <- geneMap$entrez[match(genes, geneMap$hgnc_symbol)]
+	}
+	return(as.character(out))
 }
 
 
@@ -39,31 +39,31 @@ ent2sym <- function(genes, geneMap = NULL) {
 #' @export
 
 extractGeneList <- function(resultsLS, fco, qco, cnt = NULL, remove_ambi = FALSE) {
-    ## Add logFC, p-value, adjusted p-value column detector ##
-    ##
-    ##
-    ##
+	## Add logFC, p-value, adjusted p-value column detector ##
+	##
+	##
+	##
 
-    if (length(qco) != 1 & length(qco) != length(resultsLS)) stop("qco length should be either 1 or same as resultsLS.")
-    if (length(fco) != 1 & length(fco) != length(resultsLS)) stop("fco length should be either 1 or same as resultsLS.")
+	if (length(qco) != 1 & length(qco) != length(resultsLS)) stop("qco length should be either 1 or same as resultsLS.")
+	if (length(fco) != 1 & length(fco) != length(resultsLS)) stop("fco length should be either 1 or same as resultsLS.")
 
-    if (length(qco) == 1) qco <- structure(rep(qco, length(resultsLS)), names = names(resultsLS))
-    if (length(fco) == 1) fco <- structure(rep(fco, length(resultsLS)), names = names(resultsLS))
+	if (length(qco) == 1) qco <- structure(rep(qco, length(resultsLS)), names = names(resultsLS))
+	if (length(fco) == 1) fco <- structure(rep(fco, length(resultsLS)), names = names(resultsLS))
 
-    geneList <- list(up = list(), dn = list(), to = list())
-    for (aid in names(resultsLS)) {
-        resultDF.f <- resultsLS[[aid]]
-        resultDF.f <- resultDF.f[which(!is.na(resultDF.f$entGene)), ]
+	geneList <- list(up = list(), dn = list(), to = list())
+	for (aid in names(resultsLS)) {
+		resultDF.f <- resultsLS[[aid]]
+		resultDF.f <- resultDF.f[which(!is.na(resultDF.f$entGene)), ]
 
-        geneList$up[[aid]] <- with(resultDF.f, unique(entGene[which(adj.P.Val < qco[aid] & logFC >= log2(fco[aid]))]))
-        geneList$dn[[aid]] <- with(resultDF.f, unique(entGene[which(adj.P.Val < qco[aid] & logFC <= -log2(fco[aid]))]))
-        geneList$to[[aid]] <- unique(resultDF.f$entGene)
-    }
+		geneList$up[[aid]] <- with(resultDF.f, unique(entGene[which(adj.P.Val < qco[aid] & logFC >= log2(fco[aid]))]))
+		geneList$dn[[aid]] <- with(resultDF.f, unique(entGene[which(adj.P.Val < qco[aid] & logFC <= -log2(fco[aid]))]))
+		geneList$to[[aid]] <- unique(resultDF.f$entGene)
+	}
 
-    ## Remove ambiguous option
-    if (remove_ambi) geneList <- removeAmbigDEGs(geneList)
+	## Remove ambiguous option
+	if (remove_ambi) geneList <- removeAmbigDEGs(geneList)
 
-    return(geneList)
+	return(geneList)
 }
 
 
@@ -80,10 +80,10 @@ extractGeneList <- function(resultsLS, fco, qco, cnt = NULL, remove_ambi = FALSE
 #' @export
 
 removeAmbigDEGs <- function(geneList) {
-    ambi <- map2(geneList$up, geneList$dn, function(x, y) intersect(x, y))
-    geneList$up <- map2(geneList$up, ambi, function(x, y) setdiff(x, y))
-    geneList$dn <- map2(geneList$dn, ambi, function(x, y) setdiff(x, y))
-    return(geneList)
+	ambi <- map2(geneList$up, geneList$dn, function(x, y) intersect(x, y))
+	geneList$up <- map2(geneList$up, ambi, function(x, y) setdiff(x, y))
+	geneList$dn <- map2(geneList$dn, ambi, function(x, y) setdiff(x, y))
+	return(geneList)
 }
 
 
@@ -103,7 +103,7 @@ removeAmbigDEGs <- function(geneList) {
 #' @export
 
 geneCount <- function(geneList) {
-    sapply(geneList, function(ls) sapply(ls, length))
+	sapply(geneList, function(ls) sapply(ls, length))
 }
 
 
@@ -115,6 +115,7 @@ geneCount <- function(geneList) {
 #' @param gls Unnested list of genes
 #' @param tgls List of gene space for each entry in gls
 #' @param unique_combn Only return unique combination (no replicates) Default FALSE, will be set to TRUE in later versions
+#' @param fe_psc pseudocount for fold enrichment (default 0)
 #' @return dataframe
 #' @examples
 #' \dontrun{
@@ -123,31 +124,33 @@ geneCount <- function(geneList) {
 #' }
 #' @export
 
-getOverlapDF <- function(gls, tgls, unique_combn = FALSE) {
-    if (unique_combn) {
-        pairdf <- data.frame(t(combn(names(gls), 2)))
-        colnames(pairdf) <- c("Var1", "Var2")
-    } else {
-        pairdf <- expand.grid(names(gls), names(gls), stringsAsFactors = FALSE)
-        pairdf <- pairdf[order(factor(pairdf$Var1, levels = names(gls))), ]
-    }
+getOverlapDF <- function(gls, tgls, unique_combn = FALSE, fe_psc = 0) {
+	if (unique_combn) {
+		pairdf <- data.frame(t(combn(names(gls), 2)))
+		colnames(pairdf) <- c("Var1", "Var2")
+	} else {
+		pairdf <- expand.grid(names(gls), names(gls), stringsAsFactors = FALSE)
+		pairdf <- pairdf[order(factor(pairdf$Var1, levels = names(gls))), ]
+	}
 
-    LS <- apply(pairdf, 1, function(v) {
-        ix1 <- as.character(v[1])
-        ix2 <- as.character(v[2])
-        gspace <- intersect(tgls[[ix1]], tgls[[ix2]])
-        setA <- intersect(gls[[ix1]], gspace)
-        setB <- intersect(gls[[ix2]], gspace)
-        hgeo <- hypergeoTest(setA, setB, gspace)
-        eff <- getEnrichmentFactor(setA, setB, gspace, 2)
-        tan <- tanimotoCoef(setA, setB)
-        data.frame(ix1 = ix1, ix2 = ix2, hgeo = hgeo, ef = eff, tan = tan)
-    })
-    pairdf <- do.call(rbind, LS)
+	LS <- apply(pairdf, 1, function(v) {
+		ix1 <- as.character(v[1])
+		ix2 <- as.character(v[2])
+		gspace <- intersect(tgls[[ix1]], tgls[[ix2]])
+		setA <- intersect(gls[[ix1]], gspace)
+		setB <- intersect(gls[[ix2]], gspace)
+		hgeo <- hypergeoTest(setA, setB, gspace)
+		fe  <- get_fold_enrichment(setA, setB, gspace, fe_psc)
+		tan <- tanimotoCoef(setA, setB)
+		ovc <- overlapCoef(setA, setB)
+		data.frame(ix1 = ix1, ix2 = ix2, hgeo = hgeo, fe = fe, tan = tan)
+	})
+	
+	pairdf <- do.call(rbind, LS)
 }
 
 
-
+## TODO: Move this plot section to separate file
 #' Draw MA, volcano plot
 #'
 #' Draw MA plot from resultDF generated from limma (data.frame format). DESeq2 results should have column names matching limma.
@@ -164,36 +167,154 @@ getOverlapDF <- function(gls, tgls, unique_combn = FALSE) {
 #' }
 #' @export
 
-drawMA <- function(resultDF, qco, fco, ttl_pre, ylim = NULL) {
-    ui <- which(resultDF$adj.P.Val < qco & resultDF$logFC > log2(fco))
-    di <- which(resultDF$adj.P.Val < qco & resultDF$logFC < -log2(fco))
-    gcnt <- paste("up:", length(ui), "dn:", length(di))
-    if (is.null(ylim)) {
-        ylim <- c(-max(abs(resultDF$logFC), na.rm = TRUE), max(abs(resultDF$logFC), na.rm = TRUE))
-    }
-    mtitle <- paste(ttl_pre, "fc", fco, "qv", qco, gcnt)
+drawMA <- function(resultDF, qco, fco, ttl_pre = "", ylim = NULL, xlim = NULL, mode = "ma", pcol = "padj", ...) {
 
-    # MA
-    plot(logFC ~ AveExpr, data = resultDF, pch = 20, main = mtitle, cex = 0.05, ylim = ylim)
-    points(logFC ~ AveExpr, data = resultDF[c(ui, di), ], pch = 20, col = "red", cex = 0.25)
-    abline(h = 0, col = "blue", lty = 2)
+	if(!mode %in% c("ma", "vol")) stop("Argument mode should be either 'ma' or 'vol'.")
+	if(!pcol %in% c("pval", "padj")) stop("Argument pcol should be either 'pval' or 'padj'.")
+	if(pcol == "pval") { mt_p <- "pv"; ax_p <- "-log10(pval)" }
+	if(pcol == "padj") { mt_p <- "qv"; ax_p <- "-log10(padj)" }
+
+	resultDF <- resultDF %>% mutate(p.used = get(pcol)) 
+
+	ui <- which(resultDF$p.used < qco & resultDF$logFC >=  log2(fco))
+	di <- which(resultDF$p.used < qco & resultDF$logFC <= -log2(fco))
+	gcnt <- paste("up:", length(ui), "dn:", length(di))
+
+	mtitle <- paste(ttl_pre, "fc", fco, "qv", qco, gcnt)
+	lfcmx <- max(abs(resultDF$logFC), na.rm = TRUE)
+	axlim <- c(-lfcmx, lfcmx)
+
+	# MA
+	if( mode == "ma" ) {
+		if( !is.null(ylim) ) { axlim <- ylim }
+	
+		plot(logFC ~ AveExpr, data = resultDF, pch = 20, main = mtitle, cex = 0.05, ylim = axlim, ...)
+		points(logFC ~ AveExpr, data = resultDF[c(ui, di), ], pch = 20, col = "red", cex = 0.25)
+		# abline(h = 0, col = "blue", lty = 2)
+		abline(h = c(-log2(fco), log2(fco)), col = "blue", lty = 2)
+	}
+	
+	# volcano
+	if( mode == "vol" ) {
+		if( !is.null(xlim) ) { axlim <- xlim }
+
+		plot(-log10(p.used) ~ logFC, data = resultDF, pch = 20, main = mtitle, cex = 0.05, xlim = axlim, ylab = ax_p, ...)
+		points(-log10(p.used) ~ logFC, data = resultDF[c(ui, di), ], pch = 20, col = "red", cex = 0.25)
+		# abline(v = 0, col = "blue", lty = 2)
+		abline(v = c(-log2(fco), log2(fco)), col = "blue", lty = 2)
+		abline(h = -log10(qco), col = "blue", lty = 2)
+	}
+
 }
 
 #' @describeIn drawMA
-#' Draw volcano plot
+#' Draw volcano plot (deprecated)
 #' @export
 
 drawVol <- function(resultDF, qco, fco, ttl_pre, xlim = NULL) {
-    ui <- which(resultDF$adj.P.Val < qco & resultDF$logFC > log2(fco))
-    di <- which(resultDF$adj.P.Val < qco & resultDF$logFC < -log2(fco))
-    gcnt <- paste("up:", length(ui), "dn:", length(di))
-    if (is.null(xlim)) {
-        xlim <- c(-max(abs(resultDF$logFC), na.rm = TRUE), max(abs(resultDF$logFC), na.rm = TRUE))
-    }
-    mtitle <- paste(ttl_pre, "fc", fco, "qv", qco, gcnt)
+	.Deprecated("drawMA")
 
-    # volcano
-    plot(-log10(adj.P.Val) ~ logFC, data = resultDF, pch = 20, main = mtitle, cex = 0.05, xlim = xlim)
-    points(-log10(adj.P.Val) ~ logFC, data = resultDF[c(ui, di), ], pch = 20, col = "red", cex = 0.25)
-    abline(v = 0, col = "blue", lty = 2)
+	ui <- which(resultDF$adj.P.Val < qco & resultDF$logFC > log2(fco))
+	di <- which(resultDF$adj.P.Val < qco & resultDF$logFC < -log2(fco))
+	gcnt <- paste("up:", length(ui), "dn:", length(di))
+	if (is.null(xlim)) {
+		xlim <- c(-max(abs(resultDF$logFC), na.rm = TRUE), max(abs(resultDF$logFC), na.rm = TRUE))
+	}
+	mtitle <- paste(ttl_pre, "fc", fco, "qv", qco, gcnt)
+
+	# volcano
+	plot(-log10(adj.P.Val) ~ logFC, data = resultDF, pch = 20, main = mtitle, cex = 0.05, xlim = xlim)
+	points(-log10(adj.P.Val) ~ logFC, data = resultDF[c(ui, di), ], pch = 20, col = "red", cex = 0.25)
+	abline(v = 0, col = "blue", lty = 2)
 }
+
+#' @describeIn drawMA
+#' ggplot2 wrapper for drawing MA/volcano plot
+#' @export
+
+drawMA_gg <- function(resultDF, qco, fco, ttl_pre = "", ylim = NULL, xlim = NULL, mode = "ma", pcol = "padj", top10_lab = FALSE) {
+	require(ggrepel) # TODO: add dependency as suggest
+
+	if(!mode %in% c("ma", "vol")   ) stop("Argument mode should be either 'ma' or 'vol'."   )
+	if(!pcol %in% c("pval", "padj")) stop("Argument pcol should be either 'pval' or 'padj'.")
+	if(pcol == "pval") { mt_p <- "pv"; ax_p <- expression(bold(-log[10] ~ p.val)) }
+	if(pcol == "padj") { mt_p <- "qv"; ax_p <- expression(bold(-log[10] ~ FDR))   }
+
+	resultDF <- resultDF %>% 
+		mutate(p.used = get(pcol)) %>% 
+		filter(!is.na(p.used))
+
+	ui <- which(resultDF$p.used < qco & resultDF$logFC >=  log2(fco))
+	di <- which(resultDF$p.used < qco & resultDF$logFC <= -log2(fco))
+	gcnt <- paste("up:", length(ui), "dn:", length(di))
+	mtitle <- paste(ttl_pre, "FC", fco, mt_p, qco, gcnt)
+	lfcmx <- max(abs(resultDF$logFC), na.rm = TRUE)
+	axlim <- c(-lfcmx, lfcmx)
+
+	# if(diff(round(axlim)) >= 10) {
+	# 	x_ax <- seq(round(axlim/2)[1], round(axlim/2)[2], 1) * 2
+	# } else {
+	# 	x_ax <- seq(round(axlim)[1], round(axlim)[2], 1)
+	# }
+
+	# MA
+	if( mode == "ma" ) {
+		gp <- ggplot(resultDF, aes(x = AveExpr, y = logFC)) +
+			geom_point(shape = 20, cex = 0.05) +
+			geom_point(
+				data = resultDF[c(ui, di), ], aes(x = AveExpr, y = logFC), 
+				shape = 20, colour = "red", cex = 0.25
+			) +
+			geom_hline(yintercept = c(-log2(fco), log2(fco)), col = "blue", lty = 2) +
+			scale_y_continuous(limits = axlim) + 
+			# scale_y_continuous(breaks = x_ax, limits = axlim) + 
+			labs(title = mtitle, y = expression(bold(log[2] ~ FC)), x = "AveExpr")
+	}
+	
+	# volcano
+	if( mode == "vol" ) {
+		gp <- ggplot(resultDF, aes(x = logFC, y = -log10(p.used))) +
+			geom_point(shape = 20, cex = 0.05) +
+			geom_point(
+				data = resultDF[c(ui, di), ], aes(x = logFC, y = -log10(p.used)), 
+				shape = 20, colour = "red", cex = 0.25
+			) +
+			geom_hline(yintercept = -log10(qco), col = "blue", lty = 2) + 
+			geom_vline(xintercept = c(-log2(fco), log2(fco)), col = "blue", lty = 2) +
+			scale_x_continuous(limits = axlim) +
+			# scale_x_continuous(breaks = x_ax, limits = axlim) +
+			labs(title = mtitle, y = ax_p, x = expression(bold(log[2] ~ FC)))
+	}
+
+	# label for top 10
+	if( top10_lab ) {
+		labeldf <- resultDF[c(ui, di), ] %>% 
+			filter(rank(logFC, ties.method = "min") <= 10 | rank(-logFC, ties.method = "min") <= 10)
+		gp <- gp + 
+			geom_label_repel(
+				data = labeldf, aes(x = logFC, y = -log10(p.used), label = geneSym), 
+				colour = "blue", max.overlaps = 20
+			)
+	}
+
+	# theme to look like base plot
+	gp <- gp + 
+		theme(
+			panel.border = element_blank(),
+			panel.grid = element_line(colour = "grey92"), 
+			plot.title = element_text(colour = "black", face = "bold", size = rel(1.4), hjust = 0.5),
+			axis.title = element_text(colour = "black", face = "bold", size = rel(1.1)),
+			axis.line  = element_line(colour = "black", linewidth = 0.5),
+			axis.text  = element_text(colour = "black", size = rel(1.1)),
+			plot.background   = element_rect(fill = "transparent", colour = NA), 
+			panel.background  = element_rect(fill = "transparent", colour = NA), 
+			strip.background  = element_rect(fill = "transparent", colour = NA, linewidth = 0.7), 
+			legend.background = element_rect(fill = "transparent", colour = NA), 
+			legend.key = element_blank(), 
+			panel.ontop = FALSE,
+			complete = TRUE
+		)
+
+	gp
+}
+

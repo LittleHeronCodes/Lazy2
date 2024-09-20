@@ -34,8 +34,8 @@ drawMA <- function(resultDF, qco, fco, ttl_pre = "", ylim = NULL, xlim = NULL, m
 }
 
 
-
-drawMA2 <- function(resultDF, qco, fco, ttl_pre = "", ylim = NULL, xlim = NULL, mode = "ma", pcol = "padj", top10_lab = FALSE) {
+# For ggplot
+drawMA_gg <- function(resultDF, qco, fco, ttl_pre = "", ylim = NULL, xlim = NULL, mode = "ma", pcol = "padj", top10_lab = FALSE) {
 	require(ggrepel)
 
 	if(!mode %in% c("ma", "vol")   ) stop("Argument mode should be either 'ma' or 'vol'."   )
