@@ -27,7 +27,7 @@ Gen_enrichment <- function(glist, refgmt, tglist, minGeneSet = 10, ncore = 1, ef
 		}, mc.cores = ncore)
     }
     names(enrobj) <- names(glist)
-    return(enrobj)
+    enrobj
 }
 
 
@@ -65,5 +65,5 @@ enrobj2Matrix <- function(enrobj, val.col = "pvalue", log = TRUE) {
 
     if (!log) plotMat <- reshape2::acast(hmplot, ID ~ set, value.var = val.col, fill = NA)
     plotMat <- plotMat[order(apply(plotMat, 1, sum, na.rm = TRUE), decreasing = TRUE), ]
-    return(plotMat)
+    plotMat
 }

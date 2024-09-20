@@ -25,7 +25,7 @@ readGMT <- function(gmtfile, as.df = FALSE) {
         colnames(ont2gene) <- c("ont", "gene")
         out <- ont2gene
     }
-    return(out)
+    out
 }
 
 
@@ -137,7 +137,7 @@ hypergeoTestForGeneset <- function(query, refGMT, gspace, minGeneSet = 10, ef.ps
     enrRes$logQ <- -log10(enrRes$qVal)
 
     enrRes <- enrRes[, c("ID", "pVal", "logP", "qVal", "logQ", "fe", "tan", "int", "gsRatio", "bgRatio", "intGenes")]
-    return(enrRes)
+    enrRes
 }
 
 
@@ -202,5 +202,5 @@ hypergeoTestForGeneset2 <- function(query, refGMT, gspace, minGeneSet = 10, ncor
     enrRes$logQ <- -log10(enrRes$qVal)
 
     enrRes <- enrRes[, c("ID", "pVal", "logP", "qVal", "logQ", "oddsRatio", "tan", "int", "gsRatio", "bgRatio", "intGenes")]
-    return(enrRes)
+    enrRes
 }

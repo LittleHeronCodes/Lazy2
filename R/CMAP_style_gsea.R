@@ -63,5 +63,5 @@ enrichmentFactorForDataFrame <- function(data, enrich_element, rank_by, cutoff =
     out$logQ <- -log10(out$qVal)
 
     out <- out[, c("EF", "HyperP", "logP", "qVal", "logQ", "ratio", "cover")]
-    return(out)
+    out
 }

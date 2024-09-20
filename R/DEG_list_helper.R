@@ -21,7 +21,7 @@ ent2sym <- function(genes, geneMap = NULL) {
 	} else {
 		out <- geneMap$entrez[match(genes, geneMap$hgnc_symbol)]
 	}
-	return(as.character(out))
+	as.character(out)
 }
 
 
@@ -63,7 +63,7 @@ extractGeneList <- function(resultsLS, fco, qco, cnt = NULL, remove_ambi = FALSE
 	## Remove ambiguous option
 	if (remove_ambi) geneList <- removeAmbigDEGs(geneList)
 
-	return(geneList)
+	geneList
 }
 
 
@@ -83,7 +83,7 @@ removeAmbigDEGs <- function(geneList) {
 	ambi <- map2(geneList$up, geneList$dn, function(x, y) intersect(x, y))
 	geneList$up <- map2(geneList$up, ambi, function(x, y) setdiff(x, y))
 	geneList$dn <- map2(geneList$dn, ambi, function(x, y) setdiff(x, y))
-	return(geneList)
+	geneList
 }
 
 
