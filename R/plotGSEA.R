@@ -155,7 +155,7 @@ plotEnrichment2 <- function(gset, stats,
         grid.draw(gr)
     }
 
-    return(gr)
+    gr
 }
 
 
