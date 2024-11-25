@@ -65,7 +65,7 @@ get_fold_enrichment <- function(setA, setB, setT, psc = 0) {
 }
 
 #' @describeIn get_fold_enrichment
-#' Draw volcano plot (deprecated)
+#' fold enrichment function previous name (deprecated)
 #' @export
 
 getEnrichmentFactor <- function(...) {
@@ -88,7 +88,7 @@ getEnrichmentFactor <- function(...) {
 #' By nature of phyper, reference and query input should be interchangeable.
 #' @export
 
-hypergeoTest <- function(query, reference, bgspace) {
+hypergeo_test <- function(query, reference, bgspace) {
 	query <- intersect(query, bgspace)
 	reference <- intersect(reference, bgspace)
 
@@ -103,6 +103,14 @@ hypergeoTest <- function(query, reference, bgspace) {
 	data.frame(pVal = pVal, oddsRatio = odds, int = q, bg = N)
 }
 
+#' @describeIn hypergeo_test
+#' hypergeometric test function previous name (deprecated)
+#' @export
+
+hypergeoTest <- function(...) {
+	.Deprecated("hypergeo_test")
+	hypergeo_test(...)
+}
 
 #' Harmonic Mean
 #'

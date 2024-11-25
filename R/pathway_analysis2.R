@@ -10,8 +10,7 @@
 #' @return List of enricher Object: up, down
 #' @export
 
-Gen_enrichment <- function(glist, refgmt, tglist, minGeneSet = 10, ncore = 1, ef.psc = 0) {
-    # .Deprecated("glist_enrichment")
+glist_enrichment <- function(glist, refgmt, tglist, minGeneSet = 10, ncore = 1, ef.psc = 0) {
     bgspace <- unique(unlist(refgmt))
     glist <- lapply(glist, function(gg) intersect(gg, bgspace))
     tglist <- lapply(tglist, function(gg) intersect(gg, bgspace))
@@ -30,6 +29,15 @@ Gen_enrichment <- function(glist, refgmt, tglist, minGeneSet = 10, ncore = 1, ef
     enrobj
 }
 
+#' @describeIn glist_enrichment
+#' hypergeometric test function previous name (deprecated)
+#' @export
+
+Gen_enrichment <- function(...) {
+    .Deprecated("glist_enrichment")
+	glist_enrichment(...)
+}
+
 
 #' Enrichment object list to matrix
 #'
@@ -42,11 +50,12 @@ Gen_enrichment <- function(glist, refgmt, tglist, minGeneSet = 10, ncore = 1, ef
 #' @importFrom reshape2 acast
 #' @export
 
-
 enrobj2Matrix <- function(enrobj, val.col = "pvalue", log = TRUE) {
     LS <- lapply(names(enrobj), function(set) {
         dff <- data.frame(enrobj[[set]])
-        if ("Description" %in% names(dff)) dff <- dff %>% dplyr::rename("termID" = "ID", "ID" = "Description")
+        if ("Description" %in% names(dff)) {
+            dff <- dff %>% dplyr::rename("termID" = "ID", "ID" = "Description")
+        }
         dff$set <- set
         dff <- dff[order(dff$set), ]
         return(dff)

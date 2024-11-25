@@ -2,7 +2,7 @@
 
 ## :boom:Version 0.2.0 major changes
 
-- [ ] Develop in R 4.3.0
+- [ ] Develop in R 4.3.0 (Rstudio windows)
 - [ ] Re-do readme to be more user centric
 - [ ] Function name changes to be consistent and in accordance to tidyverse style guide (keep old function names deprecated)
 
@@ -12,6 +12,7 @@
 ### :heavy_exclamation_mark:High priority
 
 - [ ] Functions : `plotMA`, `plotVol` -- turn into one function with option. (Deprecate `plotVol`)
+- [x] Package   : Added `ggrepel` package as dependency suggest for ggplot wrapper of `plotMA_gg`
 - [x] Functions : change the variable `oddsRatio` to `FE` as fold enrichment is the more accurate term.
 - [x] Functions : `getEnrichmentFactor` change name to `get_fold_enrichment` for more accurate term.
 - [x] Functions : Add overlap coefficient calculation to `getOverlapDF`
@@ -46,7 +47,8 @@
 ## :bulb:Version 0.2 Ideas
 
 - [ ] Mathematical equations into help page. (if possible)
-- [ ] Commit/changelog ideas : start using icons for commit messages
+- [ ] Think about replacing `get()` to embracing operators
+- [x] Commit/changelog ideas : start using icons for commit messages
 
 
 ## :memo:Note to Self
@@ -90,11 +92,11 @@ check()
 | Bugfix                   | :bug: `:bug:`                                             |
 | Metadata                 | :card_index: `:card_index:`                               |
 | Documenting source code  | :bulb: `:bulb:`                                           |
-| Note to self             | :clipboard: `:clipboard:`                                         |
+| Note to self             | :clipboard: `:clipboard:`                                 |
 | Work in progress         | :construction: `:construction:`                           |
 | Breaking changes         | :boom: `:boom:`                                           |
 | Critical hotfix          | :ambulance: `:ambulance:`                                 |
-| Deprecation              | :warning: `:warning:`                                         |
+| Deprecation              | :warning: `:warning:`                                     |
 | Tests                    | :rotating_light: `:rotating_light:`                       |
 | Adding a test            | :white_check_mark: `:white_check_mark:`                   |
 | Make a test pass         | :heavy_check_mark: `:heavy_check_mark:`                   |

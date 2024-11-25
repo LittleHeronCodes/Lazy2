@@ -35,7 +35,6 @@ install()
 reload(inst('Lazy2'))
 ```
 
-
 ## :pushpin: Useful Links and References
 
 * [R Namespaces](http://r-pkgs.had.co.nz/namespace.html)

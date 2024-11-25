@@ -21,16 +21,17 @@
 #' @export
 
 ## GSEA plot
-plotEnrichment2 <- function(gset, stats, 
-							nes = NULL,	qv = NULL, 
-							gseaParam = 1, 
-							mtitle = NULL, ytitle = "",
-                            ticksSize = 0.4, base_size = 7, 
-							line.col = "green", lwd = 2, 
-							ylims = NULL, 
-							draw = TRUE, 
-							statbar = FALSE
-							) {
+plotEnrichment2 <- function(
+    gset, stats, 
+    nes = NULL,	qv = NULL, 
+    gseaParam = 1, 
+    mtitle = NULL, ytitle = "",
+    ticksSize = 0.4, base_size = 7, 
+    line.col = "green", lwd = 2, 
+    ylims = NULL, 
+    draw = TRUE, 
+    statbar = FALSE
+) {
     set.seed(1234)
 
 	# check input
@@ -168,10 +169,13 @@ theme_common_gsea <- function(base_size = 7) {
     .theme <- theme(
         text = element_text(face = "plain", size = base_size, colour = "black", family = "Arial"),
         plot.title = element_text(size = rel(1.0)),
-        axis.ticks = element_blank(), axis.text = element_blank(), axis.title = element_blank(),
-        panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        axis.ticks = element_blank(), 
+        axis.text  = element_blank(), 
+        axis.title = element_blank(),
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
         panel.background = element_rect(fill = "transparent", colour = NA),
-        plot.background = element_rect(fill = "transparent", colour = NA),
+        plot.background  = element_rect(fill = "transparent", colour = NA),
         complete = TRUE
     )
     .theme
