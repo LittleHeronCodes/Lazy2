@@ -10,24 +10,31 @@
 #' @return List of enricher Object: up, down
 #' @export
 
-Gen_enrichment <- function(glist, refgmt, tglist, minGeneSet = 10, ncore = 1, ef.psc = 0) {
-    # .Deprecated("glist_enrichment")
-    bgspace <- unique(unlist(refgmt))
-    glist <- lapply(glist, function(gg) intersect(gg, bgspace))
-    tglist <- lapply(tglist, function(gg) intersect(gg, bgspace))
+glist_enrichment <- function(
+	glist, refgmt, tglist, minGeneSet = 10, ncore = 1, ef.psc = 0
+) {
+	bgspace <- unique(unlist(refgmt))
+	glist  <- lapply(glist,  \(gg) intersect(gg, bgspace))
+	tglist <- lapply(tglist, \(gg) intersect(gg, bgspace))
 
-    if (ncore <= 1) {
-        enrobj <- lapply(names(glist), function(aid) {
-			hypergeoTestForGeneset(glist[[aid]], refgmt, tglist[[aid]], minGeneSet, ef.psc = ef.psc)
-			})
-    }
-    if (ncore > 1) {
-        enrobj <- mclapply(names(glist), function(aid) {
+	if (ncore > 1) {
+		enrobj <- mclapply(names(glist), function(aid) {
 			hypergeoTestForGeneset(glist[[aid]], refgmt, tglist[[aid]], minGeneSet, ef.psc = ef.psc)
 		}, mc.cores = ncore)
-    }
-    names(enrobj) <- names(glist)
-    return(enrobj)
+	} else {
+		enrobj <- lapply(names(glist), function(aid) {
+			hypergeoTestForGeneset(glist[[aid]], refgmt, tglist[[aid]], minGeneSet, ef.psc = ef.psc)
+		})
+	}
+	names(enrobj) <- names(glist)
+	enrobj
+}
+
+#' @rdname glist_enrichment
+#' @export
+Gen_enrichment <- function(glist, refgmt, tglist, minGeneSet = 10, ncore = 1, ef.psc = 0) {
+	.Deprecated("glist_enrichment", "Use glist_enrichment instead.")
+	glist_enrichment(glist, refgmt, tglist, minGeneSet, ncore, ef.psc)
 }
 
 
@@ -44,26 +51,33 @@ Gen_enrichment <- function(glist, refgmt, tglist, minGeneSet = 10, ncore = 1, ef
 
 
 enrobj2Matrix <- function(enrobj, val.col = "pvalue", log = TRUE) {
-    LS <- lapply(names(enrobj), function(set) {
-        dff <- data.frame(enrobj[[set]])
-        if ("Description" %in% names(dff)) dff <- dff %>% dplyr::rename("termID" = "ID", "ID" = "Description")
-        dff$set <- set
-        dff <- dff[order(dff$set), ]
-        return(dff)
-    })
-    hmplot <- do.call(rbind, LS)
+	LS <- lapply(names(enrobj), function(set) {
+		dff <- data.frame(enrobj[[set]])
+		if ("Description" %in% names(dff)) {
+			dff <- dff |> dplyr::rename("termID" = "ID", "ID" = "Description")
+		}
+		dff$set <- set
+		dff[order(dff$set), ]
+	})
 
-    # detect log values
-    is_log <- FALSE
-    if (any(quantile(hmplot[, val.col], na.rm = TRUE) > 1)) is_log <- TRUE
-    if (log & is_log) cat("val.col seems to already be in log values.\n")
-    log <- FALSE
-    if (log & !is_log) {
-        hmplot$logV <- -log10(hmplot[, val.col])
-        plotMat <- reshape2::acast(hmplot, ID ~ set, value.var = "logV", fill = NA)
-    }
+	hmplot <- do.call(rbind, LS)
 
-    if (!log) plotMat <- reshape2::acast(hmplot, ID ~ set, value.var = val.col, fill = NA)
-    plotMat <- plotMat[order(apply(plotMat, 1, sum, na.rm = TRUE), decreasing = TRUE), ]
-    return(plotMat)
+	# detect log values
+	is_log <- FALSE
+	if (any(quantile(hmplot[, val.col], na.rm = TRUE) > 1)) {
+		is_log <- TRUE
+	}
+	if (log & is_log) message("val.col seems to already be in log values. Setting log = FALSE.")
+	log <- FALSE
+	if (log & !is_log) {
+		hmplot$logV <- -log10(hmplot[, val.col])
+		plotMat <- reshape2::acast(hmplot, ID ~ set, value.var = "logV", fill = NA)
+	}
+
+	if (!log) {
+		plotMat <- reshape2::acast(hmplot, ID ~ set, value.var = val.col, fill = NA)
+	}
+	plotMat <- plotMat[order(apply(plotMat, 1, sum, na.rm = TRUE), decreasing = TRUE), ]
+
+	plotMat
 }

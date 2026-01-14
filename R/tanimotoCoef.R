@@ -7,23 +7,32 @@
 #' @examples
 #' A <- c(1:5)
 #' B <- c(3:7)
-#' tanimotoCoef(A, B)
+#' tanimoto_coef(A, B)
+#' @export
+
+tanimoto_coef <- function(A, B, T = NULL) {
+	if (!is.null(T)) {
+		A <- intersect(A, T)
+		B <- intersect(B, T)
+	}
+	int <- intersect(A, B)
+	uni <- union(A, B)
+	
+	(length(int) / length(uni))
+}
+
+#' @deprecated
+#' @rdname tanimoto_coef
 #' @export
 
 tanimotoCoef <- function(A, B, T = NULL) {
-    if (!is.null(T)) {
-        A <- intersect(A, T)
-        B <- intersect(B, T)
-    }
-    int <- intersect(A, B)
-    uni <- union(A, B)
-    return(length(int) / length(uni))
+	.Deprecated("tanimoto_coef", "Use tanimoto_coef instead.")
+	tanimoto_coef(A, B, T)
 }
 
-
-#' Calculate Enrichment factor
+#' Calculate Fold Enrichment
 #'
-#' Enrichment factor represents the "enrichment" of overlap between two sets in a given space.
+#' Calculate the fold enrichment of overlap between two sets in a given space.
 #' This is calculated as (observed count) / (expected count).
 #' @param setA set input1 as vectors
 #' @param setB set input2 as vectors
@@ -33,29 +42,36 @@ tanimotoCoef <- function(A, B, T = NULL) {
 #' A <- c(1:5)
 #' B <- c(3:7)
 #' total <- c(1:10)
-#' getEnrichmentFactor(A, B, total)
+#' get_enrichment_factor(A, B, total)
 #' @export
 
-getEnrichmentFactor <- function(setA, setB, setT, psc = 0) {
-    setA <- intersect(setA, setT)
-    setB <- intersect(setB, setT)
+fold_enrichment <- function(setA, setB, setT, psc = 0) {
+	setA <- intersect(setA, setT)
+	setB <- intersect(setB, setT)
 
-    ef <- NA
-    A <- length(setA)
-    B <- length(setB)
-    T <- length(setT)
-    I <- length(intersect(setA, setB))
-    if ((A / T * B) != 0) {
-        ef <- (I + psc) / (A / T * B + psc)
-    }
-    return(ef)
+	ef <- NA
+	A <- length(setA)
+	B <- length(setB)
+	T <- length(setT)
+	I <- length(intersect(setA, setB))
+	if ((A / T * B) != 0) {
+		ef <- (I + psc) / (A / T * B + psc)
+	}
+	ef
+}
+
+#' @rdname fold_enrichment
+#' @export
+getEnrichmentFactor <- function(setA, setB, setT, psc = 0) {
+	.Deprecated("fold_enrichment", "Use fold_enrichment instead.")
+	fold_enrichment(setA, setB, setT, psc)
 }
 
 
 #' Hypergeometric test
 #'
 #' Run one-tailed hypergeometric test (fisher test) with set inputs.
-#' 'hypergeoTest' uses hypergeometric distribution function phyper with lower.tail = FALSE fixed.
+#' 'hypergeo_test' uses hypergeometric distribution function phyper with lower.tail = FALSE fixed.
 #' This is commonly used for testing significance in overlap between sets.
 #'
 #' @param query     query set        (balls drawn)
@@ -67,20 +83,26 @@ getEnrichmentFactor <- function(setA, setB, setT, psc = 0) {
 #' By nature of phyper, reference and query input should be interchangeable.
 #' @export
 
-hypergeoTest <- function(query, reference, bgspace) {
-    query <- intersect(query, bgspace)
-    reference <- intersect(reference, bgspace)
+hypergeo_test <- function(query, reference, bgspace) {
+	query <- intersect(query, bgspace)
+	reference <- intersect(reference, bgspace)
 
-    N <- length(bgspace) # no of balls in urn
-    k <- length(query) # no of balls drawn from urn (DEG no)
-    m <- length(reference) # no of white balls in urn
-    q <- length(intersect(reference, query)) # no of white balls drawn
+	N <- length(bgspace)   # no of balls in urn
+	k <- length(query)     # no of balls drawn from urn (DEG no)
+	m <- length(reference) # no of white balls in urn
+	q <- length(intersect(reference, query)) # no of white balls drawn
 
-    pVal <- phyper(q - 1, m, N - m, k, lower.tail = FALSE)
-    odds <- (q / k) / (m / N)
-    return(data.frame(pVal = pVal, oddsRatio = odds, int = q, bg = N))
+	pVal <- phyper(q - 1, m, N - m, k, lower.tail = FALSE)
+	odds <- (q / k) / (m / N)
+	data.frame(pVal = pVal, oddsRatio = odds, int = q, bg = N)
 }
 
+#' @rdname hypergeo_test
+#' @export
+hypergeoTest <- function(query, reference, bgspace) {
+	.Deprecated("hypergeo_test", "Use hypergeo_test instead.")
+	hypergeo_test(query, reference, bgspace)
+}
 
 #' Harmonic Mean
 #'
@@ -92,5 +114,5 @@ hypergeoTest <- function(query, reference, bgspace) {
 #' v <- seq(0.01, .99, .01)
 #' harmean(v)
 harmean <- function(v, ...) {
-    1 / mean(1 / v, ...)
+	1 / mean(1/v, ...)
 }

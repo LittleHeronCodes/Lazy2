@@ -2,8 +2,12 @@
 *.db
 .DS_Store
 
+# workspace files
 *.sublime-project
 *.sublime-workspace
+*.Rproj
+*.code-workspace
+
 
 # Data files
 # *.csv
@@ -47,3 +51,5 @@ vignettes/*.pdf
 
 # Shiny token, see https://shiny.rstudio.com/articles/shinyapps.html
 rsconnect/
+
+/.quarto/

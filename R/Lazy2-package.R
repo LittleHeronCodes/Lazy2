@@ -6,6 +6,7 @@
 #' @import stats
 #' @import magrittr
 #' @importFrom data.table data.table
+#' @importFrom dplyr mutate select
 #' @importFrom utils combn packageDescription stack
 #' @importFrom purrr map2
 #' @importFrom parallel mclapply

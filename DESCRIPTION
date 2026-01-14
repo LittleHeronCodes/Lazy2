@@ -1,19 +1,19 @@
 Package: Lazy2
 Title: Lazy Package
-Version: 0.1.7.9000
+Version: 0.3.0.9000
 Authors@R: 
     person(given   = "Yeogha",
            family  = "Yoon",
            role    = c("aut", "cre"),
-           email   = "ygyoon17@ewhain.net",
+           email   = "yeogha.yoon@mssm.edu",
            comment = c(ORCID = "0000-0003-0955-4344"))
 Description: Lazy package of custom functions for personal use in bioinformatic analyses.
-License: MIT + file LICENSE
+License: MIT
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.2.3.9000
 Depends: 
-	R (>= 3.6.0)
+	R (>= 4.0.0)
 Imports: 
 	data.table (>= 1.12.0),
 	dplyr (>= 0.8.1),
