@@ -1,3 +1,8 @@
+## Geometric mean
+geomean <- function(x) {
+	if(any(x < 0)) stop("Geometric mean is only defined for non-negative numbers")
+	exp(mean(log(x[x > 0])))
+}
 
 
 ## Functions to help draw plot
