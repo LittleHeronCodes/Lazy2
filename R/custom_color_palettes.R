@@ -4,6 +4,9 @@
 #' @param palette Name of the color palette to use. Use "list" to see all available palettes or "aliases" to see palette aliases.
 #' @return A function that generates a color ramp palette.
 #' @export
+#' @examples
+#' colpal <- custom_color_palette("OceanFire")(11)
+#' colpal
 
 custom_color_palette <- function(palette = "OceanFire") {
 	pal_list <- list(
@@ -123,13 +126,16 @@ custom_color_palette <- function(palette = "OceanFire") {
 		stop("Available palettes: ", paste(names(pal_list), collapse = ", "))
 	}
 
-	colorRampPalette(pal_list[[palette]])
+	grDevices::colorRampPalette(pal_list[[palette]])
 }
 
 #' @describeIn custom_color_palette Print all available palettes
 #' @param n Number of colors to display for each palette
 #' @export
-print_custom_palettes <- function(n = 11) {
+#' @examples 
+#' show_custom_palettes(11)
+
+show_custom_palettes <- function(n = 11) {
 	pals <- custom_color_palette("list")
 	par.default <- par(no.readonly = TRUE)
 	par(mfrow = c(ceiling(length(pals) / 2), 2), mar = c(2, 2, 2, 2))
@@ -146,29 +152,3 @@ print_custom_palettes <- function(n = 11) {
 	}
 	par(par.default)
 }
-
-# Theme with transparent
-
-
-
-# Additional palettes (suggested by Copilot, Possible modification to discrete palettes)
-# GlacierMelt = c( # icy blue through white to warm earth tones
-# 	'#003f5c', '#2f4b7c', '#665191', '#a05195', '#d45087', '#f95d6a', 
-# 	'#ff7c43', '#ffa600'
-# ),
-# VolcanicAsh = c( # volcanic eruption colors
-# 	'#2d3436', '#636e72', '#b2bec3', '#ddd6fe', '#fd79a8', '#e84393', 
-# 	'#e17055', '#d63031', '#a29bfe', '#6c5ce7'
-# ),
-# CosmicDust = c( # space-inspired deep purples to starlight
-# 	'#000000', '#1a0033', '#4a0080', '#8000ff', '#bf80ff', '#e6ccff', 
-# 	'#ffffff', '#ffffcc', '#ffff80', '#ffff00'
-# ),
-# NorthernLights = c( # aurora-inspired palette
-# 	'#0d1b2a', '#415a77', '#778da9', '#e0e1dd', '#bcf5bc', '#90e0ef', 
-# 	'#00b4d8', '#0077b6', '#023e8a', '#03045e'
-# ),
-# NorthernLights2 = c( # realistic aurora colors
-# 	'#001122', '#003366', '#004488', '#0066aa', '#0088cc', '#33aadd', 
-# 	'#66ccee', '#99ddff', '#aaffaa', '#66ff66', '#33ff33'
-# ),

@@ -21,7 +21,6 @@ tanimoto_coef <- function(A, B, T = NULL) {
 	(length(int) / length(uni))
 }
 
-#' @deprecated
 #' @rdname tanimoto_coef
 #' @export
 
@@ -42,22 +41,22 @@ tanimotoCoef <- function(A, B, T = NULL) {
 #' A <- c(1:5)
 #' B <- c(3:7)
 #' total <- c(1:10)
-#' get_enrichment_factor(A, B, total)
+#' fold_enrichment(A, B, total)
 #' @export
 
 fold_enrichment <- function(setA, setB, setT, psc = 0) {
 	setA <- intersect(setA, setT)
 	setB <- intersect(setB, setT)
 
-	ef <- NA
+	fe <- NA
 	A <- length(setA)
 	B <- length(setB)
 	T <- length(setT)
 	I <- length(intersect(setA, setB))
 	if ((A / T * B) != 0) {
-		ef <- (I + psc) / (A / T * B + psc)
+		fe <- (I + psc) / (A / T * B + psc)
 	}
-	ef
+	fe
 }
 
 #' @rdname fold_enrichment

@@ -74,12 +74,14 @@ writeGMT <- function(gmtfile, genelist, geneset_desc = "") {
 #' hypergeoTestForGeneset(gset, glist, LETTERS)
 #' @export
 
-hypergeoTestForGeneset <- function(query, refGMT, gspace, minGeneSet = 10, ef.psc = 0) {
+hypergeoTestForGeneset <- function(
+	query, refGMT, gspace, minGeneSet = 10, ef.psc = 0
+) {
 	
 	# match gene space
 	if (!all(query %in% gspace)) {
+		msg <- c(length(setdiff(query, gspace)), "query items were found outside of background space.")
 		query <- intersect(query, gspace)
-		msg <- c(length(setdiff(query, gspace)), " query items were found outside of background space.")
 		warning(msg)
 	}
 	if (length(query) == 0) stop("Query length is zero.")
@@ -93,7 +95,8 @@ hypergeoTestForGeneset <- function(query, refGMT, gspace, minGeneSet = 10, ef.ps
 	if (length(exc) != 0) {
 		if (length(exc) <= 5) {
 			msg <- paste(
-				"Ref set no.", paste(exc, collapse = ", "), "had less than", minGeneSet, "genes and were excluded."
+				"Ref set no.", paste(exc, collapse = ", "), "had less than", 
+				minGeneSet, "genes and were excluded."
 			)
 		} else {
 			msg <- paste(
@@ -150,7 +153,9 @@ hypergeoTestForGeneset <- function(query, refGMT, gspace, minGeneSet = 10, ef.ps
 #' @importFrom data.table rbindlist
 #' @export
 
-hypergeoTestForGeneset2 <- function(query, refGMT, gspace, minGeneSet = 10, ncore = 1, ef.psc = 0) {
+hypergeoTestForGeneset2 <- function(
+	query, refGMT, gspace, minGeneSet = 10, ncore = 1, ef.psc = 0
+) {
 	.Deprecated("hypergeoTestForGeneset")
 
 	if (!all(query %in% gspace)) {

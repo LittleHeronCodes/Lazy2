@@ -32,7 +32,9 @@ glist_enrichment <- function(
 
 #' @rdname glist_enrichment
 #' @export
-Gen_enrichment <- function(glist, refgmt, tglist, minGeneSet = 10, ncore = 1, ef.psc = 0) {
+Gen_enrichment <- function(
+	glist, refgmt, tglist, minGeneSet = 10, ncore = 1, ef.psc = 0
+) {
 	.Deprecated("glist_enrichment", "Use glist_enrichment instead.")
 	glist_enrichment(glist, refgmt, tglist, minGeneSet, ncore, ef.psc)
 }
@@ -67,7 +69,10 @@ enrobj2Matrix <- function(enrobj, val.col = "pvalue", log = TRUE) {
 	if (any(quantile(hmplot[, val.col], na.rm = TRUE) > 1)) {
 		is_log <- TRUE
 	}
-	if (log & is_log) message("val.col seems to already be in log values. Setting log = FALSE.")
+	if (log & is_log) {
+		message("val.col seems to already be in log values. Setting log = FALSE.")
+	}
+
 	log <- FALSE
 	if (log & !is_log) {
 		hmplot$logV <- -log10(hmplot[, val.col])

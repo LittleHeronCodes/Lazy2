@@ -1,3 +1,111 @@
+#' Draw Volcano Plot using ggplot2
+#' @param resultDF Data frame containing the results. Must include columns: logFC, pval, padj, geneSym.
+#' @param qco Q-value cutoff for significance. Default is 0.05.
+#' @param fco Fold change cutoff for significance. Default is 1.5.
+#' @param ttl_pre Title prefix for the plot. Default is an empty string.
+#' @param mode Plot mode: "vol" for volcano, "ma" for MA plot. Default is "vol".
+#' @param pcol P-value column to use: "pval" or "padj". Default is "padj".
+#' @param top10_lab Logical, whether to label the top 10 significant genes. Default is FALSE.
+#' @return A ggplot2 object representing the volcano or MA plot.
+#' @export
+
+drawVol_gg <- function(
+	resultDF, 
+	qco = 0.05, 
+	fco = 1.5, 
+	ttl_pre = "", 
+	mode = "vol", 
+	pcol = "padj", 
+	top10_lab = FALSE
+) {
+
+	# argument check
+	if (!mode %in% c("ma", "vol")   ) stop("Argument mode should be either 'ma' or 'vol'."   )
+	if (!pcol %in% c("pval", "padj")) stop("Argument pcol should be either 'pval' or 'padj'.")
+	if (pcol == "pval") {
+		mt_p <- "pv"
+		ax_p <- expression(bold(-log[10] ~ p.val))
+	}
+	if (pcol == "padj") {
+		mt_p <- "qv"
+		ax_p <- expression(bold(-log[10] ~ FDR))
+	}
+
+	resultDF <- resultDF |> 
+		dplyr::mutate(p.used = get(pcol)) |> 
+		dplyr::filter(!is.na(p.used))
+
+	ui <- which(resultDF$p.used < qco & resultDF$logFC >=  log2(fco))
+	di <- which(resultDF$p.used < qco & resultDF$logFC <= -log2(fco))
+	gcnt <- paste("up:", length(ui), "dn:", length(di))
+	mtitle <- paste(ttl_pre, "FC", fco, mt_p, qco, gcnt)
+	axlim <- max(abs(resultDF$logFC), na.rm = TRUE) * c(-1, 1)
+
+	# MA
+	if (mode == "ma") {
+		gp <- ggplot(resultDF, aes(x = AveExpr, y = logFC)) +
+			geom_point(shape = 20, cex = 0.05) +
+			geom_point(
+				data = resultDF[c(ui, di), ], aes(x = AveExpr, y = logFC), 
+				shape = 20, colour = "red", cex = 0.25
+			) +
+			geom_hline(yintercept = c(-log2(fco), log2(fco)), col = "blue", lty = 2) +
+			scale_y_continuous(limits = axlim) + 
+			labs(title = mtitle, y = expression(bold(log[2] ~ FC)), x = "AveExpr")
+	}
+	
+	# volcano
+	if (mode == "vol") {
+		gp <- ggplot(resultDF, aes(x = logFC, y = -log10(p.used))) +
+			geom_point(shape = 20, cex = 0.05) +
+			geom_point(
+				data = resultDF[c(ui, di), ], aes(x = logFC, y = -log10(p.used)), 
+				shape = 20, colour = "red", cex = 0.25
+			) +
+			geom_hline(yintercept = -log10(qco), col = "blue", lty = 2) + 
+			geom_vline(xintercept = c(-log2(fco), log2(fco)), col = "blue", lty = 2) +
+			scale_x_continuous(limits = axlim) +
+			labs(title = mtitle, y = ax_p, x = expression(bold(log[2] ~ FC)))
+	}
+
+	# label
+	if (top10_lab) {
+		require(ggrepel)
+		labeldf <- resultDF[c(ui, di), ] |>
+			dplyr::filter(
+				(rank(logFC, ties.method = "min") <= 10) | (rank(-logFC, ties.method = "min") <= 10)
+			)
+
+		gp <- gp + 
+			geom_label_repel(
+				data = labeldf, aes(x = logFC, y = -log10(p.used), label = geneSym), 
+				colour = "blue", max.overlaps = 20
+			)
+	}
+
+	# theme
+	gp <- gp + 
+		theme(
+			panel.border = element_blank(),
+			panel.grid = element_line(colour = "grey92"), 
+			plot.title = element_text(colour = "black", face = "bold", size = rel(1.4), hjust = 0.5),
+			axis.title = element_text(colour = "black", face = "bold", size = rel(1.1)),
+			axis.line  = element_line(colour = "black", linewidth = 0.5),
+			axis.text  = element_text(colour = "black", size = rel(1.1)),
+			plot.background   = element_rect(fill = "transparent", colour = NA), 
+			panel.background  = element_rect(fill = "transparent", colour = NA), 
+			strip.background  = element_rect(fill = "transparent", colour = NA, linewidth = 0.7), 
+			legend.background = element_rect(fill = "transparent", colour = NA), 
+			legend.key = element_blank(), 
+			panel.ontop = FALSE
+		)
+
+	gp
+}
+
+
+
+
 ## Draw MA / Volcano plot
 drawMA <- function(resultDF, qco, fco, ttl_pre = "", ylim = NULL, xlim = NULL, mode = "ma", pcol = "padj", ...) {
 

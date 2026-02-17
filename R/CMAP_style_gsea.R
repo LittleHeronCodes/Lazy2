@@ -10,12 +10,17 @@
 #' @return dataframe of named vectors for each category
 #' @export
 
-enrichmentFactorForDataFrame <- function(data, enrich_element, rank_by, cutoff = 0.05, min_count = 3, psc = 1) {
+enrichmentFactorForDataFrame <- function(
+	data, enrich_element, rank_by, cutoff = 0.05, min_count = 3, psc = 1
+) {
 	
 	# index to use
 	include <- names(which(table(data[, enrich_element]) >= min_count))
 	if (length(include) < length(unique(data[, enrich_element])) * .10) {
-		stop("Less than 10% factors were included. There may be a problem with the inputs or set lower min_count.")
+		stop(
+			"Less than 10% factors were included. ",
+			"There may be a problem with the inputs or set lower min_count."
+		)
 	}
 	data <- data[which(data[, enrich_element] %in% include), ]
 
@@ -44,7 +49,6 @@ enrichmentFactorForDataFrame <- function(data, enrich_element, rank_by, cutoff =
 	# ratio
 	rat <- structure(paste0(cntPct[idx], "/", cntAll[idx]), names = idx)
 	rat <- rat[names(ef)]
-
 
 	# add zero values
 	idx2 <- setdiff(names(cntAll), idx)
