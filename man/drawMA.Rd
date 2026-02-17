@@ -3,27 +3,46 @@
 \name{drawMA}
 \alias{drawMA}
 \alias{drawVol}
+\alias{drawVol_gg}
 \title{Draw MA, volcano plot}
 \usage{
 drawMA(resultDF, qco, fco, ttl_pre, ylim = NULL)
 
 drawVol(resultDF, qco, fco, ttl_pre, xlim = NULL)
+
+drawVol_gg(
+  resultDF,
+  qco = 0.05,
+  fco = 1.5,
+  ttl_pre = "",
+  mode = "vol",
+  pcol = "padj",
+  top10_lab = FALSE
+)
 }
 \arguments{
-\item{resultDF}{result dataframe generated from limma or DEseq2. If DESeq2, column name should be 'adj.P.Val','logFC','AveExpr'}
+\item{resultDF}{Data frame containing the results. Must include columns: logFC, pval, padj, geneSym.}
 
-\item{qco}{adjusted p value cut off}
+\item{qco}{Q-value cutoff for significance. Default is 0.05.}
 
-\item{fco}{fold change cut off}
+\item{fco}{Fold change cutoff for significance. Default is 1.5.}
 
-\item{ttl_pre}{main title prefix}
+\item{ttl_pre}{Title prefix for the plot. Default is an empty string.}
 
 \item{ylim}{y-axis limit}
 
 \item{xlim}{x-axis limit}
+
+\item{mode}{Plot mode: "vol" for volcano, "ma" for MA plot. Default is "vol".}
+
+\item{pcol}{P-value column to use: "pval" or "padj". Default is "padj".}
+
+\item{top10_lab}{Logical, whether to label the top 10 significant genes. Default is FALSE.}
 }
 \value{
 plot
+
+A ggplot2 object representing the volcano or MA plot.
 }
 \description{
 Draw MA plot from resultDF generated from limma (data.frame format). DESeq2 results should have column names matching limma.
@@ -31,6 +50,8 @@ Draw MA plot from resultDF generated from limma (data.frame format). DESeq2 resu
 \section{Functions}{
 \itemize{
 \item \code{drawVol()}: Draw volcano plot
+
+\item \code{drawVol_gg()}: Draw Volcano Plot using ggplot2
 
 }}
 \examples{

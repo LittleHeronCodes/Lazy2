@@ -25,7 +25,7 @@ hypergeoTestForGeneset2(
 
 \item{minGeneSet}{minimum size of gene set. This is used to filter refGMT. Default 10}
 
-\item{ef.psc}{pseudocount when calculating enrichment factor (oddsRatio). Default 0}
+\item{ef.psc}{pseudocount when calculating fold enrichment. Default 0}
 
 \item{ncore}{number of cores used in hypergeoTestForGeneset2 (soon to be removed)}
 }
@@ -34,7 +34,7 @@ Data frame of gene set analysis results
 \describe{
 	  \item{pVal}{: hypergeometric test p values from phyper}
 	  \item{logP}{: -log10(p value)}
-	  \item{oddsRatio}{: odds ratio}
+	  \item{FE}{: Fold enrichment. ratio of DEGs in gene set / ratio of genes in gene space}
 	  \item{tanco}{: tanimoto coefficient (Jaccard index)}
 	  \item{int}{: intersected item count}
 	  \item{gsRatio}{: gene set ratio (selected genes in gene set / selected genes)}
@@ -42,7 +42,8 @@ Data frame of gene set analysis results
 }
 }
 \description{
-Gene list hypergeometric test against gmt format list of gene set. Can be used for custom pathway analysis or CMAP style query.
+Gene list hypergeometric test against gmt format list of gene set. 
+Can be used for custom pathway analysis or CMAP style query.
 }
 \section{Functions}{
 \itemize{

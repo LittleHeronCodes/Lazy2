@@ -8,8 +8,8 @@
 plotEnrichment2(
   gset,
   stats,
-  nes,
-  qv,
+  nes = NULL,
+  qv = NULL,
   gseaParam = 1,
   mtitle = NULL,
   ytitle = "",
@@ -19,7 +19,8 @@ plotEnrichment2(
   lwd = 2,
   ylims = NULL,
   draw = TRUE,
-  statbar = FALSE
+  statbar = FALSE,
+  seed = 1234
 )
 
 theme_common_gsea(base_size = 7)
@@ -33,31 +34,34 @@ theme_common_gsea(base_size = 7)
 
 \item{qv}{adjusted p value provided for annotation. Runs fgsea if not provided.}
 
-\item{gseaParam}{gseaParam from plotEnrichment.}
+\item{gseaParam}{gseaParam from plotEnrichment. default 1}
 
-\item{mtitle}{main title}
+\item{mtitle}{main title of the plot.}
 
 \item{ytitle}{y axis name}
 
-\item{ticksSize}{ticks lwd for geneset bars.}
+\item{ticksSize}{ticks width for gene set bars. default 0.4}
 
 \item{base_size}{font base size. default 7}
 
-\item{line.col}{line colour for GSEA running score.}
+\item{line.col}{line colour for GSEA running score. default "green"}
 
-\item{lwd}{line width for GSEA running score.}
+\item{lwd}{line width for GSEA running score. default 2}
 
-\item{ylims}{y-axis limits.}
+\item{ylims}{y-axis limits. If NULL (default), limits will be set automatically.}
 
-\item{draw}{draw plot. default TRUE}
+\item{draw}{draw plot on device. Return ggplot object if set to FALSE. default TRUE}
 
-\item{statbar}{show statistics tick at bottom of plot.}
+\item{statbar}{show statistics tick at bottom of plot. default FALSE}
+
+\item{seed}{random seed for reproducibility. default 1234}
 }
 \value{
 enrichment plot
 }
 \description{
-Plot running score for GSEA enrichment plot. Function modified from plotEnrichment function in fgsea package.
+Draw a plot of running score for GSEA enrichment plot. 
+Function has been taken and modified from plotEnrichment function in fgsea package.
 }
 \section{Functions}{
 \itemize{

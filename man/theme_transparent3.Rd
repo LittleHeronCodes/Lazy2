@@ -8,7 +8,8 @@ theme_transparent3(
   base_size = 11,
   base_family = "",
   base_line_size = base_size/22,
-  base_rect_size = base_size/22
+  base_rect_size = base_size/22,
+  complete = TRUE
 )
 }
 \arguments{
@@ -19,6 +20,8 @@ theme_transparent3(
 \item{base_line_size}{base line size. default base_size / 22}
 
 \item{base_rect_size}{base rectangle size. default base_size / 22}
+
+\item{complete}{whether to return complete theme object. default TRUE}
 }
 \value{
 ggplot theme
@@ -30,4 +33,5 @@ Theme for transparent ggplot figures. function adopts from theme_grey.
 \dontrun{
 theme_set(theme_transparent3())
 }
+
 }

@@ -1,6 +1,6 @@
 Package: Lazy2
 Title: Lazy Package
-Version: 0.3.0.9000
+Version: 0.3.1.9001
 Authors@R: 
     person(given   = "Yeogha",
            family  = "Yoon",
@@ -11,23 +11,24 @@ Description: Lazy package of custom functions for personal use in bioinformatic 
 License: MIT
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.2.3.9000
+RoxygenNote: 7.3.3
 Depends: 
-	R (>= 4.0.0)
+	R (>= 4.3.0)
 Imports: 
 	data.table (>= 1.12.0),
-	dplyr (>= 0.8.1),
-	ggplot2 (>= 3.3.5),
+	dplyr (>= 1.1.4),
+	ggplot2 (>= 3.5.0),
 	purrr (>= 0.3.4),
 	reshape2 (>= 1.4.3),
 	parallel,
 	magrittr (>= 2.0.3),
+	RColorBrewer (>= 1.1),
 	fgsea (>= 1.12.0)
 Suggets:
+	ggrepel (>= 0.9.1),
 	rlang (>= 1.0.6),
 	circlize (>= 0.4.6),
 	ComplexHeatmap (>= 2.0.0),
 	clusterProfiler (>= 3.12.0),
 	gtable (>= 0.3.0),
-	RColorBrewer (>= 1.1),
 	tidyr (>= 0.8.3)
