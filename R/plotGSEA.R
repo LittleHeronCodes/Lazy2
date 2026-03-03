@@ -132,7 +132,7 @@ plotEnrichment2 <- function(
 		
 	# gene set bar
 	g2 <- data.frame(x = pathway) |>
-		ggplot(aes(x = x, y = -diff/3, xend = x, yend = diff/3)) +
+		ggplot(aes(x = .data$x, y = -diff/3, xend = .data$x, yend = diff/3)) +
 		geom_segment(size = ticksSize, colour = "grey35") +
 		scale_x_continuous(breaks = xbreaks, limits = xlims) +
 		theme_common_gsea(base_size = base_size) +

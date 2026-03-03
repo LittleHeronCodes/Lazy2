@@ -139,11 +139,14 @@ hypergeoTestForGeneset <- function(
 	enrRes <- enrRes |>
 		dplyr::mutate(
 			qVal = p.adjust(pv, method = "fdr"),
-			qVal = ifelse(int == 0, 1, qVal),
-			logP = -log10(pVal),
-			logQ = -log10(qVal)
+			qVal = ifelse(.data$int == 0, 1, .data$qVal),
+			logP = -log10(.data$pVal),
+			logQ = -log10(.data$qVal)
 		) |>
-		dplyr::select(ID, pVal, logP, qVal, logQ, fe, tan, int, gsRatio, bgRatio, intGenes)
+		dplyr::select(
+			"ID", "pVal", "logP", "qVal", "logQ", 
+			"fe", "tan", "int", "gsRatio", "bgRatio", "intGenes"
+		)
 
 	enrRes
 }

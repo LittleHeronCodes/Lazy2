@@ -3,3 +3,4 @@
 ^LICENSE\.md$
 ^Lazy2.code-workspace$
 ^.quarto$
+^.vscode$

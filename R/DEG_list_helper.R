@@ -79,9 +79,9 @@ extractGeneList <- function(resultsLS, fco, qco, cnt = NULL, remove_ambi = FALSE
 #' @export
 
 removeAmbigDEGs <- function(geneList) {
-	ambi <- map2(geneList$up, geneList$dn, function(x, y) intersect(x, y))
-	geneList$up <- map2(geneList$up, ambi, function(x, y) setdiff(x, y))
-	geneList$dn <- map2(geneList$dn, ambi, function(x, y) setdiff(x, y))
+	ambi <- purrr::map2(geneList$up, geneList$dn, function(x, y) intersect(x, y))
+	geneList$up <- purrr::map2(geneList$up, ambi, function(x, y) setdiff(x, y))
+	geneList$dn <- purrr::map2(geneList$dn, ambi, function(x, y) setdiff(x, y))
 	return(geneList)
 }
 
@@ -135,10 +135,11 @@ getOverlapDF <- function(gls, tgls, unique_combn = FALSE) {
 		setB <- intersect(gls[[ix2]], gspace)
 		hgeo <- hypergeoTest(setA, setB, gspace)
 		FE <- fold_enrichment(setA, setB, gspace, 2)
-		tan <- tanimotoCoef(setA, setB)
+		tan <- tanimoto_coef(setA, setB)
 		data.frame(ix1 = ix1, ix2 = ix2, hgeo = hgeo, FE = FE, tan = tan)
 	})
-	pairdf <- do.call(rbind, LS)
+
+	do.call(rbind, LS)
 }
 
 
@@ -204,6 +205,7 @@ drawVol <- function(resultDF, qco, fco, ttl_pre, xlim = NULL) {
 #' @param pcol P-value column to use: "pval" or "padj". Default is "padj".
 #' @param top10_lab Logical, whether to label the top 10 significant genes. Default is FALSE.
 #' @return A ggplot2 object representing the volcano or MA plot.
+#' @importFrom rlang .data
 #' @export
 
 drawVol_gg <- function(
@@ -229,8 +231,8 @@ drawVol_gg <- function(
 	}
 
 	resultDF <- resultDF |> 
-		dplyr::mutate(p.used = get(pcol)) |> 
-		dplyr::filter(!is.na(p.used))
+		dplyr::mutate(p.used = get(.data$pcol)) |> 
+		dplyr::filter(!is.na(.data$p.used))
 
 	ui <- which(resultDF$p.used < qco & resultDF$logFC >=  log2(fco))
 	di <- which(resultDF$p.used < qco & resultDF$logFC <= -log2(fco))
@@ -240,10 +242,10 @@ drawVol_gg <- function(
 
 	# MA
 	if (mode == "ma") {
-		gp <- ggplot(resultDF, aes(x = AveExpr, y = logFC)) +
+		gp <- ggplot(resultDF, aes(x = .data$AveExpr, y = .data$logFC)) +
 			geom_point(shape = 20, cex = 0.05) +
 			geom_point(
-				data = resultDF[c(ui, di), ], aes(x = AveExpr, y = logFC), 
+				data = resultDF[c(ui, di), ], aes(x = .data$AveExpr, y = .data$logFC), 
 				shape = 20, colour = "red", cex = 0.25
 			) +
 			geom_hline(yintercept = c(-log2(fco), log2(fco)), col = "blue", lty = 2) +
@@ -253,10 +255,10 @@ drawVol_gg <- function(
 	
 	# volcano
 	if (mode == "vol") {
-		gp <- ggplot(resultDF, aes(x = logFC, y = -log10(p.used))) +
+		gp <- ggplot(resultDF, aes(x = .data$logFC, y = -log10(.data$p.used))) +
 			geom_point(shape = 20, cex = 0.05) +
 			geom_point(
-				data = resultDF[c(ui, di), ], aes(x = logFC, y = -log10(p.used)), 
+				data = resultDF[c(ui, di), ], aes(x = .data$logFC, y = -log10(.data$p.used)), 
 				shape = 20, colour = "red", cex = 0.25
 			) +
 			geom_hline(yintercept = -log10(qco), col = "blue", lty = 2) + 
@@ -267,15 +269,16 @@ drawVol_gg <- function(
 
 	# label
 	if (top10_lab) {
-		require(ggrepel)
 		labeldf <- resultDF[c(ui, di), ] |>
 			dplyr::filter(
-				(rank(logFC, ties.method = "min") <= 10) | (rank(-logFC, ties.method = "min") <= 10)
+				(rank(.data$logFC, ties.method = "min") <= 10) | 
+				(rank(-.data$logFC, ties.method = "min") <= 10)
 			)
 
 		gp <- gp + 
-			geom_label_repel(
-				data = labeldf, aes(x = logFC, y = -log10(p.used), label = geneSym), 
+			ggrepel::geom_label_repel(
+				data = labeldf, 
+				aes(x = .data$logFC, y = -log10(.data$p.used), label = .data$geneSym), 
 				colour = "blue", max.overlaps = 20
 			)
 	}

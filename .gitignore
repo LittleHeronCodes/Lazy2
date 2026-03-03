@@ -7,6 +7,7 @@
 *.sublime-workspace
 *.Rproj
 *.code-workspace
+/.vscode/
 
 
 # Data files
