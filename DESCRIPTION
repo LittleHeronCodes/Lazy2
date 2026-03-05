@@ -25,6 +25,8 @@ Imports:
 	magrittr (>= 2.0.3),
 	fgsea (>= 1.12.0),
 	ggrepel (>= 0.9.1)
-Suggets:
+Suggests: 
 	gtable (>= 0.3.0),
-	tidyr (>= 0.8.3)
+	tidyr (>= 0.8.3),
+	testthat (>= 3.0.0)
+Config/testthat/edition: 3
