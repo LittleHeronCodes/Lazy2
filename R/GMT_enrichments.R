@@ -112,7 +112,7 @@ hypergeoTestForGeneset <- function(
 	N <- length(gspace) # no of balls in urn
 	k <- length(query)  # no of balls drawn from urn (DEG no)
 
-	intscts <- sapply(refGMT, \(x) intersect(x, query))
+	intscts <- lapply(refGMT, \(x) intersect(x, query))
 	qs <- sapply(intscts, length) # no of white balls drawn
 	ms <- sapply(refGMT, length)  # no of white balls in urn
 
