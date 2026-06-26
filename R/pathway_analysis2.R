@@ -17,8 +17,13 @@ glist_enrichment <- function(
 	glist  <- lapply(glist,  \(gg) intersect(gg, bgspace))
 	tglist <- lapply(tglist, \(gg) intersect(gg, bgspace))
 
+	if (ncore > 1 && !requireNamespace("parallel", quietly = TRUE)) {
+		warning("Package 'parallel' is not available. Falling back to single-core processing.", call. = FALSE)
+		ncore <- 1
+	}
+
 	if (ncore > 1) {
-		enrobj <- mclapply(names(glist), function(aid) {
+		enrobj <- parallel::mclapply(names(glist), function(aid) {
 			hypergeoTestForGeneset(glist[[aid]], refgmt, tglist[[aid]], minGeneSet, ef.psc = ef.psc)
 		}, mc.cores = ncore)
 	} else {

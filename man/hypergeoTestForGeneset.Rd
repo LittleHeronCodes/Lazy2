@@ -12,7 +12,7 @@ hypergeoTestForGeneset2(
   refGMT,
   gspace,
   minGeneSet = 10,
-  ncore = 1,
+  ncore = NULL,
   ef.psc = 0
 )
 }
@@ -47,7 +47,7 @@ Can be used for custom pathway analysis or CMAP style query.
 }
 \section{Functions}{
 \itemize{
-\item \code{hypergeoTestForGeneset2()}: Using multiprocessing (Deprecated)
+\item \code{hypergeoTestForGeneset2()}: Deprecated wrapper. Use \code{hypergeoTestForGeneset} directly.
 
 }}
 \examples{

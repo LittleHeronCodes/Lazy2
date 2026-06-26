@@ -1,5 +1,14 @@
 # Changelog
 
+## Ver 0.3.2 [2026.06.26]
+- General: Dependency cleanup to reduce install footprint.
+- Removed hard dependencies: `fgsea`, `magrittr`, `data.table`, `grid`.
+- Moved to Suggests: `parallel`, `ggrepel`.
+- Functions: `plotEnrichment2`, `theme_common_gsea` retired (`.Defunct()`). Implementation archived in `workstation/plotGSEA.R`.
+- Functions: `hypergeoTestForGeneset2` simplified to deprecated wrapper around `hypergeoTestForGeneset`. `ncore` option defunct.
+- Functions: `glist_enrichment` now uses `parallel::mclapply` with `requireNamespace` guard; falls back to `lapply` if `parallel` is unavailable.
+- Functions: `drawVol_gg` now checks for `ggrepel` via `requireNamespace` when `top10_lab = TRUE`.
+
 ## Ver 0.3.1.9002 [2026.03.03]
 - Fixed build check warnings "no visible binding for global variable"
 - Fixed License file
