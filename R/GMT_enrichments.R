@@ -112,7 +112,7 @@ hypergeoTestForGeneset <- function(
 	N <- length(gspace) # no of balls in urn
 	k <- length(query)  # no of balls drawn from urn (DEG no)
 
-	intscts <- sapply(refGMT, \(x) intersect(x, query))
+	intscts <- lapply(refGMT, \(x) intersect(x, query))
 	qs <- sapply(intscts, length) # no of white balls drawn
 	ms <- sapply(refGMT, length)  # no of white balls in urn
 
@@ -152,67 +152,15 @@ hypergeoTestForGeneset <- function(
 }
 
 #' @describeIn hypergeoTestForGeneset
-#' Using multiprocessing (Deprecated)
-#' @importFrom data.table rbindlist
+#' Deprecated wrapper. Use \code{hypergeoTestForGeneset} directly.
 #' @export
 
 hypergeoTestForGeneset2 <- function(
-	query, refGMT, gspace, minGeneSet = 10, ncore = 1, ef.psc = 0
+	query, refGMT, gspace, minGeneSet = 10, ncore = NULL, ef.psc = 0
 ) {
 	.Deprecated("hypergeoTestForGeneset")
-
-	if (!all(query %in% gspace)) {
-		stop(paste(length(setdiff(query, gspace)), "Query items were found outside of background space. Check inputs."))
+	if (!is.null(ncore)) {
+		warning("'ncore' is defunct and will be ignored.", call. = FALSE)
 	}
-	# query = intersect(query, gspace)
-	refGMT <- parallel::mclapply(refGMT, function(g) intersect(g, gspace), mc.cores = ncore)
-
-	if (length(query) == 0) stop("Query length is zero.")
-
-	exc <- which(sapply(refGMT, length) < minGeneSet)
-	if (length(exc) != 0) {
-		if (length(exc) <= 5) {
-			mesg <- paste("Ref set no", paste(exc, collapse = ", "), "had less than 10 genes and were excluded.")
-		} else {
-			mesg <- paste(length(exc), "entries in refGMT had less than 10 genes and were excluded.")
-		}
-		warning(mesg)
-		refGMT <- refGMT[which(sapply(refGMT, length) >= minGeneSet)]
-	}
-	if (length(refGMT) == 0) stop("Length of refGMT after filtering is zero.")
-
-	N <- length(gspace)
-	k <- length(query)
-	enrRes <- mclapply(refGMT, function(refgenes) {
-		q <- length(intersect(refgenes, query))
-		m <- length(intersect(gspace, refgenes))
-		I <- intersect(refgenes, query)
-
-		pVal <- phyper(q - 1, m, N - m, k, lower.tail = FALSE)
-		odds <- (q + ef.psc) / (m / N * k + ef.psc)
-		jacc <- q / length(union(query, refgenes))
-		gs.ratio <- paste0(q, "/", k)
-		bg.ratio <- paste0(m, "/", N)
-
-		out <- data.table(
-			pVal = pVal, 
-			oddsRatio = odds, 
-			tan = jacc, 
-			int = q, 
-			gsRatio = gs.ratio, 
-			bgRatio = bg.ratio, 
-			intGenes = list(I))
-	}, mc.cores = ncore)
-
-	enrRes <- rbindlist(enrRes, idcol = "ID")
-	# enrRes$ID <- names(refGMT)
-	enrRes$logP <- -log10(enrRes$pVal)
-
-	pv <- ifelse(enrRes$int == 0, NA, enrRes$pVal)
-	enrRes$qVal <- p.adjust(pv, method = "fdr")
-	enrRes$qVal <- ifelse(enrRes$int == 0, 1, enrRes$qVal)
-	enrRes$logQ <- -log10(enrRes$qVal)
-
-	enrRes <- enrRes[, c("ID", "pVal", "logP", "qVal", "logQ", "oddsRatio", "tan", "int", "gsRatio", "bgRatio", "intGenes")]
-	return(enrRes)
+	hypergeoTestForGeneset(query, refGMT, gspace, minGeneSet = minGeneSet, ef.psc = ef.psc)
 }

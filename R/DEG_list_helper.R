@@ -269,6 +269,9 @@ drawVol_gg <- function(
 
 	# label
 	if (top10_lab) {
+		if (!requireNamespace("ggrepel", quietly = TRUE)) {
+			stop("Package 'ggrepel' is required for top10_lab = TRUE. Install it with: install.packages('ggrepel')", call. = FALSE)
+		}
 		labeldf <- resultDF[c(ui, di), ] |>
 			dplyr::filter(
 				(rank(.data$logFC, ties.method = "min") <= 10) | 
