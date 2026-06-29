@@ -66,7 +66,6 @@ extractGeneList <- function(resultsLS, fco, qco, cnt = NULL, remove_ambi = FALSE
 }
 
 
-
 #' Remove ambiguous DEGs
 #'
 #' Remove DEGs if they're both in Down and Up.
@@ -105,20 +104,33 @@ geneCount <- function(geneList) {
 
 #' Get pairwise overlap significance for a list
 #'
-#' Calculate genelist set overlap (replaces pairsOverlap).
-#' Metric : hypergeometric test p value, enrichment factor, tanimoto coef.
-#' @param gls Unnested list of genes
-#' @param tgls List of gene space for each entry in gls
-#' @param unique_combn Only return unique combination (no replicates) Default FALSE, will be set to TRUE in later versions
-#' @return dataframe
+#' Calculate pairwise overlap significance for a list of sets.
+#' @param gls Unnested named list of sets.
+#' @param tgls Background space for entry in gls. Need to be either same length as gls or a single shared background space.
+#' @param unique_combn Return only unique combinations (upper triangle). Default TRUE.
+#' @return Dataframe of pairwise overlap significance.
+#'  \item{ix1} {Name of set 1}
+#'  \item{ix2} {Name of set 2}
+#'  \item{hgeo} {Hypergeometric test p value}
+#'  \item{FE} {Fold enrichment}
+#'  \item{tan} {Tanimoto coefficient}
 #' @examples
 #' \dontrun{
-#' pairdf <- getOverlapDF(geneList$up, geneList$to)
-#' pairm <- reshape2::acast(pairdf, ix1 ~ ix2, value.var = "ef")
+#' set.seed(1234)
+#' gls <- list(A = sample(letters, 10), B = sample(letters, 5), C = sample(letters, 4))
+#' tgls <- letters
+#' pairdf <- setlist_overlap(gls, tgls)
+#' pairm <- reshape2::acast(pairdf, ix1 ~ ix2, value.var = "FE")
 #' }
 #' @export
 
-getOverlapDF <- function(gls, tgls, unique_combn = FALSE) {
+setlist_overlap <- function(gls, tgls, unique_combn = TRUE) {
+	if (class(tgls) != "list") {
+		tgls <- structure(rep(tgls[[1]], length(gls)), names = names(gls))
+	} else if (length(tgls) != length(gls) || !all(names(tgls) == names(gls))) {
+		stop("tgls should be either a vector of shared background space or a list of same length and names as gls.")
+	}
+
 	if (unique_combn) {
 		pairdf <- data.frame(t(combn(names(gls), 2)))
 		colnames(pairdf) <- c("Var1", "Var2")
@@ -133,7 +145,7 @@ getOverlapDF <- function(gls, tgls, unique_combn = FALSE) {
 		gspace <- intersect(tgls[[ix1]], tgls[[ix2]])
 		setA <- intersect(gls[[ix1]], gspace)
 		setB <- intersect(gls[[ix2]], gspace)
-		hgeo <- hypergeoTest(setA, setB, gspace)
+		hgeo <- hypergeo_test(setA, setB, gspace)
 		FE <- fold_enrichment(setA, setB, gspace, 2)
 		tan <- tanimoto_coef(setA, setB)
 		data.frame(ix1 = ix1, ix2 = ix2, hgeo = hgeo, FE = FE, tan = tan)
@@ -142,6 +154,12 @@ getOverlapDF <- function(gls, tgls, unique_combn = FALSE) {
 	do.call(rbind, LS)
 }
 
+#' @rdname setlist_overlap
+#' @export
+getOverlapDF <- function(gls, tgls, unique_combn = TRUE) {
+	.Deprecated("setlist_overlap", "Use setlist_overlap instead.")
+	setlist_overlap(gls, tgls, unique_combn)
+}
 
 #' Draw MA, volcano plot
 #'

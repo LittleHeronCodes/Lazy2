@@ -56,7 +56,6 @@ Gen_enrichment <- function(
 #' @importFrom reshape2 acast
 #' @export
 
-
 enrobj2Matrix <- function(enrobj, val.col = "pvalue", log = TRUE) {
 	LS <- lapply(names(enrobj), function(set) {
 		dff <- data.frame(enrobj[[set]])
