@@ -163,8 +163,8 @@ getOverlapDF <- function(gls, tgls, unique_combn = TRUE) {
 
 #' Draw MA, volcano plot
 #'
-#' Draw MA plot from resultDF generated from limma (data.frame format). DESeq2 results should have column names matching limma.
-#' @param resultDF result dataframe generated from limma or DEseq2. If DESeq2, column name should be 'adj.P.Val','logFC','AveExpr'
+#' Draw MA plot from results generated from limma (data.frame format). DESeq2 results should have column names matching limma.
+#' @param results result dataframe generated from limma or DEseq2. If DESeq2, column name should be 'adj.P.Val','logFC','AveExpr'
 #' @param qco adjusted p value cut off
 #' @param fco fold change cut off
 #' @param ttl_pre main title prefix
@@ -173,23 +173,23 @@ getOverlapDF <- function(gls, tgls, unique_combn = TRUE) {
 #' @return plot
 #' @examples
 #' \dontrun{
-#' drawMA(resultDF, qco = 0.1, fco = 2.0, ttl_pre = "title")
+#' drawMA(results, qco = 0.1, fco = 2.0, ttl_pre = "title")
 #' }
 #' @export
 
-drawMA <- function(resultDF, qco, fco, ttl_pre, ylim = NULL) {
-	ui <- which(resultDF$adj.P.Val < qco & resultDF$logFC > log2(fco))
-	di <- which(resultDF$adj.P.Val < qco & resultDF$logFC < -log2(fco))
+drawMA <- function(results, qco, fco, ttl_pre, ylim = NULL) {
+	ui <- which(results$adj.P.Val < qco & results$logFC > log2(fco))
+	di <- which(results$adj.P.Val < qco & results$logFC < -log2(fco))
 	gcnt <- paste("up:", length(ui), "dn:", length(di))
 
 	if (is.null(ylim)) {
-		ylim <- max(abs(resultDF$logFC), na.rm = TRUE) * c(-1, 1)
+		ylim <- max(abs(results$logFC), na.rm = TRUE) * c(-1, 1)
 	}
 	mtitle <- paste(ttl_pre, "fc", fco, "qv", qco, gcnt)
 
 	# MA
-	plot(logFC ~ AveExpr, data = resultDF, pch = 20, main = mtitle, cex = 0.05, ylim = ylim)
-	points(logFC ~ AveExpr, data = resultDF[c(ui, di), ], pch = 20, col = "red", cex = 0.25)
+	plot(logFC ~ AveExpr, data = results, pch = 20, main = mtitle, cex = 0.05, ylim = ylim)
+	points(logFC ~ AveExpr, data = results[c(ui, di), ], pch = 20, col = "red", cex = 0.25)
 	abline(h = 0, col = "blue", lty = 2)
 }
 
@@ -197,44 +197,50 @@ drawMA <- function(resultDF, qco, fco, ttl_pre, ylim = NULL) {
 #' Draw volcano plot
 #' @export
 
-drawVol <- function(resultDF, qco, fco, ttl_pre, xlim = NULL) {
-	ui <- which(resultDF$adj.P.Val < qco & resultDF$logFC > log2(fco))
-	di <- which(resultDF$adj.P.Val < qco & resultDF$logFC < -log2(fco))
+drawVol <- function(results, qco, fco, ttl_pre, xlim = NULL) {
+	ui <- which(results$adj.P.Val < qco & results$logFC > log2(fco))
+	di <- which(results$adj.P.Val < qco & results$logFC < -log2(fco))
 	gcnt <- paste("up:", length(ui), "dn:", length(di))
 
 	if (is.null(xlim)) {
-		xlim <- max(abs(resultDF$logFC), na.rm = TRUE) * c(-1, 1)
+		xlim <- max(abs(results$logFC), na.rm = TRUE) * c(-1, 1)
 	}
 	mtitle <- paste(ttl_pre, "fc", fco, "qv", qco, gcnt)
 
 	# volcano
-	plot(-log10(adj.P.Val) ~ logFC, data = resultDF, pch = 20, main = mtitle, cex = 0.05, xlim = xlim)
-	points(-log10(adj.P.Val) ~ logFC, data = resultDF[c(ui, di), ], pch = 20, col = "red", cex = 0.25)
+	plot(-log10(adj.P.Val) ~ logFC, data = results, pch = 20, main = mtitle, cex = 0.05, xlim = xlim)
+	points(-log10(adj.P.Val) ~ logFC, data = results[c(ui, di), ], pch = 20, col = "red", cex = 0.25)
 	abline(v = 0, col = "blue", lty = 2)
 }
 
 #' @describeIn drawMA
 #' Draw Volcano Plot using ggplot2
-#' @param resultDF Data frame containing the results. Must include columns: logFC, pval, padj, geneSym.
+#' @param results Data frame containing the results. Must include columns: logFC, pval, padj, geneSym. Can inherit from DESeqResults.
 #' @param qco Q-value cutoff for significance. Default is 0.05.
 #' @param fco Fold change cutoff for significance. Default is 1.5.
 #' @param ttl_pre Title prefix for the plot. Default is an empty string.
 #' @param mode Plot mode: "vol" for volcano, "ma" for MA plot. Default is "vol".
 #' @param pcol P-value column to use: "pval" or "padj". Default is "padj".
-#' @param top10_lab Logical, whether to label the top 10 significant genes. Default is FALSE.
+#' @param top10_lab Logical, whether to label the top 10 significant genes. Default is FALSE. This requires the 'ggrepel' package.
 #' @return A ggplot2 object representing the volcano or MA plot.
 #' @importFrom rlang .data
 #' @export
 
 drawVol_gg <- function(
-	resultDF, 
+	results, 
 	qco = 0.05, 
 	fco = 1.5, 
 	ttl_pre = "", 
 	mode = "vol", 
 	pcol = "padj", 
-	top10_lab = FALSE
+	top10_lab = FALSE,
+	resultDF = NULL
 ) {
+
+	if (!is.null(resultDF)) {
+		.Deprecated("resultDF", "Use 'results' parameter directly with the appropriate data frame format.")
+		results <- resultDF
+	}
 
 	# argument check
 	if (!mode %in% c("ma", "vol")   ) stop("Argument mode should be either 'ma' or 'vol'."   )
@@ -244,26 +250,33 @@ drawVol_gg <- function(
 		ax_p <- expression(bold(-log[10] ~ p.val))
 	}
 	if (pcol == "padj") {
-		mt_p <- "qv"
+		mt_p <- "fdr"
 		ax_p <- expression(bold(-log[10] ~ FDR))
 	}
 
-	resultDF <- resultDF |> 
-		dplyr::mutate(p.used = get(.data$pcol)) |> 
+	if (inherits(results, "DESeqResults")) {
+		results <- as.data.frame(results) |> 
+			rownames_to_column("geneSym") |>
+			dplyr::rename(logFC = "log2FoldChange", pval = "pvalue") |>
+			dplyr::mutate(AveExpr = log2(baseMean + 1)) |>
+			arrange(padj)
+	}
+	results <- results |> 
+		dplyr::mutate(p.used = get(pcol)) |> 
 		dplyr::filter(!is.na(.data$p.used))
 
-	ui <- which(resultDF$p.used < qco & resultDF$logFC >=  log2(fco))
-	di <- which(resultDF$p.used < qco & resultDF$logFC <= -log2(fco))
+	ui <- which(results$p.used < qco & results$logFC >=  log2(fco))
+	di <- which(results$p.used < qco & results$logFC <= -log2(fco))
 	gcnt <- paste("up:", length(ui), "dn:", length(di))
 	mtitle <- paste(ttl_pre, "FC", fco, mt_p, qco, gcnt)
-	axlim <- max(abs(resultDF$logFC), na.rm = TRUE) * c(-1, 1)
+	axlim <- max(abs(results$logFC), na.rm = TRUE) * c(-1, 1)
 
 	# MA
 	if (mode == "ma") {
-		gp <- ggplot(resultDF, aes(x = .data$AveExpr, y = .data$logFC)) +
+		gp <- ggplot(results, aes(x = .data$AveExpr, y = .data$logFC)) +
 			geom_point(shape = 20, cex = 0.05) +
 			geom_point(
-				data = resultDF[c(ui, di), ], aes(x = .data$AveExpr, y = .data$logFC), 
+				data = results[c(ui, di), ], aes(x = .data$AveExpr, y = .data$logFC), 
 				shape = 20, colour = "red", cex = 0.25
 			) +
 			geom_hline(yintercept = c(-log2(fco), log2(fco)), col = "blue", lty = 2) +
@@ -273,10 +286,10 @@ drawVol_gg <- function(
 	
 	# volcano
 	if (mode == "vol") {
-		gp <- ggplot(resultDF, aes(x = .data$logFC, y = -log10(.data$p.used))) +
+		gp <- ggplot(results, aes(x = .data$logFC, y = -log10(.data$p.used))) +
 			geom_point(shape = 20, cex = 0.05) +
 			geom_point(
-				data = resultDF[c(ui, di), ], aes(x = .data$logFC, y = -log10(.data$p.used)), 
+				data = results[c(ui, di), ], aes(x = .data$logFC, y = -log10(.data$p.used)), 
 				shape = 20, colour = "red", cex = 0.25
 			) +
 			geom_hline(yintercept = -log10(qco), col = "blue", lty = 2) + 
@@ -290,7 +303,7 @@ drawVol_gg <- function(
 		if (!requireNamespace("ggrepel", quietly = TRUE)) {
 			stop("Package 'ggrepel' is required for top10_lab = TRUE. Install it with: install.packages('ggrepel')", call. = FALSE)
 		}
-		labeldf <- resultDF[c(ui, di), ] |>
+		labeldf <- results[c(ui, di), ] |>
 			dplyr::filter(
 				(rank(.data$logFC, ties.method = "min") <= 10) | 
 				(rank(-.data$logFC, ties.method = "min") <= 10)
