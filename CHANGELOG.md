@@ -1,4 +1,12 @@
 # Changelog
+## Ver 0.3.2.9000 [2026.07.13]
+- Functions: `drawVol_gg` can now inherit `DESeqResults` object. Parameter `resultDF` now `results` to reflect this change.
+
+## Ver 0.3.2.9000 [2026.06.29]
+- Tests: Added tests for `removeNAs()` and `countUni()`
+- Functions: `getOverlapDF()` -- now `setlist_overlap()`
+  - Better `unique_combn` description in help
+  - `tgls` parameter handling fix for non-list input (vector of shared background space)
 
 ## Ver 0.3.2 [2026.06.26]
 - General: Dependency cleanup to reduce install footprint.
